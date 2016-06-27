@@ -18,10 +18,18 @@ class StartViewController: UIViewController {
     
     var playerCount = 2
     override func viewDidLoad() {
+        let cornerRadius = CGFloat(20)
+        addButton.layer.cornerRadius = cornerRadius
+        removeButton.layer.cornerRadius = cornerRadius
+        startButton.layer.cornerRadius = cornerRadius
         super.viewDidLoad()
         playerCount = 2
         for var i=0; i < 4; i=i+1 {
             changeColor(i)
+            p1Button.layer.cornerRadius = cornerRadius
+            p2Button.layer.cornerRadius = cornerRadius
+            p3Button.layer.cornerRadius = cornerRadius
+            p4Button.layer.cornerRadius = cornerRadius
         }
         checkButtons()
         
