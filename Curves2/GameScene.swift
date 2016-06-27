@@ -3,7 +3,7 @@
 //  Curves2
 //
 //  Created by Moritz Martin on 27.06.16.
-//  Copyright (c) 2016 Moritz Martin. All rights reserved.
+//  Copyright (c) 2016 Moritz Martin. All rights reserved.dd
 //
 
 import SpriteKit
