@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3CDDA5AB1D2177D80094A36E /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDA5AA1D2177D80094A36E /* StartViewController.swift */; };
 		58FF4AFE1D2171E9005C8DD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FF4AFD1D2171E9005C8DD3 /* AppDelegate.swift */; };
 		58FF4B001D2171E9005C8DD3 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 58FF4AFF1D2171E9005C8DD3 /* GameScene.sks */; };
 		58FF4B021D2171E9005C8DD3 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FF4B011D2171E9005C8DD3 /* GameScene.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3CDDA5AA1D2177D80094A36E /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		58FF4AFA1D2171E9005C8DD3 /* Curves2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Curves2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58FF4AFD1D2171E9005C8DD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58FF4AFF1D2171E9005C8DD3 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				58FF4AFF1D2171E9005C8DD3 /* GameScene.sks */,
 				58FF4B011D2171E9005C8DD3 /* GameScene.swift */,
 				58FF4B031D2171E9005C8DD3 /* GameViewController.swift */,
+				3CDDA5AA1D2177D80094A36E /* StartViewController.swift */,
 				58FF4B051D2171E9005C8DD3 /* Main.storyboard */,
 				58FF4B081D2171E9005C8DD3 /* Assets.xcassets */,
 				58FF4B0A1D2171E9005C8DD3 /* LaunchScreen.storyboard */,
@@ -199,7 +202,7 @@
 				TargetAttributes = {
 					58FF4AF91D2171E9005C8DD3 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = D24AGHC9PF;
+						DevelopmentTeam = 42N696HKU5;
 					};
 					58FF4B111D2171E9005C8DD3 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -265,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				58FF4B021D2171E9005C8DD3 /* GameScene.swift in Sources */,
+				3CDDA5AB1D2177D80094A36E /* StartViewController.swift in Sources */,
 				58FF4B041D2171E9005C8DD3 /* GameViewController.swift in Sources */,
 				58FF4AFE1D2171E9005C8DD3 /* AppDelegate.swift in Sources */,
 			);
@@ -409,10 +413,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Curves2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -421,10 +427,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Curves2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -495,6 +503,7 @@
 				58FF4B281D2171E9005C8DD3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		58FF4B291D2171E9005C8DD3 /* Build configuration list for PBXNativeTarget "Curves2Tests" */ = {
 			isa = XCConfigurationList;
@@ -503,6 +512,7 @@
 				58FF4B2B1D2171E9005C8DD3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		58FF4B2C1D2171E9005C8DD3 /* Build configuration list for PBXNativeTarget "Curves2UITests" */ = {
 			isa = XCConfigurationList;
@@ -511,6 +521,7 @@
 				58FF4B2E1D2171E9005C8DD3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
