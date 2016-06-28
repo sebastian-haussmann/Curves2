@@ -45,17 +45,6 @@
                                     <action selector="p1Color:" destination="th5-rQ-oUl" eventType="touchUpInside" id="aoN-kQ-Xha"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZ0-Io-nPz">
-                                <rect key="frame" x="20" y="20" width="100" height="100"/>
-                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="7W3-NT-QZK"/>
-                                    <constraint firstAttribute="width" constant="100" id="QVI-9V-ks2"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="p4Action:" destination="th5-rQ-oUl" eventType="touchUpInside" id="mqb-XM-YPM"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uOC-gA-j7H">
                                 <rect key="frame" x="616" y="28" width="100" height="100"/>
                                 <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -102,6 +91,17 @@
                                     <action selector="removePlayer:" destination="th5-rQ-oUl" eventType="touchUpInside" id="gfX-X4-Y5i"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZ0-Io-nPz">
+                                <rect key="frame" x="20" y="28" width="100" height="100"/>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="7W3-NT-QZK"/>
+                                    <constraint firstAttribute="width" constant="100" id="QVI-9V-ks2"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="p4Action:" destination="th5-rQ-oUl" eventType="touchUpInside" id="mqb-XM-YPM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -114,7 +114,7 @@
                             <constraint firstItem="uOC-gA-j7H" firstAttribute="trailing" secondItem="7mW-5S-2bL" secondAttribute="trailingMargin" id="FH8-Ya-1mh"/>
                             <constraint firstItem="vPr-as-JOD" firstAttribute="bottom" secondItem="P5C-4F-6Y4" secondAttribute="bottom" id="LE4-om-q3s"/>
                             <constraint firstItem="8Br-LU-BJk" firstAttribute="top" secondItem="nNh-U2-Jkk" secondAttribute="top" id="N3s-ch-0EH"/>
-                            <constraint firstItem="vZ0-Io-nPz" firstAttribute="top" secondItem="qpx-oW-JTf" secondAttribute="bottom" id="RyQ-p2-XwN"/>
+                            <constraint firstItem="vZ0-Io-nPz" firstAttribute="top" secondItem="qpx-oW-JTf" secondAttribute="bottom" constant="8" id="RyQ-p2-XwN"/>
                             <constraint firstItem="vPr-as-JOD" firstAttribute="centerX" secondItem="7mW-5S-2bL" secondAttribute="centerX" id="Wo9-hr-mWH"/>
                             <constraint firstItem="ccc-f1-oxM" firstAttribute="top" secondItem="vPr-as-JOD" secondAttribute="top" id="eU9-cL-sYP"/>
                             <constraint firstItem="vZ0-Io-nPz" firstAttribute="leading" secondItem="7mW-5S-2bL" secondAttribute="leadingMargin" id="eqb-Lq-cPp"/>
