@@ -103,9 +103,18 @@ class StartViewController: UIViewController {
     
     func changeColor(number: Int){
         var randomColors = [UIColor.blueColor(),UIColor.brownColor(), UIColor.cyanColor(), UIColor.greenColor(), UIColor.grayColor(), UIColor.orangeColor(), UIColor.redColor(), UIColor.purpleColor(), UIColor.yellowColor(), UIColor.whiteColor()]
-//        for var i = 0; i < 4; i=i+1 {
-//        randomColors = randomColors.filter {!$0.containsString(randomColors[Int(colorInt)])}
-//        }
+        randomColors = randomColors.filter { (color: UIColor) -> Bool in
+            color != p1Button.backgroundColor
+        }
+        randomColors = randomColors.filter { (color: UIColor) -> Bool in
+            color != p2Button.backgroundColor
+        }
+        randomColors = randomColors.filter { (color: UIColor) -> Bool in
+            color != p3Button.backgroundColor
+        }
+        randomColors = randomColors.filter { (color: UIColor) -> Bool in
+            color != p4Button.backgroundColor
+        }
         let colorInt = arc4random_uniform(UInt32(randomColors.count))
         switch number {
         case 0:
