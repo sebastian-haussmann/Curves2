@@ -76,7 +76,7 @@ class GameScene: SKScene {
         
         
         
-        // 3 oben rechts
+        // 3 oben rechtss
         p3R = SKShapeNode(path: trianglePathP1L)
         p3R.position = CGPoint(x:view.frame.width - 115, y: view.frame.height - 105)
         p3R.strokeColor = SKColor.blueColor()
