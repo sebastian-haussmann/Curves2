@@ -229,29 +229,31 @@ class GameScene: SKScene {
     
     func drawLine(index: Int){
         if (CGPathIsEmpty(players[index].path)) {
-            CGPathMoveToPoint(players[index].path, nil, players[index].position.x, players[index].position.y)
+            CGPathMoveToPoint(players[index].path, nil, players[index].lastPoint.x, players[index].lastPoint.y)
             players[index].lineNode.path = nil
-//            players[index].lineNode.lineWidth = lineThickness
-//            if running {
-                lineContainer.addChild(players[index].lineNode)
-//            }
+            players[index].lineNode.lineWidth = 3.0
+            
+           
+            
+            lineContainer.addChild(players[index].lineNode)
+            
             
         }
         
-        
-        var x = (players[index].lastPoint.x) + players[index].xCurve
-        var y = (players[index].lastPoint.y) + players[index].yCurve
-
+        var x = players[index].lastPoint.x + players[index].xCurve
+        var y = players[index].lastPoint.y + players[index].yCurve
         CGPathAddLineToPoint(players[index].path, nil, x, y)
         players[index].lineNode.path = players[index].path
         players[index].head.position = CGPoint(x: x, y: y)
+        
+        
         players[index].lastPoint = CGPointMake(x, y)
         players[index].wayPoints.append(CGPoint(x:x,y:y))
-        
-        self.addLinesToTexture(index)
+        addLinesToTexture(index)
         
     }
     
+
     func addLinesToTexture (index: Int) {
         // Convert the contents of the line container to an SKTexture
         texture = self.view!.textureFromNode(lineContainer)!
