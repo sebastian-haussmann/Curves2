@@ -44,6 +44,10 @@ class GameScene: SKScene {
     var myTimerL4 = NSTimer()
     var myTimerR4 = NSTimer()
     
+    var texture = SKTexture()
+    var lineContainer = SKNode()
+    var lineCanvas:SKSpriteNode?
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
        
@@ -61,11 +65,13 @@ class GameScene: SKScene {
             
             self.addChild(line.head)
             players.append(line)
-            randomStartingPosition(index)
             
         }
+        newRound()
         
         createButtons(players.count)
+        
+        addChild(lineContainer)
         
         
         
@@ -222,15 +228,36 @@ class GameScene: SKScene {
     }
     
     func drawLine(index: Int){
+        if (CGPathIsEmpty(players[index].path)) {
+            CGPathMoveToPoint(players[index].path, nil, players[index].position.x, players[index].position.y)
+            players[index].lineNode.path = nil
+//            players[index].lineNode.lineWidth = lineThickness
+//            if running {
+                lineContainer.addChild(players[index].lineNode)
+//            }
+            
+        }
+        
         
         var x = (players[index].lastPoint.x) + players[index].xCurve
         var y = (players[index].lastPoint.y) + players[index].yCurve
 
-//        CGPathAddLineToPoint(path, nil, x, y)
-//        lineNode.path = path
+        CGPathAddLineToPoint(players[index].path, nil, x, y)
+        players[index].lineNode.path = players[index].path
         players[index].head.position = CGPoint(x: x, y: y)
         players[index].lastPoint = CGPointMake(x, y)
         players[index].wayPoints.append(CGPoint(x:x,y:y))
+        
+        self.addLinesToTexture(index)
+        
+    }
+    
+    func addLinesToTexture (index: Int) {
+        // Convert the contents of the line container to an SKTexture
+        texture = self.view!.textureFromNode(lineContainer)!
+        lineCanvas!.texture = texture
+        players[index].lineNode.removeFromParent()
+        players[index].path = CGPathCreateMutable()
         
     }
     
@@ -367,6 +394,21 @@ class GameScene: SKScene {
         players[index].xCurve = direction.x * players[index].curveSpeed
         players[index].yCurve = direction.y * players[index].curveSpeed
         
+        
+    }
+    
+    
+    func newRound(){
+        lineContainer.removeAllChildren()
+        lineCanvas = SKSpriteNode(color:SKColor.clearColor(),size:view!.frame.size)
+        lineCanvas!.anchorPoint = CGPointZero
+        lineCanvas!.position = CGPointZero
+        lineContainer.addChild(lineCanvas!)
+        texture = SKTexture()
+        for (index,player) in players.enumerate(){
+//            addLinesToTexture(index)
+            randomStartingPosition(index)
+        }
         
     }
 
