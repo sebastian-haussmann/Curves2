@@ -32,7 +32,7 @@
                                 </state>
                                 <connections>
                                     <action selector="startButton:" destination="th5-rQ-oUl" eventType="touchUpInside" id="AKm-Re-zjY"/>
-                                    <segue destination="BV1-FR-VrT" kind="show" id="joP-jp-44u"/>
+                                    <segue destination="BV1-FR-VrT" kind="show" identifier="startGame" id="joP-jp-44u"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Br-LU-BJk">
