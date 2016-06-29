@@ -26,7 +26,6 @@ class GameScene: SKScene {
     var p4R = SKShapeNode()
     var p4L = SKShapeNode()
     
-    var curveRadius = 5.0
     
     var gameArea = SKShapeNode()
     var btnWidth: CGFloat = 110
@@ -81,15 +80,13 @@ class GameScene: SKScene {
             let location = touch.locationInNode(self)
             
             if p1R.containsPoint(location){
-               
-               changeDirectionR2(1)
-                myTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 1, repeats: true)
+                changeDirectionR2(0)
+                myTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 0, repeats: true)
                 
             }
             else if p1L.containsPoint(location){
-                
-                changeDirectionL2(1)
-                myTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 1, repeats: true)
+                changeDirectionL2(0)
+                myTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 0, repeats: true)
             }
             
 
@@ -124,11 +121,12 @@ class GameScene: SKScene {
     }
     func changeDirectionL2(index: Int){
         let playerIndex = index
+        print("hallo + ", index)
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
         //        if switchDirBool {
         //           wayPoints[0] = radianToPoint(alt-curveRadius)
         //        }else{
-        players[playerIndex].wayPoints[0] = radianToPoint(alt+curveRadius)
+        players[playerIndex].wayPoints[0] = radianToPoint(alt+players[playerIndex].curveRadius)
         //        }
         changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
     }
@@ -140,7 +138,7 @@ class GameScene: SKScene {
         //        if switchDirBool {
         //            wayPoints[0] = radianToPoint(alt+curveRadius)
         //        }else{
-        players[playerIndex].wayPoints[0] = radianToPoint(alt-curveRadius)
+        players[playerIndex].wayPoints[0] = radianToPoint(alt-players[playerIndex].curveRadius)
         //        }
         changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
         
@@ -161,8 +159,8 @@ class GameScene: SKScene {
     
     func drawLine(index: Int){
         
-        var x = (players[index].lastPoint.x) + 1
-        var y = (players[index].lastPoint.y) + 1
+        var x = (players[index].lastPoint.x) + players[index].xCurve
+        var y = (players[index].lastPoint.y) + players[index].yCurve
 
 //        CGPathAddLineToPoint(path, nil, x, y)
 //        lineNode.path = path
