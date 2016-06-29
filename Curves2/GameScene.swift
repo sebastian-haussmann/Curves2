@@ -26,9 +26,6 @@ class GameScene: SKScene {
     var p4R = SKShapeNode()
     var p4L = SKShapeNode()
     
-    
-    var lastPoint = CGPointZero
-    var wayPoints: [CGPoint] = []
     var curveRadius = 5.0
     
     var gameArea = SKShapeNode()
@@ -38,6 +35,8 @@ class GameScene: SKScene {
     
     
     var players = [LineObject]()
+    var myTimer1 = NSTimer()
+    var myTimer2 = NSTimer()
 
     
     override func didMoveToView(view: SKView) {
@@ -48,7 +47,7 @@ class GameScene: SKScene {
         for (index,color) in GameData.colors.enumerate(){
             
             
-            let line = LineObject(head: SKShapeNode(circleOfRadius: 3.0), position: CGPoint(), path: CGPathCreateMutable(), lineNode: SKShapeNode(), wayPoints: [], dead: false)
+            let line = LineObject(head: SKShapeNode(circleOfRadius: 3.0), position: CGPoint(), path: CGPathCreateMutable(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xCurve: CGFloat(1), yCurve: CGFloat(1), curveRadius: 5.0, curveSpeed: CGFloat(1))
 
             line.head.fillColor = color
             line.head.strokeColor = color
@@ -82,59 +81,96 @@ class GameScene: SKScene {
             let location = touch.locationInNode(self)
             
             if p1R.containsPoint(location){
-                print("rechts")
+               
+               changeDirectionR2(1)
+                myTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 1, repeats: true)
                 
             }
             else if p1L.containsPoint(location){
-                print("links")
+                
+                changeDirectionL2(1)
+                myTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 1, repeats: true)
             }
             
-            
-            
-//            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-//            
-//            sprite.xScale = 0.5
-//            sprite.yScale = 0.5
-//            sprite.position = location
-//            
-//            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-//            
-//            sprite.runAction(SKAction.repeatActionForever(action))
-//            
-//            self.addChild(sprite)
+
         }
     }
     
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        myTimer1.invalidate()
+        myTimer2.invalidate()
+        for touch in touches{
+            let location = touch.locationInNode(self)
+            
+            if p1R.containsPoint(location){
+                
+            }
+        }
+        
+        
+    }
+    
     //Linkskurve
-    func changeDirectionL(){
-//        let alt = pointToRadian(wayPoints[0])
-//        if switchDirBool {
-//            wayPoints[0] = radianToPoint(alt-curveRadius)
-//        }else{
-//            wayPoints[0] = radianToPoint(alt+curveRadius)
-//        }
-//        changeDirection(wayPoints[0])
+    func changeDirectionL(timer: NSTimer){
+        let playerIndex = timer.userInfo as! Int
+        changeDirectionL2(playerIndex)
     }
     
     //Rechtskurve
-    func changeDirectionR(){
-//        let alt = pointToRadian(wayPoints[0])
-//        if switchDirBool {
-//            wayPoints[0] = radianToPoint(alt+curveRadius)
-//        }else{
-//            wayPoints[0] = radianToPoint(alt-curveRadius)
-//        }
-//        changeDirection(wayPoints[0])
+    func changeDirectionR(timer: NSTimer){
+        let playerIndex = timer.userInfo as! Int
+        changeDirectionR2(playerIndex)
+        
+    }
+    func changeDirectionL2(index: Int){
+        let playerIndex = index
+        let alt = pointToRadian(players[playerIndex].wayPoints[0])
+        //        if switchDirBool {
+        //           wayPoints[0] = radianToPoint(alt-curveRadius)
+        //        }else{
+        players[playerIndex].wayPoints[0] = radianToPoint(alt+curveRadius)
+        //        }
+        changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
+    }
+    
+    //Rechtskurve
+    func changeDirectionR2(index: Int){
+        let playerIndex = index
+        let alt = pointToRadian(players[playerIndex].wayPoints[0])
+        //        if switchDirBool {
+        //            wayPoints[0] = radianToPoint(alt+curveRadius)
+        //        }else{
+        players[playerIndex].wayPoints[0] = radianToPoint(alt-curveRadius)
+        //        }
+        changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
         
     }
 
     
+    
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        
+        for (i,player) in players.enumerate(){
+                drawLine(i)
+        }
+        
+        
     }
     
-    
+    func drawLine(index: Int){
+        
+        var x = (players[index].lastPoint.x) + 1
+        var y = (players[index].lastPoint.y) + 1
+
+//        CGPathAddLineToPoint(path, nil, x, y)
+//        lineNode.path = path
+        players[index].head.position = CGPoint(x: x, y: y)
+        players[index].lastPoint = CGPointMake(x, y)
+        players[index].wayPoints.append(CGPoint(x:x,y:y))
+        
+    }
     
     
     func randomStartingPosition(i: Int){
@@ -144,12 +180,13 @@ class GameScene: SKScene {
         //        print(startingPosition)
         
         players[i].head.position = CGPointMake(posX, posY)
+        players[i].lastPoint = CGPointMake(posX, posY)
         players[i].wayPoints.append(startingPosition)
         
         let startingDirection = Double(arc4random_uniform(360))
-        curveRadius = startingDirection
-        changeDirectionL()
-        curveRadius = 5.0
+        players[i].curveRadius = startingDirection
+        changeDirectionL2(i)
+        players[i].curveRadius = 5.0
     }
 
     
@@ -242,6 +279,34 @@ class GameScene: SKScene {
         
     }
     
+    
+    // Für Kurve -> Punkt zu Radius
+    func pointToRadian(targetPoint: CGPoint) -> Double{
+        let deltaX = targetPoint.x;
+        let deltaY = targetPoint.y;
+        let rad = atan2(deltaY, deltaX); // In radians
+        return ( Double(rad) * (180 / M_PI))
+    }
+    
+    //Für Kurve -> Radius zu Punkt
+    func radianToPoint(rad: Double) -> CGPoint{
+        return CGPoint(x: cos(rad*(M_PI/180))*141, y: sin(rad*(M_PI/180))*141)
+    }
+    
+    
+    
+    //Für Kurve + Geschwindigkeit
+    func changeDirection(targetPoint: CGPoint, index: Int){
+        let currentPosition = position
+        let offset = CGPoint(x: targetPoint.x - currentPosition.x, y: targetPoint.y - currentPosition.y)
+        let length = Double(sqrtf(Float(offset.x * offset.x) + Float(offset.y * offset.y)))
+        let direction = CGPoint(x:CGFloat(offset.x) / CGFloat(length), y: CGFloat(offset.y) / CGFloat(length))
+        players[index].xCurve = direction.x * players[index].curveSpeed
+        players[index].yCurve = direction.y * players[index].curveSpeed
+        
+        
+    }
+
     
     
     
