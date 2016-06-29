@@ -31,12 +31,18 @@ class GameScene: SKScene {
     var btnWidth: CGFloat = 110
     
     
-    
-    
     var players = [LineObject]()
-    var myTimer1 = NSTimer()
-    var myTimer2 = NSTimer()
+    var myTimerL1 = NSTimer()
+    var myTimerR1 = NSTimer()
+    
+    var myTimerL2 = NSTimer()
+    var myTimerR2 = NSTimer()
 
+    var myTimerL3 = NSTimer()
+    var myTimerR3 = NSTimer()
+    
+    var myTimerL4 = NSTimer()
+    var myTimerR4 = NSTimer()
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -81,32 +87,91 @@ class GameScene: SKScene {
             
             if p1R.containsPoint(location){
                 changeDirectionR2(0)
-                myTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 0, repeats: true)
+                myTimerR1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 0, repeats: true)
+                
+            }else if p1L.containsPoint(location){
+                changeDirectionL2(0)
+                myTimerL1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 0, repeats: true)
+            }else if p2R.containsPoint(location){
+                changeDirectionR2(1)
+                myTimerR2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 1, repeats: true)
+                
+            }else if p2L.containsPoint(location){
+                changeDirectionL2(1)
+                myTimerL2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 1, repeats: true)
+            }else if p3R.containsPoint(location){
+                changeDirectionR2(2)
+                myTimerR3 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 2, repeats: true)
                 
             }
-            else if p1L.containsPoint(location){
-                changeDirectionL2(0)
-                myTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 0, repeats: true)
+            else if p3L.containsPoint(location){
+                changeDirectionL2(2)
+                myTimerL3 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 2, repeats: true)
+            }else if p4R.containsPoint(location){
+                changeDirectionR2(3)
+                myTimerR4 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionR), userInfo: 3, repeats: true)
+                
+            }else if p4L.containsPoint(location){
+                changeDirectionL2(3)
+                myTimerL4 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameScene.changeDirectionL), userInfo: 3, repeats: true)
             }
-            
 
         }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        myTimer1.invalidate()
-        myTimer2.invalidate()
+        
         for touch in touches{
             let location = touch.locationInNode(self)
             
-            if p1R.containsPoint(location){
+            
+            if p1R.containsPoint(location) || p1L.containsPoint(location){
+                myTimerR1.invalidate()
+                myTimerL1.invalidate()
+                
+            }else if p2R.containsPoint(location) || p2L.containsPoint(location){
+                myTimerR2.invalidate()
+                myTimerL2.invalidate()
+                
+            }else if p3R.containsPoint(location) || p3L.containsPoint(location){
+                myTimerR3.invalidate()
+                myTimerL3.invalidate()
+                
+            }else if p4R.containsPoint(location) || p4L.containsPoint(location){
+                myTimerR4.invalidate()
+                myTimerL4.invalidate()
                 
             }
         }
+    }
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
-        
+        for touch in touches{
+            let location = touch.locationInNode(self)
+            let prevLoc = touch.previousLocationInNode(self)
+            
+            if p1R.containsPoint(prevLoc) && !p1R.containsPoint(location) || p1L.containsPoint(prevLoc) && !p1L.containsPoint(location){
+                myTimerR1.invalidate()
+                myTimerL1.invalidate()
+                
+            }else if p2R.containsPoint(prevLoc) && !p2R.containsPoint(location) || p2L.containsPoint(prevLoc) && !p2L.containsPoint(location){
+                myTimerR2.invalidate()
+                myTimerL2.invalidate()
+                
+            }else if p3R.containsPoint(prevLoc) && !p3R.containsPoint(location) || p3L.containsPoint(prevLoc) && !p3L.containsPoint(location){
+                myTimerR3.invalidate()
+                myTimerL3.invalidate()
+                
+            }else if p4R.containsPoint(prevLoc) && !p4R.containsPoint(location) || p4L.containsPoint(prevLoc) && !p4L.containsPoint(location){
+                myTimerR4.invalidate()
+                myTimerL4.invalidate()
+                
+            }
+        }
     }
     
+    
+       
     //Linkskurve
     func changeDirectionL(timer: NSTimer){
         let playerIndex = timer.userInfo as! Int
@@ -121,7 +186,6 @@ class GameScene: SKScene {
     }
     func changeDirectionL2(index: Int){
         let playerIndex = index
-        print("hallo + ", index)
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
         //        if switchDirBool {
         //           wayPoints[0] = radianToPoint(alt-curveRadius)
@@ -199,6 +263,7 @@ class GameScene: SKScene {
         
         
         
+    
         
         if playerCount == 2{
             //Ganz andere Anordnungg
