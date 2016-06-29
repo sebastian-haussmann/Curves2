@@ -7,6 +7,8 @@
 //
 
 import UIKit
+
+
 class StartViewController: UIViewController {
     @IBOutlet weak var p1Button: UIButton!
     @IBOutlet weak var p2Button: UIButton!
@@ -127,6 +129,25 @@ class StartViewController: UIViewController {
             p4Button.backgroundColor = randomColors[Int(colorInt)]
         default:
             print("Fail Color")
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "startGame" {
+            var colors = [UIColor]()
+            colors.append(p1Button.backgroundColor!)
+            if playerCount > 1 {
+                colors.append(p2Button.backgroundColor!)
+            }
+            if playerCount > 2 {
+                colors.append(p3Button.backgroundColor!)
+            }
+            if playerCount > 3 {
+                colors.append(p4Button.backgroundColor!)
+            }
+            GameData.colors = colors
         }
     }
     
