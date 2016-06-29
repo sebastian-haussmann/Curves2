@@ -107,7 +107,7 @@ class GameScene: SKScene {
         
         
         if playerCount == 2{
-            //Ganz andere Anordnung
+            //Ganz andere Anordnungg
         }
         
         
