@@ -8,11 +8,28 @@
 
 import SpriteKit
 
+
+//Pysics Categories
+struct PhysicsCat{
+    static let gameAreaCat : UInt32 = 0x1 << 1
+    static let itemCat : UInt32 = 0x1 << 2
+    static let bombCat : UInt32 = 0x1 << 3
+    static let p1HeadCat : UInt32 = 0x1 << 4
+    static let p2HeadCat : UInt32 = 0x1 << 5
+    static let p3HeadCat : UInt32 = 0x1 << 6
+    static let p4HeadCat : UInt32 = 0x1 << 7
+    static let p1tailCat : UInt32 = 0x1 << 8
+    static let p2tailCat : UInt32 = 0x1 << 9
+    static let p3tailCat : UInt32 = 0x1 << 10
+    static let p4tailCat : UInt32 = 0x1 << 11
+    
+}
+
 struct GameData{
     static var colors = [UIColor]()
 }
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let trianglePathP1L = CGPathCreateMutable()
     
@@ -53,6 +70,8 @@ class GameScene: SKScene {
        
         scaleMode = .ResizeFill
         
+        physicsWorld.contactDelegate = self
+        
         for (index,color) in GameData.colors.enumerate(){
             
             
@@ -70,6 +89,7 @@ class GameScene: SKScene {
         newRound()
         
         createButtons(players.count)
+        addPhysics()
         
         addChild(lineContainer)
         
@@ -79,7 +99,16 @@ class GameScene: SKScene {
         gameArea = SKShapeNode(rect: CGRect(x: btnWidth + 5 , y: 5, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
         gameArea.lineWidth = 5
         gameArea.strokeColor = SKColor.whiteColor()
+        
+        // Fügt den Wänden einen Body für die Kollisionserkennung hinzu
+        gameArea.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: btnWidth + 5, y: 5, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
+        gameArea.physicsBody!.categoryBitMask = PhysicsCat.gameAreaCat
+        gameArea.physicsBody?.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+        gameArea.physicsBody?.affectedByGravity = false
+        gameArea.physicsBody?.dynamic = false
         self.addChild(gameArea)
+        
+        
     }
     
     
@@ -221,7 +250,9 @@ class GameScene: SKScene {
         /* Called before each frame is rendered */
         
         for (i,player) in players.enumerate(){
+            if !player.dead{
                 drawLine(i)
+            }
         }
         
         
@@ -250,6 +281,7 @@ class GameScene: SKScene {
         players[index].lastPoint = CGPointMake(x, y)
         players[index].wayPoints.append(CGPoint(x:x,y:y))
         addLinesToTexture(index)
+        addPhysicsTail(index)
         
     }
     
@@ -263,7 +295,7 @@ class GameScene: SKScene {
         
     }
     
-    
+    // setzt Spieler i auf zufällige Startposition
     func randomStartingPosition(i: Int){
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (4*btnWidth+10) - 100))) + 2 * btnWidth + 10 + 50
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 25)
@@ -280,6 +312,67 @@ class GameScene: SKScene {
         players[i].curveRadius = 5.0
     }
 
+    // fügt Physics den Köpfen der Schlangen hinzu
+    func addPhysics(){
+        players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 3.0)
+        players[0].head.physicsBody!.categoryBitMask = PhysicsCat.p1HeadCat
+        players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.p2tailCat | PhysicsCat.p3tailCat | PhysicsCat.p4tailCat
+        players[0].head.physicsBody?.affectedByGravity = false
+        players[0].head.physicsBody?.linearDamping = 0
+        
+        if players.count > 1 {
+            players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 3.0)
+            players[1].head.physicsBody!.categoryBitMask = PhysicsCat.p2HeadCat
+            players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.p1tailCat | PhysicsCat.p3tailCat | PhysicsCat.p4tailCat
+            players[1].head.physicsBody?.affectedByGravity = false
+            players[1].head.physicsBody?.linearDamping = 0
+        }
+        if players.count > 2 {
+            players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 3.0)
+            players[2].head.physicsBody!.categoryBitMask = PhysicsCat.p3HeadCat
+            players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.p1tailCat | PhysicsCat.p2tailCat | PhysicsCat.p4tailCat
+            players[2].head.physicsBody?.affectedByGravity = false
+            players[2].head.physicsBody?.linearDamping = 0
+        }
+        if players.count > 3 {
+            players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 3.0)
+            players[3].head.physicsBody!.categoryBitMask = PhysicsCat.p4HeadCat
+            players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.p1tailCat | PhysicsCat.p2tailCat | PhysicsCat.p3tailCat
+            players[3].head.physicsBody?.affectedByGravity = false
+            players[3].head.physicsBody?.linearDamping = 0
+        }
+    }
+    
+    // fügt Physics den Tails der Schlangen hinzu, funktioniert leider noch nicht
+    func addPhysicsTail(i: Int){
+        
+        let pBody = SKPhysicsBody(edgeChainFromPath: players[i].path)
+        switch i {
+        case 0:
+            pBody.categoryBitMask = PhysicsCat.p1tailCat
+            pBody.contactTestBitMask = PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+        case 1:
+            pBody.categoryBitMask = PhysicsCat.p2tailCat
+            pBody.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+        case 2:
+            pBody.categoryBitMask = PhysicsCat.p3tailCat
+            pBody.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p4HeadCat
+        case 3:
+            pBody.categoryBitMask = PhysicsCat.p4tailCat
+            pBody.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat
+        default:
+            print("default")
+        }
+        pBody.affectedByGravity = false
+        pBody.linearDamping = 0
+//        players[i].lineNode.physicsBody = pBody
+//        if players[i].lineNode.physicsBody != nil {
+//            let bodies = SKPhysicsBody(bodies: [players[i].lineNode.physicsBody!, pBody])
+//            players[i].lineNode.physicsBody = bodies
+//        }else{
+//            players[i].lineNode.physicsBody = pBody
+//        }
+    }
     
     
     func createButtons(playerCount: Int){
@@ -291,14 +384,37 @@ class GameScene: SKScene {
         CGPathCloseSubpath(trianglePathP1L)
         
         
-        
+        // Für 1 und 2 Spieler
+        if playerCount <= 2{
+            p1L = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p1L.position = CGPoint(x: 50, y: 60 )
+            p1L.strokeColor = GameData.colors[0]
+            p1L.fillColor = GameData.colors[0]
+            self.addChild(p1L)
+            p1R = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p1R.position = CGPoint(x: view!.frame.width-50, y: 60)
+            p1R.strokeColor = GameData.colors[0]
+            p1R.fillColor = GameData.colors[0]
+            self.addChild(p1R)
+        }
     
         
-        if playerCount == 2{
-            //Ganz andere Anordnungg
+        // Für genau 2. Spieler
+        if playerCount == 2{            
+            p2L = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p2L.position = CGPoint(x: view!.frame.width-50, y: view!.frame.height-50 )
+            p2L.strokeColor = GameData.colors[1]
+            p2L.fillColor = GameData.colors[1]
+            self.addChild(p2L)
+            p2R = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p2R.position = CGPoint(x: 50, y: view!.frame.height-50)
+            p2R.strokeColor = GameData.colors[1]
+            p2R.fillColor = GameData.colors[1]
+            self.addChild(p2R)
         }
         
         
+        // Buttons für 1.-3. Spieler
         if playerCount > 2 {
             
             p1L = SKShapeNode(path: trianglePathP1L)
@@ -347,6 +463,7 @@ class GameScene: SKScene {
 
             
         }
+        // Buttons für 4. Spieler
         if playerCount > 3 {
             
 
@@ -415,6 +532,25 @@ class GameScene: SKScene {
     }
 
     
+    // Kollisionen mit Wand und Tail der Gegner
+    func didBeginContact(contact: SKPhysicsContact) {
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p2tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p4tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat) {
+            players[0].dead = true
+            
+        }
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p1tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p4tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat)  {
+            players[1].dead = true
+            
+        }
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p1tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p4tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat)  {
+            players[2].dead = true
+            
+        }
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p1tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p3tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat)  {
+            players[3].dead = true
+            
+        }
+    }
     
     
 }
