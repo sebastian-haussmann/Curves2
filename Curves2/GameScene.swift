@@ -27,7 +27,7 @@ struct GameData{
     static var colors = [UIColor]()
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITableViewDelegate {
     
     let trianglePathP1L = CGPathCreateMutable()
     
@@ -53,6 +53,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var players = [LineObject]()
     var foodList = [SKShapeNode]()
+    
+    // Score
+    var scoreView: UIView = UIView()
+    var scoreTableView: UITableView = UITableView()
+    var scoreSort = [(Int, UIColor, Int)]()
     
     
     override func didMoveToView(view: SKView) {
@@ -81,6 +86,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             players.append(line)
             counter.append(0)
             randomStartingPosition(index)
+            
+            
+            // Score View After each round
+            scoreView = UIView(frame: CGRect(x: btnWidth + 5, y: 5, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
+            scoreTableView = UITableView(frame: CGRect(origin: CGPoint(x: 0,y: 0), size: CGSize(width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10)))
+            scoreView.addSubview(scoreTableView)
+            scoreView.hidden = true
+            scoreTableView.dataSource = self
+            scoreTableView.delegate = self
+            scoreTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+            let tblView =  UIView(frame: CGRectZero)
+            scoreTableView.tableFooterView = tblView
+            scoreTableView.tableFooterView!.hidden = true
+            scoreTableView.backgroundColor = UIColor.clearColor()
+            scoreSort.append((0,color,0))
+            
+            self.view?.addSubview(scoreView)
             
         }
 
@@ -181,14 +203,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 tail.removeFromParent()
             }
             player.tail.removeAll()
-        randomStartingPosition(count)
-        players[count].dead = false
+            randomStartingPosition(count)
+            players[count].dead = false
+            scoreSort[count].2 = 0
         }
+        scoreView.hidden = true
         
     }
     
     func randomStartingPosition(i: Int){
-        let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (4*btnWidth+10) - 100))) + 2 * btnWidth + 10 + 50
+        let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2 * btnWidth + 10) - 100))) + btnWidth + 5 + 50
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 25)
         let startingPosition = CGPoint(x: posX, y: posY)
                 //        print(startingPosition)
@@ -200,6 +224,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         players[i].xSpeed = 1
         players[i].ySpeed = 0
+        
+        for index in 0...Int(arc4random_uniform(4)) {
+            leftBtn(i)
+        }
 
 
 
@@ -500,7 +528,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.foodCat){
             
             addTailAndRemoveFood(contact.bodyA.node!.position, index: 0)
-            print(contact.bodyA.node!.frame)
+//            print(contact.bodyA.node!.frame)
         }
         if (contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.foodCat){
             
@@ -520,14 +548,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var deadPlayers = players.filter{(obj: LineObject) -> Bool in
             obj.dead == false}
         
+        
+        // check if All Dead
         if deadPlayers.count == 1 && players.count > 1{
+            
+            updateTableView()
             NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
             
         }
         
         if !players.contains({obj -> Bool in obj.dead == false}) && players.count == 1{
+            updateTableView()
             NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
         }
+    }
+    
+    func updateTableView(){
+        for (count,player) in players.enumerate(){
+            scoreSort[count] = (player.score, GameData.colors[count], scoreSort[count].2)
+        }
+        scoreSort.sortInPlace() { $0.0 > $1.0 }
+        scoreView.hidden = false
+        self.scoreTableView.reloadData()
     }
     
     func updateScore(index: Int){
@@ -537,6 +579,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             for (count,player) in players.enumerate(){
                 if count != index && player.dead == false{
                     player.score += 5
+                    scoreSort[count].2 += 5
                     scoreLblList[count].text = String(player.score)
                 }
             }
@@ -574,6 +617,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
 
     
+    //***********************************************************************************
+    //***********************************************************************************
+    //                                  Score Table View Start
+    //***********************************************************************************
+    //***********************************************************************************
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return players.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+        //        print(scores[indexPath.row])
+//        let player = players.filter {($0.playerID == scores[indexPath.row].0)}
+//        if player.count == 0{
+            cell.textLabel?.textColor = scoreSort[indexPath.row].1
+//        }else{
+//            cell.textLabel?.textColor = hexStringToUIColor(player[0].color)
+//        }
+        cell.textLabel?.text = String(scoreSort[indexPath.row].0)
+        cell.textLabel?.font = UIFont.boldSystemFontOfSize(25)
+        cell.backgroundColor = UIColor.blackColor()
+//        cell.textLabel?.text = scores[indexPath.row].1
+        cell.detailTextLabel?.text = "+ " + String(scoreSort[indexPath.row].2)
+        return cell
+    }
+    
+    
+    
+    //***********************************************************************************
+    //***********************************************************************************
+    //                                  Score Table View End
+    //***********************************************************************************
+    //***********************************************************************************
     
     
 //        for (index,color) in GameData.colors.enumerate(){
