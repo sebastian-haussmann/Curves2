@@ -52,7 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
     
     var players = [LineObject]()
-    var foodList = [SKShapeNode]()
+    var foodList = [SKSpriteNode]()
     
     // Score
     var scoreView: UIView = UIView()
@@ -134,13 +134,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func createFood(){
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
-//        var food = SKShapeNode(rect: CGRect(x: posX, y: posY, width: 10, height: 10))
-        var food = SKShapeNode(rectOfSize: CGSize(width: 30, height: 30))
-        food.fillColor = UIColor.redColor()
-        food.position = CGPoint(x: posX, y: posY)
-//        
+
+        var randFood = arc4random_uniform(17)
+        var imageName = ""
         
-        food.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 10, height: 10))
+        
+        if randFood <= 2{
+            imageName = "Banane"
+        }else if randFood > 2 && randFood <= 8{
+            imageName = "Apfel"
+        }else{
+            imageName = "Erdbeere"
+        }
+        
+        var food = SKSpriteNode(imageNamed: imageName)
+        food.name = imageName
+        food.position = CGPoint(x: posX, y: posY)
+        food.setScale(0.1)
+        
+        food.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: food.size.width - 5, height: food.size.height - 5))
         //food.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: posX, y: posY, width: 10, height: 10))
         food.physicsBody!.categoryBitMask = PhysicsCat.foodCat
         food.physicsBody!.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
@@ -527,21 +539,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
         if (contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.foodCat){
             
-            addTailAndRemoveFood(contact.bodyA.node!.position, index: 0)
+            addTailAndRemoveFood(contact.bodyA.node!.position, index: 0, foodName: contact.bodyA.node!.name!)
 //            print(contact.bodyA.node!.frame)
         }
         if (contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.foodCat){
             
-            addTailAndRemoveFood(contact.bodyA.node!.position, index: 1)
+            addTailAndRemoveFood(contact.bodyA.node!.position, index: 1, foodName: contact.bodyA.node!.name!)
         }
         if (contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.foodCat){
             
-            addTailAndRemoveFood(contact.bodyA.node!.position, index: 2)
+            addTailAndRemoveFood(contact.bodyA.node!.position, index: 2, foodName: contact.bodyA.node!.name!)
         }
         if (contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.foodCat){
             
-            addTailAndRemoveFood(contact.bodyA.node!.position, index: 3)
-            
+            addTailAndRemoveFood(contact.bodyA.node!.position, index: 3, foodName: contact.bodyA.node!.name!)
         }
         
         
@@ -589,7 +600,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
     }
 
-    func addTailAndRemoveFood(contactPos: CGPoint, index: Int){
+    func addTailAndRemoveFood(contactPos: CGPoint, index: Int, foodName: String){
 
         for (count,foodUnit) in foodList.enumerate(){
             if contactPos == foodUnit.position{
@@ -613,6 +624,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 players[index].tail.append(newTail)
             }
         }
+        switch foodName {
+        case "Erdbeere":
+            players[index].score += 1
+            scoreSort[index].2 += 1
+        case "Apfel":
+            players[index].score += 2
+            scoreSort[index].2 += 2
+        case "Banane":
+            players[index].score += 3
+            scoreSort[index].2 += 3
+        default:
+            break
+        }
+        scoreLblList[index].text = String(players[index].score)
+        
     }
     
 
