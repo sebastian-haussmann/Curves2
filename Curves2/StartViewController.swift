@@ -17,6 +17,7 @@ class StartViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var settingsButton: UIButton!
     
     var playerCount = 2
     override func viewDidLoad() {
@@ -24,6 +25,8 @@ class StartViewController: UIViewController {
         addButton.layer.cornerRadius = cornerRadius
         removeButton.layer.cornerRadius = cornerRadius
         startButton.layer.cornerRadius = cornerRadius
+        settingsButton.layer.cornerRadius = cornerRadius
+        
         super.viewDidLoad()
         playerCount = 2
         for var i=0; i < 4; i=i+1 {

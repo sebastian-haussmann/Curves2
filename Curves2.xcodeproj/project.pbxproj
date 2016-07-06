@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3CDDA5AB1D2177D80094A36E /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDDA5AA1D2177D80094A36E /* StartViewController.swift */; };
+		588D1FFA1D2D7563000C9E43 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D1FF91D2D7563000C9E43 /* SettingsViewController.swift */; };
 		58CD5BD61D23C8F300F50914 /* LineObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CD5BD51D23C8F300F50914 /* LineObject.swift */; };
 		58FF4AFE1D2171E9005C8DD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FF4AFD1D2171E9005C8DD3 /* AppDelegate.swift */; };
 		58FF4B001D2171E9005C8DD3 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 58FF4AFF1D2171E9005C8DD3 /* GameScene.sks */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		3CDDA5AA1D2177D80094A36E /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		588D1FF91D2D7563000C9E43 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		58CD5BD51D23C8F300F50914 /* LineObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineObject.swift; path = ../LineObject.swift; sourceTree = "<group>"; };
 		58FF4AFA1D2171E9005C8DD3 /* Curves2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Curves2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58FF4AFD1D2171E9005C8DD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				58FF4B011D2171E9005C8DD3 /* GameScene.swift */,
 				58FF4B031D2171E9005C8DD3 /* GameViewController.swift */,
 				3CDDA5AA1D2177D80094A36E /* StartViewController.swift */,
+				588D1FF91D2D7563000C9E43 /* SettingsViewController.swift */,
 				58FF4B051D2171E9005C8DD3 /* Main.storyboard */,
 				58FF4B081D2171E9005C8DD3 /* Assets.xcassets */,
 				58FF4B0A1D2171E9005C8DD3 /* LaunchScreen.storyboard */,
@@ -275,6 +278,7 @@
 				58FF4B041D2171E9005C8DD3 /* GameViewController.swift in Sources */,
 				58CD5BD61D23C8F300F50914 /* LineObject.swift in Sources */,
 				58FF4AFE1D2171E9005C8DD3 /* AppDelegate.swift in Sources */,
+				588D1FFA1D2D7563000C9E43 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
