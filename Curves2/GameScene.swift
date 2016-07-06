@@ -80,6 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             line.head.strokeColor = color
             line.lineNode.fillColor = color
             line.lineNode.strokeColor = color
+            line.head.name = String(index)
             
             var scorelbl = SKLabelNode(fontNamed: "TimesNewRoman")
             scorelbl.text = String(line.score)
@@ -260,33 +261,70 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
                 if p1R.containsPoint(location){
                     rightBtn(0)
+                    p1R.alpha = 0.5
                     
                 }else if p1L.containsPoint(location){
                     leftBtn(0)
+                    p1L.alpha = 0.5
                     
                 }else if p2R.containsPoint(location){
                     rightBtn(1)
+                    p2R.alpha = 0.5
                     
                 }else if p2L.containsPoint(location){
                     leftBtn(1)
+                    p2L.alpha = 0.5
                     
                 }else if p3R.containsPoint(location){
                     rightBtn(2)
+                    p3R.alpha = 0.5
                     
                 }else if p3L.containsPoint(location){
                     leftBtn(2)
+                    p3L.alpha = 0.5
                     
                 }else if p4R.containsPoint(location){
                     rightBtn(3)
+                    p4R.alpha = 0.5
                     
                 }else if p4L.containsPoint(location){
                     leftBtn(3)
+                    p4L.alpha = 0.5
                 }
-                
-    
-
           }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch in touches {
+            let location = touch.locationInNode(self)
+            
+            if p1R.containsPoint(location){
+                p1R.alpha = 1
+                
+            }else if p1L.containsPoint(location){
+                p1L.alpha = 1
+                
+            }else if p2R.containsPoint(location){
+                p2R.alpha = 1
+                
+            }else if p2L.containsPoint(location){
+                p2L.alpha = 1
+                
+            }else if p3R.containsPoint(location){
+                p3R.alpha = 1
+                
+            }else if p3L.containsPoint(location){
+                p3L.alpha = 1
+                
+            }else if p4R.containsPoint(location){
+                p4R.alpha = 1
+                
+            }else if p4L.containsPoint(location){
+                p4L.alpha = 1
+            }
         }
+
+    }
     
     func rightBtn(index: Int){
         if(players[index].xSpeed > 0){
@@ -342,7 +380,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
         if nameRandom < 5 {
             imageName = "SpeedItemGreen"
-        }else if nameRandom > 5{
+        }else if nameRandom >= 5{
             imageName = "SpeedItemRed"
         }
 
@@ -443,7 +481,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 p3R.strokeColor = GameData.colors[2]
                 p3R.zRotation = CGFloat (-M_PI_2)
                 p3R.fillColor = GameData.colors[2]
-                p3R.alpha = 0.3
                 self.addChild(p3R)
                 
                 
@@ -517,28 +554,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func addPhysics(){
         players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
         players[0].head.physicsBody!.categoryBitMask = PhysicsCat.p1HeadCat
-        players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+        players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.itemCat
         players[0].head.physicsBody?.affectedByGravity = false
         players[0].head.physicsBody?.linearDamping = 0
     
         if players.count > 1 {
             players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
             players[1].head.physicsBody!.categoryBitMask = PhysicsCat.p2HeadCat
-            players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+            players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.itemCat
             players[1].head.physicsBody?.affectedByGravity = false
             players[1].head.physicsBody?.linearDamping = 0
         }
         if players.count > 2 {
             players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
             players[2].head.physicsBody!.categoryBitMask = PhysicsCat.p3HeadCat
-            players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat
+            players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.itemCat
             players[2].head.physicsBody?.affectedByGravity = false
             players[2].head.physicsBody?.linearDamping = 0
         }
         if players.count > 3 {
             players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
             players[3].head.physicsBody!.categoryBitMask = PhysicsCat.p4HeadCat
-            players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat
+            players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.itemCat
             players[3].head.physicsBody?.affectedByGravity = false
             players[3].head.physicsBody?.linearDamping = 0
         }
@@ -597,6 +634,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
             addTailAndRemoveFood(contact.bodyA.node!.position, index: 3, foodName: contact.bodyA.node!.name!)
         }
+        if (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) {
+            
+            
+            
+            switch contact.bodyB.node!.name!{
+            case "SpeedItemRed":
+                increaseSpeedRed(Int(contact.bodyA.node!.name!)!)
+            case "SpeedItemGreen":
+                increaseSpeedGreen(Int(contact.bodyA.node!.name!)!)
+            default:
+                break
+            }
+            
+            for item in itemList{
+                if contact.bodyB.node!.position == item.position{
+                    item.removeFromParent()
+                    
+                }
+            }
+            
+           
+            
+        }
+            
+            
+        
         
         
         var deadPlayers = players.filter{(obj: LineObject) -> Bool in
@@ -616,6 +679,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             updateTableView()
             foodTimer.invalidate()
             NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
+        }
+    }
+    
+    func increaseSpeedGreen(index: Int){
+        players[index].snakeVelocity += 0.5
+        rightBtn(index)
+        leftBtn(index)
+        NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.decreaseSpeed), userInfo: index, repeats: false)
+        
+    }
+    
+    func decreaseSpeed(timer: NSTimer){
+        let index = timer.userInfo as! Int
+        players[index].snakeVelocity -= 0.5
+        rightBtn(index)
+        leftBtn(index)
+    
+    }
+    
+    func increaseSpeedRed(index: Int){
+        for (count,player) in players.enumerate(){
+            
+            if index != count{
+                players[index].snakeVelocity += 0.5
+            }
+            
         }
     }
     
