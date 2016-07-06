@@ -22,8 +22,9 @@ class LineObject{
     var speed: CGFloat = CGFloat()
     var tail: [SKShapeNode] = []
     var score: Int = Int()
+    var snakeVelocity: CGFloat = CGFloat()
     
-    init(head: SKShapeNode,position: CGPoint, lineNode: SKShapeNode, wayPoints: [CGPoint], dead: Bool, lastPoint: CGPoint, xSpeed: CGFloat, ySpeed: CGFloat, speed: CGFloat, tail: [SKShapeNode], score: Int){
+    init(head: SKShapeNode,position: CGPoint, lineNode: SKShapeNode, wayPoints: [CGPoint], dead: Bool, lastPoint: CGPoint, xSpeed: CGFloat, ySpeed: CGFloat, speed: CGFloat, tail: [SKShapeNode], score: Int, snakeVelocity: CGFloat){
         self.head = head
         self.position = position
         self.lineNode = lineNode
@@ -35,6 +36,7 @@ class LineObject{
         self.speed = speed
         self.tail = tail
         self.score = score
+        self.snakeVelocity = snakeVelocity
     }
     
     

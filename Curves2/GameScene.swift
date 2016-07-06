@@ -60,6 +60,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var scoreSort = [(Int, UIColor, Int)]()
     
     
+    var item = SKSpriteNode()
+    var itemList = [SKSpriteNode]()
+    var foodTimer = NSTimer()
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
        
@@ -70,7 +74,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for (index,color) in GameData.colors.enumerate(){
             
             
-            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0)
+            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(1.5))
         
             line.head.fillColor = color
             line.head.strokeColor = color
@@ -126,7 +130,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
     
         
-        let foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
+        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
+        let itemTimer = NSTimer.scheduledTimerWithTimeInterval(11.0, target: self, selector: #selector(GameScene.makeItems), userInfo: 0, repeats: true)
+        
+        
+        
         
         
     }
@@ -162,18 +170,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         foodList.append(food)
         
         self.addChild(food)
-        
-        
-//        newTail.fillColor = UIColor.greenColor()
-//        newTail.position = CGPoint(x: 100,y: 100)
-//        self.addChild(newTail)
-//        p1Tail.append(newTail)
-//        
-//        newTail2.fillColor = UIColor.greenColor()
-//        newTail2.position = CGPoint(x: 100,y: 100)
-//        self.addChild(newTail2)
-//        p1Tail.append(newTail2)
-    
+
     }
     
     func moveSnake(index : Int){
@@ -192,24 +189,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             followHead(index)
         }
     }
+    
+    
     func followHead(index: Int){
         
     
-        var x = 10
+    
+        var x = Int(15 / players[index].snakeVelocity)
         for tail in players[index].tail{
-            var jo = players[index].wayPoints.count
-            
-            tail.position = players[index].wayPoints[jo - x]
-            x = x + 10
+            var tailSize = players[index].wayPoints.count
+            tail.position = players[index].wayPoints[tailSize - x]
+            x = x + Int(15 / players[index].snakeVelocity)
         }
+
     }
+
     
     func newRound(){
         
         for food in foodList{
             food.removeFromParent()
-//            food.removeAllActions()
         }
+        for item in itemList{
+            item.removeFromParent()
+        }
+        itemList.removeAll()
         for (count,player) in players.enumerate(){
             for tail in players[count].tail{
                 tail.removeFromParent()
@@ -220,7 +224,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             scoreSort[count].2 = 0
         }
         scoreView.hidden = true
-        
+        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
     }
     
     func randomStartingPosition(i: Int){
@@ -287,15 +291,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func rightBtn(index: Int){
         if(players[index].xSpeed > 0){
             players[index].xSpeed = 0
-            players[index].ySpeed = -1
+            players[index].ySpeed = -1 * players[index].snakeVelocity
         }else if (players[index].xSpeed < 0){
             players[index].xSpeed = 0
-            players[index].ySpeed = 1
+            players[index].ySpeed = 1 * players[index].snakeVelocity
         }else if (players[index].ySpeed < 0){
-            players[index].xSpeed = -1
+            players[index].xSpeed = -1 * players[index].snakeVelocity
             players[index].ySpeed = 0
         }else if (players[index].ySpeed > 0){
-            players[index].xSpeed = 1
+            players[index].xSpeed = 1 * players[index].snakeVelocity
             players[index].ySpeed = 0
         }
         
@@ -305,18 +309,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
         
     }
+    
     func leftBtn(index: Int){
         if(players[index].xSpeed > 0){
             players[index].xSpeed = 0
-            players[index].ySpeed = 1
+            players[index].ySpeed = 1 * players[index].snakeVelocity
         }else if (players[index].xSpeed < 0){
             players[index].xSpeed = 0
-            players[index].ySpeed = -1
+            players[index].ySpeed = -1 * players[index].snakeVelocity
         }else if (players[index].ySpeed < 0){
-            players[index].xSpeed = 1
+            players[index].xSpeed = 1 * players[index].snakeVelocity
             players[index].ySpeed = 0
         }else if (players[index].ySpeed > 0){
-            players[index].xSpeed = -1
+            players[index].xSpeed = -1 * players[index].snakeVelocity
             players[index].ySpeed = 0
         }
         for tail in players[index].tail{
@@ -325,6 +330,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
     }
 
+    
+    
+    func makeItems(){
+        let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
+        let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
+        
+        var nameRandom = arc4random_uniform(9)
+        
+        var imageName = String()
+        
+        if nameRandom < 5 {
+            imageName = "SpeedItemGreen"
+        }else if nameRandom > 5{
+            imageName = "SpeedItemRed"
+        }
+
+        item = SKSpriteNode(imageNamed: imageName)
+        item.name = imageName
+        item.setScale(0.4)
+        item.physicsBody = SKPhysicsBody(circleOfRadius: item.size.height / 2)
+        item.physicsBody!.categoryBitMask = PhysicsCat.itemCat
+        item.physicsBody!.contactTestBitMask =  PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+        item.physicsBody?.affectedByGravity = false
+        item.physicsBody?.linearDamping = 0
+        item.position = CGPoint(x: posX, y: posY)
+        
+        if !(item.position == CGPoint(x: 0.0, y: 0.0)){
+            addChild(item)
+            itemList.append(item)
+        }
+    }
+
+    
     
     func createButtons(playerCount: Int){
     
@@ -479,28 +517,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func addPhysics(){
         players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
         players[0].head.physicsBody!.categoryBitMask = PhysicsCat.p1HeadCat
-        players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat
+        players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
         players[0].head.physicsBody?.affectedByGravity = false
         players[0].head.physicsBody?.linearDamping = 0
     
         if players.count > 1 {
             players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
             players[1].head.physicsBody!.categoryBitMask = PhysicsCat.p2HeadCat
-            players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat
+            players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
             players[1].head.physicsBody?.affectedByGravity = false
             players[1].head.physicsBody?.linearDamping = 0
         }
         if players.count > 2 {
             players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
             players[2].head.physicsBody!.categoryBitMask = PhysicsCat.p3HeadCat
-            players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat
+            players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat
             players[2].head.physicsBody?.affectedByGravity = false
             players[2].head.physicsBody?.linearDamping = 0
         }
         if players.count > 3 {
             players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
             players[3].head.physicsBody!.categoryBitMask = PhysicsCat.p4HeadCat
-            players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat
+            players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat
             players[3].head.physicsBody?.affectedByGravity = false
             players[3].head.physicsBody?.linearDamping = 0
         }
@@ -510,32 +548,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func didBeginContact(contact: SKPhysicsContact) {
         
     
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat){
+        // PLayer + Wall Start
+        // ****************************************************************
+        // ****************************************************************
+        
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat){
             
             players[0].dead = true
             updateScore(0)
-            
-            
-        
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat){
             
             players[1].dead = true
             updateScore(1)
             
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat){
             
             players[2].dead = true
             updateScore(2)
         
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat){
             
             players[3].dead = true
             updateScore(3)
                     
         }
+        // ****************************************************************
+        // ****************************************************************
+        // PLayer + Wall End
+       
         
         if (contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.foodCat){
             
@@ -564,12 +607,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         if deadPlayers.count == 1 && players.count > 1{
             
             updateTableView()
+            foodTimer.invalidate()
             NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
             
         }
         
         if !players.contains({obj -> Bool in obj.dead == false}) && players.count == 1{
             updateTableView()
+            foodTimer.invalidate()
             NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
         }
     }
@@ -628,6 +673,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         case "Erdbeere":
             players[index].score += 1
             scoreSort[index].2 += 1
+            followHead(0)
         case "Apfel":
             players[index].score += 2
             scoreSort[index].2 += 2
