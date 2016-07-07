@@ -61,7 +61,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     // Score
     var scoreView: UIView = UIView()
     var scoreTableView: UITableView = UITableView()
-    var scoreSort = [(Int, UIColor, Int)]()
+    var scoreSort = [(Int, UIColor, Int)]()   //Score, Color, Score in current Round
     var gameModeView: SKShapeNode = SKShapeNode()
     var gameModeLbl: SKLabelNode = SKLabelNode()
     
@@ -129,6 +129,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 gameModeLbl.text = "Ziel: " + String(GameData.gameModeCount)
             }else{
                 gameModeLbl.text = "Runde " + String(curRound) + " von " + String(GameData.gameModeCount)
+                
             }
             
             gameModeLbl.color = UIColor.whiteColor()
@@ -702,14 +703,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
             updateTableView()
             foodTimer.invalidate()
-            NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
+            
+            if curRound != GameData.gameModeCount && GameData.gameModeID == 1 || scoreSort[0].0 < GameData.gameModeCount && GameData.gameModeID == 0 {
+                NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
+            }
+            
             
         }
         
         if !players.contains({obj -> Bool in obj.dead == false}) && players.count == 1{
             updateTableView()
             foodTimer.invalidate()
-            NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
+            if curRound != GameData.gameModeCount && GameData.gameModeID == 1 || scoreSort[0].0 < GameData.gameModeCount && GameData.gameModeID == 0 {
+                NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
+            }
         }
     }
     

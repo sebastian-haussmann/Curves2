@@ -41,9 +41,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         case 0:
             gamemodeID = 0
             gamemodeLbl.text = "Zu erreichende Punkte: "
+            gamemodeTxtField.text = String(50)
+            pointsOrRounds = Int(gamemodeTxtField.text!)!
         case 1:
             gamemodeID = 1
             gamemodeLbl.text = "Anzahl der Runden: "
+            gamemodeTxtField.text = String(5)
+            pointsOrRounds = Int(gamemodeTxtField.text!)!
         default:
             break
         }
