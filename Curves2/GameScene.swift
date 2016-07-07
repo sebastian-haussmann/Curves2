@@ -771,6 +771,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
             if curRound != GameData.gameModeCount && GameData.gameModeID == 1 || scoreSort[0].0 < GameData.gameModeCount && GameData.gameModeID == 0 {
                 NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
+            }else{
+                scoreView.removeFromSuperview()
+                self.removeAllActions()
+                self.removeAllChildren()
+                let scene = MainMenu(fileNamed: "MainMenu");
+                
+                scene!.scaleMode = .ResizeFill
+                
+                self.view?.presentScene(scene!, transition: SKTransition.doorsCloseVerticalWithDuration(1.5));
             }
             
             
