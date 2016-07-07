@@ -445,15 +445,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
             // Für 1 und 2 Spieler
             if playerCount <= 2{
+                
+                let leftArr = SKSpriteNode(imageNamed: "LeftArr")
+                let rightArr = SKSpriteNode(imageNamed: "RightArr")
                 p1L = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
                 p1L.position = CGPoint(x: 50, y: 50 )
                 p1L.strokeColor = GameData.colors[0]
                 p1L.fillColor = GameData.colors[0]
+                leftArr.setScale(0.5)
+                leftArr.position = CGPoint(x: 0, y: 0)
+                p1L.addChild(leftArr)
+                
                 self.addChild(p1L)
                 p1R = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
                 p1R.position = CGPoint(x: view!.frame.width-50, y: 50)
                 p1R.strokeColor = GameData.colors[0]
                 p1R.fillColor = GameData.colors[0]
+                rightArr.setScale(0.5)
+                rightArr.position = CGPoint(x: 0, y: 0)
+                p1R.addChild(rightArr)
+                
+                
                 self.addChild(p1R)
                 
                 scoreLblList[0].position = CGPoint(x: 15, y: 120)
@@ -463,15 +475,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
             // Für genau 2. Spieler
             if playerCount == 2{
+                
+                let leftArr = SKSpriteNode(imageNamed: "RightArr")
+                let rightArr = SKSpriteNode(imageNamed: "LeftArr")
                 p2L = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
                 p2L.position = CGPoint(x: view!.frame.width-50, y: view!.frame.height-50 )
                 p2L.strokeColor = GameData.colors[1]
                 p2L.fillColor = GameData.colors[1]
+                leftArr.setScale(0.5)
+                leftArr.position = CGPoint(x: 0, y: 0)
+                p2L.addChild(leftArr)
                 self.addChild(p2L)
                 p2R = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
                 p2R.position = CGPoint(x: 50, y: view!.frame.height-50)
                 p2R.strokeColor = GameData.colors[1]
                 p2R.fillColor = GameData.colors[1]
+                rightArr.setScale(0.5)
+                rightArr.position = CGPoint(x: 0, y: 0)
+                p2R.addChild(rightArr)
                 self.addChild(p2R)
                 
                 scoreLblList[1].position = CGPoint(x: 15, y: view!.frame.height - 120)
@@ -483,11 +504,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
             // Buttons für 1.-3. Spieler
             if playerCount > 2 {
-    
+                
+                
+                let leftArr = SKSpriteNode(imageNamed: "TopLeftArr")
+                let rightArr = SKSpriteNode(imageNamed: "BottomRightArr")
+                
                 p1L = SKShapeNode(path: trianglePathP1L)
                 p1L.position = CGPoint(x: 0, y: 10)
                 p1L.strokeColor = GameData.colors[0]
                 p1L.fillColor = GameData.colors[0]
+                leftArr.setScale(0.3)
+                leftArr.position = CGPoint(x: 38, y: 68)
+                p1L.addChild(leftArr)
                 self.addChild(p1L)
     
                 p1R = SKShapeNode(path: trianglePathP1L)
@@ -495,17 +523,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 p1R.strokeColor = GameData.colors[0]
                 p1R.fillColor = GameData.colors[0]
                 p1R.zRotation = CGFloat(-M_PI_4)*4
+                rightArr.setScale(0.3)
+                rightArr.zRotation = CGFloat(-M_PI_4)*4
+                rightArr.position = CGPoint(x: 38, y: 68)
+                p1R.addChild(rightArr)
                 self.addChild(p1R)
                 
                 scoreLblList[0].position = CGPoint(x: 15, y: 120)
                 self.addChild(scoreLblList[0])
     
     
+                let leftArr3 = SKSpriteNode(imageNamed: "TopRightArr")
+                let rightArr3 = SKSpriteNode(imageNamed: "BottomLeftArr")
+                
                 p3L = SKShapeNode(path: trianglePathP1L)
                 p3L.position = CGPoint(x: view!.frame.width - 10 , y: 0)
                 p3L.strokeColor = GameData.colors[2]
-                p3L.zRotation = CGFloat (M_PI_2)
+                p3L.zRotation = CGFloat(M_PI_2)
                 p3L.fillColor = GameData.colors[2]
+                leftArr3.setScale(0.3)
+                leftArr3.zRotation = CGFloat(M_PI_2)
+                leftArr3.position = CGPoint(x: 38, y: 68)
+                p3L.addChild(leftArr3)
+                
                 self.addChild(p3L)
     
                 p3R = SKShapeNode(path: trianglePathP1L)
@@ -513,6 +553,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 p3R.strokeColor = GameData.colors[2]
                 p3R.zRotation = CGFloat (-M_PI_2)
                 p3R.fillColor = GameData.colors[2]
+                rightArr3.setScale(0.3)
+                rightArr3.zRotation = CGFloat(-M_PI_2)
+                rightArr3.position = CGPoint(x: 38, y: 68)
+                p3R.addChild(rightArr3)
                 self.addChild(p3R)
                 
                 
@@ -520,10 +564,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 self.addChild(scoreLblList[2])
     
     
+                let leftArr2 = SKSpriteNode(imageNamed: "BottomRightArr")
+                let rightArr2 = SKSpriteNode(imageNamed: "TopLeftArr")
+                
                 p2R = SKShapeNode(path: trianglePathP1L)
                 p2R.position = CGPoint(x:view!.frame.width - 115, y: view!.frame.height - 105)
                 p2R.strokeColor = GameData.colors[1]
                 p2R.fillColor = GameData.colors[1]
+               
+                rightArr2.setScale(0.3)
+                rightArr2.position = CGPoint(x: 38, y: 68)
+                p2R.addChild(rightArr2)
+                
                 self.addChild(p2R)
     
                 p2L = SKShapeNode(path: trianglePathP1L)
@@ -531,6 +583,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 p2L.strokeColor = GameData.colors[1]
                 p2L.zRotation = CGFloat(M_PI)
                 p2L.fillColor = GameData.colors[1]
+                
+                leftArr2.setScale(0.3)
+                leftArr2.zRotation = CGFloat(M_PI)
+                leftArr2.position = CGPoint(x: 38, y: 68)
+                p2L.addChild(leftArr2)
                 self.addChild(p2L)
                 
                 scoreLblList[1].position = CGPoint(x: view!.frame.width - 15, y: view!.frame.height - 120)
@@ -543,12 +600,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             // Buttons für 4. Spieler
             if playerCount > 3 {
     
+                let leftArr = SKSpriteNode(imageNamed: "BottomLeftArr")
+                let rightArr = SKSpriteNode(imageNamed: "TopLeftArr")
     
                 p4R = SKShapeNode(path: trianglePathP1L)
                 p4R.position = CGPoint(x: 105, y: view!.frame.height - 115)
                 p4R.strokeColor = GameData.colors[3]
                 p4R.zRotation = CGFloat(M_PI_2)
                 p4R.fillColor = GameData.colors[3]
+                leftArr.zRotation = CGFloat(M_PI_2)
+                rightArr.setScale(0.3)
+                rightArr.position = CGPoint(x: 38, y: 68)
+                p4R.addChild(rightArr)
                 self.addChild(p4R)
     
                 p4L = SKShapeNode(path: trianglePathP1L)
@@ -556,6 +619,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 p4L.strokeColor = GameData.colors[3]
                 p4L.zRotation = CGFloat(-M_PI_2)
                 p4L.fillColor = GameData.colors[3]
+                
+                leftArr.setScale(0.3)
+                leftArr.zRotation = CGFloat(-M_PI_2)
+                leftArr.position = CGPoint(x: 38, y: 68)
+                p4L.addChild(leftArr)
                 self.addChild(p4L)
                 
                 scoreLblList[3].position = CGPoint(x: 15, y: view!.frame.height - 120)
