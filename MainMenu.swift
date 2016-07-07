@@ -15,6 +15,10 @@ class MainMenu: SKScene {
     let p3Color = SKShapeNode(rectOfSize: CGSize(width: 80, height: 80), cornerRadius: 20)
     let p4Color = SKShapeNode(rectOfSize: CGSize(width: 80, height: 80), cornerRadius: 20)
     
+    let startBtn = SKShapeNode(rectOfSize: CGSize(width: 120, height: 60), cornerRadius: 20)
+    let addBtn = SKShapeNode(rectOfSize: CGSize(width: 60, height: 60), cornerRadius: 20)
+    let removeBtn = SKShapeNode(rectOfSize: CGSize(width: 60, height: 60), cornerRadius: 20)
+    
     
     var editedSettings: Bool = false
     
@@ -24,6 +28,18 @@ class MainMenu: SKScene {
         scaleMode = .ResizeFill
         
         playerCount = 2
+        
+        
+        startBtn.position = CGPoint (x: view.frame.width / 2, y: view.frame.height / 2)
+        startBtn.fillColor = UIColor.blueColor()
+        addBtn.position = CGPoint(x: (view.frame.width / 2) + 140, y: view.frame.height / 2)
+        addBtn.fillColor = UIColor.blueColor()
+        removeBtn.position = CGPoint(x: (view.frame.width / 2) - 140, y: view.frame.height / 2)
+        removeBtn.fillColor = UIColor.blueColor()
+        
+        self.addChild(startBtn)
+        self.addChild(addBtn)
+        self.addChild(removeBtn)
         
         p1Color.position = CGPoint(x: 80, y: 80)
         p2Color.position = CGPoint(x: view.frame.width - 80, y: view.frame.height - 80)
@@ -72,7 +88,31 @@ class MainMenu: SKScene {
 
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-      
+        for touch in touches {
+            let location = touch.locationInNode(self)
+            if addBtn.containsPoint(location){
+                
+            }
+            if removeBtn.containsPoint(location){
+                
+            }
+            if startBtn.containsPoint(location){
+                
+            }
+            if p1Color.containsPoint(location){
+                
+            }
+            if p2Color.containsPoint(location){
+                
+            }
+            if p3Color.containsPoint(location){
+                
+            }
+            if p4Color.containsPoint(location){
+                
+            }
+        }
+            
         
     }
     
