@@ -62,11 +62,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var scoreView: UIView = UIView()
     var scoreTableView: UITableView = UITableView()
     var scoreSort = [(Int, UIColor, Int)]()
+    var gameModeView: SKShapeNode = SKShapeNode()
+    var gameModeLbl: SKLabelNode = SKLabelNode()
     
     
     var item = SKSpriteNode()
     var itemList = [SKSpriteNode]()
     var foodTimer = NSTimer()
+    
+    var curRound = 0
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -74,7 +78,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         scaleMode = .ResizeFill
         physicsWorld.contactDelegate = self
     
-        print(GameData.gameModeCount, GameData.gameModeID, GameData.curveMode)
         
         for (index,color) in GameData.colors.enumerate(){
             
@@ -99,7 +102,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
             
             // Score View After each round
-            scoreView = UIView(frame: CGRect(x: btnWidth + 5, y: 5, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
+            scoreView = UIView(frame: CGRect(x: btnWidth + 5, y: 60, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
             scoreTableView = UITableView(frame: CGRect(origin: CGPoint(x: 0,y: 0), size: CGSize(width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10)))
             scoreView.addSubview(scoreTableView)
             scoreView.hidden = true
@@ -112,6 +115,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             scoreTableView.backgroundColor = UIColor.clearColor()
             scoreSort.append((0,color,0))
             
+            gameModeView = SKShapeNode(rect: CGRect(x: btnWidth + 5, y: 315, width: view.frame.width - (2*btnWidth+10), height: 55))
+            gameModeView.hidden = true
+            gameModeView.fillColor = UIColor.blackColor()
+            gameModeView.strokeColor = UIColor.whiteColor()
+            gameModeView.lineWidth = 2.0
+            
+            gameModeLbl = SKLabelNode(fontNamed: "Chalkduster")
+            
+           
+            
+            if GameData.gameModeID == 0{
+                gameModeLbl.text = "Ziel: " + String(GameData.gameModeCount)
+            }else{
+                gameModeLbl.text = "Runde " + String(curRound) + " von " + String(GameData.gameModeCount)
+            }
+            
+            gameModeLbl.color = UIColor.whiteColor()
+            gameModeLbl.fontSize = 30
+            gameModeLbl.position = CGPoint(x: view.frame.width / 2, y: 330)
+            gameModeView.addChild(gameModeLbl)
+            
+            self.addChild(gameModeView)
             self.view?.addSubview(scoreView)
             
         }
@@ -230,6 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             scoreSort[count].2 = 0
         }
         scoreView.hidden = true
+        gameModeView.hidden = true
         foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
     }
     
@@ -718,7 +744,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             scoreSort[count] = (player.score, GameData.colors[count], scoreSort[count].2)
         }
         scoreSort.sortInPlace() { $0.0 > $1.0 }
+        gameModeLbl.fontColor = scoreSort[0].1
+        if GameData.gameModeID == 1{
+            curRound += 1
+            if curRound == GameData.gameModeCount{
+                gameModeLbl.text = "Letze Runde"
+            }else{
+               gameModeLbl.text = "Runde " + String(curRound) + " von " + String(GameData.gameModeCount)
+            }
+            
+            
+        }
+        
         scoreView.hidden = false
+        gameModeView.hidden = false
         self.scoreTableView.reloadData()
     }
     
@@ -797,7 +836,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         //        print(scores[indexPath.row])
 //        let player = players.filter {($0.playerID == scores[indexPath.row].0)}
 //        if player.count == 0{
-            cell.textLabel?.textColor = scoreSort[indexPath.row].1
+
+        
+        
+        cell.textLabel?.textColor = scoreSort[indexPath.row].1
 //        }else{
 //            cell.textLabel?.textColor = hexStringToUIColor(player[0].color)
 //        }
