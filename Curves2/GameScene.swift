@@ -163,12 +163,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
         
         foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
-        let itemTimer = NSTimer.scheduledTimerWithTimeInterval(11.0, target: self, selector: #selector(GameScene.makeItems), userInfo: 0, repeats: true)
-        
-        
-        
-        
-        
     }
     
     func createFood(){
@@ -645,6 +639,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for (i,player) in players.enumerate(){
             if !players[i].dead{
                 moveSnake(i)
+                if arc4random_uniform(400) == 1{
+                    makeItems()
+                }
             }
             
         }
