@@ -25,6 +25,10 @@ struct PhysicsCat{
 
 struct GameData{
     static var colors = [UIColor]()
+    static var gameModeID: Int = Int()
+    static var gameModeCount: Int = Int()
+    static var curveMode: Int = Int()
+    
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -70,6 +74,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         scaleMode = .ResizeFill
         physicsWorld.contactDelegate = self
     
+        print(GameData.gameModeCount, GameData.gameModeID, GameData.curveMode)
         
         for (index,color) in GameData.colors.enumerate(){
             

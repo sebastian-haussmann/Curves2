@@ -220,7 +220,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J9L-JV-nfn">
                                 <rect key="frame" x="0.0" y="158" width="736" height="68"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="20" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1nV-mW-ESN">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="50" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1nV-mW-ESN">
                                         <rect key="frame" x="584" y="19" width="144" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="144" id="We9-oe-9x1"/>
@@ -264,8 +264,8 @@
                                             <constraint firstAttribute="width" constant="289" id="UPM-Bp-L3p"/>
                                         </constraints>
                                         <segments>
-                                            <segment title="Rund"/>
                                             <segment title="Eckig"/>
+                                            <segment title="Rund"/>
                                         </segments>
                                         <color key="tintColor" red="0.0" green="0.02147877183" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
@@ -295,7 +295,9 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
+                                    <action selector="cancelBtnPressed:" destination="stQ-dZ-YCt" eventType="touchUpInside" id="tQz-X2-twc"/>
                                     <action selector="startButton:" destination="th5-rQ-oUl" eventType="touchUpInside" id="bmO-Xw-SNo"/>
+                                    <segue destination="th5-rQ-oUl" kind="show" identifier="cancelSettings" id="ZXU-Bd-cf5"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qwU-IS-2HA">
@@ -310,7 +312,9 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
+                                    <action selector="saveBtnPressed:" destination="stQ-dZ-YCt" eventType="touchUpInside" id="7gR-xm-tMF"/>
                                     <action selector="startButton:" destination="th5-rQ-oUl" eventType="touchUpInside" id="6Sk-5P-WLi"/>
+                                    <segue destination="th5-rQ-oUl" kind="show" identifier="saveSettings" id="l9w-oO-jrO"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -371,4 +375,7 @@
             <point key="canvasLocation" x="423" y="-24"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="ZXU-Bd-cf5"/>
+    </inferredMetricsTieBreakers>
 </document>

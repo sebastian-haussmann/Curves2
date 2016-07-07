@@ -18,16 +18,21 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     var gamemodeID = 0
     var curveID = 0
+    var pointsOrRounds = 50
+    var prevTextField = "50"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         gamemodeTxtField.delegate = self
-        //gamemodeTxtField.keyboardType = UIKeyboardType.NumberPad
+        gamemodeTxtField.keyboardType = UIKeyboardType.NumberPad
         let cornerRadius = CGFloat(20)
         saveBtn.layer.cornerRadius = cornerRadius
         cancelBtn.layer.cornerRadius = cornerRadius
         
+        let tapRecognizer = UITapGestureRecognizer()
+        tapRecognizer.addTarget(self, action: "didTapView")
+        self.view.addGestureRecognizer(tapRecognizer)
         
     }
     @IBAction func gameModeAction(sender: AnyObject) {
@@ -58,6 +63,42 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         }
         
     }
+    
+    @IBAction func saveBtnPressed(sender: AnyObject) {
+        
+       // print(pointsOrRounds)
+        
+    }
+    
+    @IBAction func cancelBtnPressed(sender: AnyObject) {
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "saveSettings" {
+            let vc = segue.destinationViewController as! StartViewController
+            GameData.gameModeID = gamemodeID
+            GameData.gameModeCount = pointsOrRounds
+            GameData.curveMode = curveID
+            vc.editedSettings = true
+        }
+    }
+
+    
+    func didTapView(){
+        
+        if gamemodeTxtField.text == "" {
+            gamemodeTxtField.text = prevTextField
+        }else{
+            prevTextField = gamemodeTxtField.text!
+        }
+        pointsOrRounds = Int(gamemodeTxtField.text!)!
+        self.view.endEditing(true)
+    }
+    
+
     
 
     override func didReceiveMemoryWarning() {

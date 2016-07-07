@@ -19,6 +19,8 @@ class StartViewController: UIViewController {
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     
+    var editedSettings: Bool = false
+    
     var playerCount = 2
     override func viewDidLoad() {
         let cornerRadius = CGFloat(20)
@@ -151,6 +153,11 @@ class StartViewController: UIViewController {
                 colors.append(p4Button.backgroundColor!)
             }
             GameData.colors = colors
+            if !editedSettings{
+                GameData.gameModeID = 0
+                GameData.gameModeCount = 50
+                GameData.curveMode = 0
+            }
         }
     }
     
