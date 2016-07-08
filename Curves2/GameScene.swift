@@ -117,6 +117,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             scoreTableView.tableFooterView = tblView
             scoreTableView.tableFooterView!.hidden = true
             scoreTableView.backgroundColor = UIColor.clearColor()
+            scoreTableView.allowsSelection = false
+            scoreTableView.scrollEnabled = false
             scoreSort.append((0,color,0))
             
             gameModeView = SKShapeNode(rect: CGRect(x: btnWidth + 5, y: 315, width: view.frame.width - (2*btnWidth+10), height: 55))
