@@ -837,7 +837,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
         
         // check if All Dead
-        if deadPlayers.count == 1 && players.count > 1{
+        if deadPlayers.count <= 1 && players.count > 1{
+            for (index, player) in players.enumerate(){
+                player.xSpeed = 0
+                player.ySpeed = 0
+            }
             
             updateTableView()
             foodTimer.invalidate()
