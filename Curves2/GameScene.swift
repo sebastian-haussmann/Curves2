@@ -1041,7 +1041,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         case "Erdbeere":
             players[index].score += 1
             scoreSort[index].2 += 1
-            followHead(0)
         case "Apfel":
             players[index].score += 2
             scoreSort[index].2 += 2
