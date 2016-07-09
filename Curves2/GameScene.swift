@@ -935,47 +935,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             //updateTableView()
             makeEndScreen(0)
             
-            
-            
-//            if curRound != GameData.gameModeCount && GameData.gameModeID == 1 || scoreSort[0].0 < GameData.gameModeCount && GameData.gameModeID == 0 {
-//                NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
-//            }else{
-//                NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.closeGame), userInfo: 0, repeats: false)
-//            }
         }
     }
     
-
-//    func gameEnded(){
-//        endScreenView = SKShapeNode(rect: CGRect(x: btnWidth + 5, y: 5, width: view!.frame.width - (2*btnWidth+10), height: 150))
-//        endScreenView.fillColor = UIColor.blackColor()
-//        endScreenView.strokeColor = UIColor.whiteColor()
-//        self.addChild(endScreenView)
-//        
-//        rematchBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
-//        endGameBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
-//        
-//        rematchBtn.position = CGPoint(x: 200, y: 50)
-//        endGameBtn.position = CGPoint(x: 440, y: 50)
-//        rematchBtn.fillColor = UIColor.blueColor()
-//        endGameBtn.fillColor = UIColor.blueColor()
-//        
-//        let rematchLbl = SKLabelNode(fontNamed: "TimesNewRoman")
-//        let endGameLbl = SKLabelNode(fontNamed: "TimesNewRoman")
-//        
-//        rematchLbl.text = "Erneut Spielen"
-//        rematchLbl.fontSize = 15
-//        endGameLbl.text = "Hauptmenü"
-//        endGameLbl.fontSize = 15
-//        
-//        rematchBtn.addChild(rematchLbl)
-//        endGameBtn.addChild(endGameLbl)
-//        
-//        endScreenView.addChild(rematchBtn)
-//        endScreenView.addChild(endGameBtn)
-//    }
-    
-    func endScreen(){
+     func endScreen(){
         scoreView.removeFromSuperview()
         makeEndScreen(1)
     }

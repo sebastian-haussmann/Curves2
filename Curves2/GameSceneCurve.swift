@@ -344,9 +344,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         players[i].xSpeed = 1
         players[i].ySpeed = 1
         
-//        for index in 0...Int(arc4random_uniform(4)) {
-//            leftBtn(i)
-//        }
+        for index in 0...Int(arc4random_uniform(4)) {
+            changeDirectionL2(i)
+            changeDirectionR2(i)
+        }
         
         
         
@@ -397,32 +398,48 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 if p1R.containsPoint(location){
                     changeDirectionR2(0)
                     myTimerR1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 0, repeats: true)
-    
+                    p1R.alpha = 0.5
                 }else if p1L.containsPoint(location){
                     changeDirectionL2(0)
+                    p1L.alpha = 0.5
                     myTimerL1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 0, repeats: true)
                 }else if p2R.containsPoint(location){
                     changeDirectionR2(1)
+                    p2R.alpha = 0.5
                     myTimerR2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 1, repeats: true)
     
                 }else if p2L.containsPoint(location){
                     changeDirectionL2(1)
+                    p2L.alpha = 0.5
                     myTimerL2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 1, repeats: true)
                 }else if p3R.containsPoint(location){
                     changeDirectionR2(2)
+                    p3R.alpha = 0.5
                     myTimerR3 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 2, repeats: true)
     
                 }
                 else if p3L.containsPoint(location){
                     changeDirectionL2(2)
+                    p3L.alpha = 0.5
                     myTimerL3 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 2, repeats: true)
                 }else if p4R.containsPoint(location){
                     changeDirectionR2(3)
+                    p4R.alpha = 0.5
                     myTimerR4 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 3, repeats: true)
     
                 }else if p4L.containsPoint(location){
                     changeDirectionL2(3)
+                    p4L.alpha = 0.5
                     myTimerL4 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 3, repeats: true)
+                }else if rematchBtn.containsPoint(location){
+                    newGame()
+                    rematchBtn.alpha = 0.5
+                }else if highScoreBtn.containsPoint(location){
+                    //newGame()
+                    highScoreBtn.alpha = 0.5
+                }else if endGameBtn.containsPoint(location){
+                    closeGame()
+                    endGameBtn.alpha = 0.5
                 }
     
             }
@@ -437,19 +454,33 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 if p1R.containsPoint(location) || p1L.containsPoint(location){
                     myTimerR1.invalidate()
                     myTimerL1.invalidate()
+                    p1R.alpha = 1.0
+                    p1L.alpha = 1.0
     
                 }else if p2R.containsPoint(location) || p2L.containsPoint(location){
                     myTimerR2.invalidate()
                     myTimerL2.invalidate()
+                    p2R.alpha = 1.0
+                    p2L.alpha = 1.0
     
                 }else if p3R.containsPoint(location) || p3L.containsPoint(location){
                     myTimerR3.invalidate()
                     myTimerL3.invalidate()
+                    p3R.alpha = 1.0
+                    p3L.alpha = 1.0
     
                 }else if p4R.containsPoint(location) || p4L.containsPoint(location){
                     myTimerR4.invalidate()
                     myTimerL4.invalidate()
+                    p4R.alpha = 1.0
+                    p4L.alpha = 1.0
     
+                }else if rematchBtn.containsPoint(location){
+                    rematchBtn.alpha = 1
+                }else if highScoreBtn.containsPoint(location){
+                    highScoreBtn.alpha = 1
+                }else if endGameBtn.containsPoint(location){
+                    endGameBtn.alpha = 1
                 }
             }
         }
@@ -462,18 +493,26 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 if p1R.containsPoint(prevLoc) && !p1R.containsPoint(location) || p1L.containsPoint(prevLoc) && !p1L.containsPoint(location){
                     myTimerR1.invalidate()
                     myTimerL1.invalidate()
+                    p1R.alpha = 1.0
+                    p1L.alpha = 1.0
     
                 }else if p2R.containsPoint(prevLoc) && !p2R.containsPoint(location) || p2L.containsPoint(prevLoc) && !p2L.containsPoint(location){
                     myTimerR2.invalidate()
                     myTimerL2.invalidate()
+                    p2R.alpha = 1.0
+                    p2L.alpha = 1.0
     
                 }else if p3R.containsPoint(prevLoc) && !p3R.containsPoint(location) || p3L.containsPoint(prevLoc) && !p3L.containsPoint(location){
                     myTimerR3.invalidate()
                     myTimerL3.invalidate()
+                    p3R.alpha = 1.0
+                    p3L.alpha = 1.0
     
                 }else if p4R.containsPoint(prevLoc) && !p4R.containsPoint(location) || p4L.containsPoint(prevLoc) && !p4L.containsPoint(location){
                     myTimerR4.invalidate()
                     myTimerL4.invalidate()
+                    p4R.alpha = 1.0
+                    p4L.alpha = 1.0
     
                 }
             }
