@@ -75,6 +75,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var endScreenView: SKShapeNode = SKShapeNode()
     var rematchBtn: SKShapeNode = SKShapeNode()
     var endGameBtn: SKShapeNode = SKShapeNode()
+    var highScoreBtn: SKShapeNode = SKShapeNode()
+    var endScreenLbl: SKLabelNode = SKLabelNode()
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -169,34 +171,52 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         gameArea.physicsBody?.dynamic = false
         self.addChild(gameArea)
         
-        endScreenView = SKShapeNode(rect: CGRect(x: btnWidth + 5 + 10, y: 20, width: view.frame.width - (2*btnWidth+10) - 20, height: view.frame.height - 50))
-        endScreenView.fillColor = UIColor.blackColor()
+        endScreenView = SKShapeNode(rect: CGRect(x: btnWidth + 5 + 10, y: 20, width: view.frame.width - (2*btnWidth+10) - 20, height: view.frame.height - 100))
+        endScreenView.fillColor = UIColor.darkGrayColor()
         endScreenView.strokeColor = UIColor.whiteColor()
         
         
         rematchBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
         endGameBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
+        highScoreBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
+        
         
         rematchBtn.position = CGPoint(x: 200, y: 70)
-        endGameBtn.position = CGPoint(x: 440, y: 70)
+        highScoreBtn.position = CGPoint(x: 330, y: 70)
+        endGameBtn.position = CGPoint(x: 460, y: 70)
+        
         rematchBtn.fillColor = UIColor.blueColor()
+        highScoreBtn.fillColor = UIColor.blueColor()
         endGameBtn.fillColor = UIColor.blueColor()
         
         let rematchLbl = SKLabelNode(fontNamed: "TimesNewRoman")
         let endGameLbl = SKLabelNode(fontNamed: "TimesNewRoman")
+        let highScoreLbl = SKLabelNode(fontNamed: "TimesNewRoman")
+        
+
+        endScreenLbl = SKLabelNode(fontNamed: "TimesNewRoman")
+        endScreenLbl.position = CGPoint(x: view.frame.width / 2, y: view.frame.height / 2)
+        
+        
         
         rematchLbl.text = "Erneut Spielen"
         rematchLbl.fontSize = 15
-        endGameLbl.text = "Highscore"
+        endGameLbl.text = "Hauptmenü"
         endGameLbl.fontSize = 15
+        highScoreLbl.text = "Highscore"
+        highScoreLbl.fontSize = 15
         
         rematchBtn.addChild(rematchLbl)
         endGameBtn.addChild(endGameLbl)
+        highScoreBtn.addChild(highScoreLbl)
         
         endScreenView.addChild(rematchBtn)
         endScreenView.addChild(endGameBtn)
+        endScreenView.addChild(highScoreBtn)
+        endScreenView.addChild(endScreenLbl)
         self.addChild(endScreenView)
         endScreenView.hidden = true
+    
     
         
         foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
@@ -386,6 +406,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 }else if rematchBtn.containsPoint(location){
                     newGame()
                     rematchBtn.alpha = 0.5
+                }else if highScoreBtn.containsPoint(location){
+                    //newGame()
+                    highScoreBtn.alpha = 0.5
+                }else if endGameBtn.containsPoint(location){
+                    closeGame()
+                    endGameBtn.alpha = 0.5
                 }
           }
     }
@@ -419,6 +445,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 p4L.alpha = 1
             }else if rematchBtn.containsPoint(location){
                 rematchBtn.alpha = 1
+            }else if highScoreBtn.containsPoint(location){
+                highScoreBtn.alpha = 1
+            }else if endGameBtn.containsPoint(location){
+                endGameBtn.alpha = 1
             }
         }
 
@@ -871,6 +901,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             //updateTableView()
             foodTimer.invalidate()
             
+            endScreenLbl.fontColor = GameData.colors[0]
+            endScreenLbl.fontSize = 80
+            endScreenLbl.text = String(players[0].score)
             endScreenView.hidden = false
             
             
