@@ -94,6 +94,7 @@ class StartViewController: UIViewController {
     
     @IBAction func startButton(sender: AnyObject) {
 //        self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     @IBAction func p1Color(sender: AnyObject) {
         changeColor(0)

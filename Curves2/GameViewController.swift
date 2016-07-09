@@ -14,22 +14,43 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let scene = GameScene(fileNamed:"GameScene") {
-            // Configure the view.s
-            let skView = self.view as! SKView
-            skView.showsFPS = true
-            skView.showsNodeCount = true
-            skView.showsPhysics = true
-
-            
-            /* Sprite Kit applies additional optimizations to improve rendering performance */
-            skView.ignoresSiblingOrder = true
-            
-            /* Set the scale mode to scale to fit the window */
-            scene.scaleMode = .AspectFill
-            scene.backgroundColor = SKColor.blackColor()
-            skView.presentScene(scene)
+        if GameData.curveMode == 0 {
+            if let scene = GameScene(fileNamed:"GameScene") {
+                // Configure the view.s
+                let skView = self.view as! SKView
+                skView.showsFPS = true
+                skView.showsNodeCount = true
+                skView.showsPhysics = true
+                
+                
+                /* Sprite Kit applies additional optimizations to improve rendering performance */
+                skView.ignoresSiblingOrder = true
+                
+                /* Set the scale mode to scale to fit the window */
+                scene.scaleMode = .AspectFill
+                scene.backgroundColor = SKColor.blackColor()
+                skView.presentScene(scene)
+            }
+        }else{
+            if let scene = GameSceneCurve(fileNamed:"GameSceneCurve") {
+                // Configure the view.s
+                let skView = self.view as! SKView
+                skView.showsFPS = true
+                skView.showsNodeCount = true
+                skView.showsPhysics = true
+                
+                
+                /* Sprite Kit applies additional optimizations to improve rendering performance */
+                skView.ignoresSiblingOrder = true
+                
+                /* Set the scale mode to scale to fit the window */
+                scene.scaleMode = .AspectFill
+                scene.backgroundColor = SKColor.blackColor()
+                skView.presentScene(scene)
+            }
         }
+        
+        
     }
 
     override func shouldAutorotate() -> Bool {
