@@ -321,8 +321,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 tail.removeFromParent()
             }
             player.tail.removeAll()
-            randomStartingPosition(count)
             players[count].dead = false
+            randomStartingPosition(count)
             scoreSort[count].2 = 0
         }
         scoreView.hidden = true
@@ -340,13 +340,12 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         players[i].lastPoint = CGPointMake(posX, posY)
         players[i].wayPoints.append(startingPosition)
         
-        
+//        let rand = Int(arc4random_uniform(4))
         players[i].xSpeed = 1
         players[i].ySpeed = 1
         
-        for index in 0...Int(arc4random_uniform(4)) {
+        for index in 0...Int(arc4random_uniform(45)) {
             changeDirectionL2(i)
-            changeDirectionR2(i)
         }
         
         
@@ -827,25 +826,27 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         // PLayer + Wall Start
         // ****************************************************************
         // ****************************************************************
+//        print(contact.bodyB.categoryBitMask , " " , contact.bodyA.categoryBitMask)
         
         if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat){
             
             players[0].dead = true
             updateScore(0)
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat) ||
+            (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat){
             
             players[1].dead = true
             updateScore(1)
             
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat){
             
             players[2].dead = true
             updateScore(2)
             
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat){
             
             players[3].dead = true
             updateScore(3)
@@ -907,9 +908,18 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         // check if All Dead
         if deadPlayers.count <= 1 && players.count > 1{
+            myTimerL1.invalidate()
+            myTimerL2.invalidate()
+            myTimerL3.invalidate()
+            myTimerL4.invalidate()
+            myTimerR1.invalidate()
+            myTimerR2.invalidate()
+            myTimerR3.invalidate()
+            myTimerR4.invalidate()
             for (index, player) in players.enumerate(){
                 player.xSpeed = 0
                 player.ySpeed = 0
+                player.dead = true
             }
             
             updateTableView()
@@ -972,28 +982,31 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     
     func changeDirectionL2(index: Int){
-                let playerIndex = index
-                let alt = pointToRadian(players[playerIndex].wayPoints[0])
-                //        if switchDirBool {
-                //           wayPoints[0] = radianToPoint(alt-curveRadius)
-                //        }else{
-                players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
-                //        }
-                changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
-            }
+        let playerIndex = index
+        if !players[index].dead{
+            let alt = pointToRadian(players[playerIndex].wayPoints[0])
+            //        if switchDirBool {
+            //           wayPoints[0] = radianToPoint(alt-curveRadius)
+            //        }else{
+            players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
+            //        }
+            changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
+        }
+    }
         
             //Rechtskurve
     func changeDirectionR2(index: Int){
-                let playerIndex = index
-                let alt = pointToRadian(players[playerIndex].wayPoints[0])
-                //        if switchDirBool {
-                //            wayPoints[0] = radianToPoint(alt+curveRadius)
-                //        }else{
-                players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
-                //        }
-                changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
-        
-            }
+        let playerIndex = index
+        if !players[index].dead{
+            let alt = pointToRadian(players[playerIndex].wayPoints[0])
+            //        if switchDirBool {
+            //            wayPoints[0] = radianToPoint(alt+curveRadius)
+            //        }else{
+            players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
+            //        }
+            changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
+        }
+    }
     
     func updateTableView(){
         for (count,player) in players.enumerate(){
