@@ -23,8 +23,9 @@ class LineObject{
     var tail: [SKShapeNode] = []
     var score: Int = Int()
     var snakeVelocity: CGFloat = CGFloat()
+    var changeDir = false
     
-    init(head: SKShapeNode,position: CGPoint, lineNode: SKShapeNode, wayPoints: [CGPoint], dead: Bool, lastPoint: CGPoint, xSpeed: CGFloat, ySpeed: CGFloat, speed: CGFloat, tail: [SKShapeNode], score: Int, snakeVelocity: CGFloat){
+    init(head: SKShapeNode,position: CGPoint, lineNode: SKShapeNode, wayPoints: [CGPoint], dead: Bool, lastPoint: CGPoint, xSpeed: CGFloat, ySpeed: CGFloat, speed: CGFloat, tail: [SKShapeNode], score: Int, snakeVelocity: CGFloat, changeDir: Bool){
         self.head = head
         self.position = position
         self.lineNode = lineNode
@@ -37,6 +38,7 @@ class LineObject{
         self.tail = tail
         self.score = score
         self.snakeVelocity = snakeVelocity
+        self.changeDir = changeDir
     }
     
     

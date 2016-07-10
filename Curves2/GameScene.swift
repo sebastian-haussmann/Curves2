@@ -46,6 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var p4L = SKShapeNode()
     var counter = [Int]()
     
+    
  
     var scoreLblList = [SKLabelNode]()
     
@@ -70,6 +71,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var itemList = [SKSpriteNode]()
     var foodTimer = NSTimer()
     
+    
+    
+    // direction Timers
+    var dir1 = NSTimer()
+    var dir2 = NSTimer()
+    var dir3 = NSTimer()
+    var dir4 = NSTimer()
+    
     var curRound = 0
     
     var endScreenView: SKShapeNode = SKShapeNode()
@@ -88,7 +97,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for (index,color) in GameData.colors.enumerate(){
             
             
-            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(2.0))
+            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(2.0), changeDir: false)
         
             line.head.fillColor = color
             line.head.strokeColor = color
@@ -248,6 +257,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for food in foodList{
             food.removeFromParent()
         }
+        foodList = [SKSpriteNode]()
     
     }
     
@@ -315,6 +325,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             tail.position = players[index].wayPoints[tailSize - x]
             x = x + Int(15 / players[index].snakeVelocity)
         }
+        
 
     }
 
@@ -324,6 +335,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for food in foodList{
             food.removeFromParent()
         }
+        foodList = [SKSpriteNode]()
         for item in itemList{
             item.removeFromParent()
         }
@@ -407,35 +419,67 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 let location = touch.locationInNode(self)
     
                 if p1R.containsPoint(location){
-                    rightBtn(0)
+                    if !players[0].changeDir{
+                        rightBtn(0)
+                    }else{
+                        leftBtn(0)
+                    }
                     p1R.alpha = 0.5
                     
                 }else if p1L.containsPoint(location){
-                    leftBtn(0)
+                    if !players[0].changeDir{
+                        leftBtn(0)
+                    }else{
+                        rightBtn(0)
+                    }
                     p1L.alpha = 0.5
                     
                 }else if p2R.containsPoint(location){
-                    rightBtn(1)
+                    if !players[1].changeDir{
+                        rightBtn(1)
+                    }else{
+                        leftBtn(1)
+                    }
                     p2R.alpha = 0.5
                     
                 }else if p2L.containsPoint(location){
-                    leftBtn(1)
+                    if !players[1].changeDir{
+                        leftBtn(1)
+                    }else{
+                        rightBtn(1)
+                    }
                     p2L.alpha = 0.5
                     
                 }else if p3R.containsPoint(location){
-                    rightBtn(2)
+                    if !players[2].changeDir{
+                        rightBtn(2)
+                    }else{
+                        leftBtn(2)
+                    }
                     p3R.alpha = 0.5
                     
                 }else if p3L.containsPoint(location){
-                    leftBtn(2)
+                    if !players[2].changeDir{
+                        leftBtn(2)
+                    }else{
+                        rightBtn(2)
+                    }
                     p3L.alpha = 0.5
                     
                 }else if p4R.containsPoint(location){
-                    rightBtn(3)
+                    if !players[3].changeDir{
+                        rightBtn(3)
+                    }else{
+                        leftBtn(3)
+                    }
                     p4R.alpha = 0.5
                     
                 }else if p4L.containsPoint(location){
-                    leftBtn(3)
+                    if !players[3].changeDir{
+                        leftBtn(3)
+                    }else{
+                        rightBtn(3)
+                    }
                     p4L.alpha = 0.5
                 }else if rematchBtn.containsPoint(location){
                     newGame()
@@ -538,12 +582,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
         var nameRandom = arc4random_uniform(9)
         
-        var imageName = String()
+        var imageName = "SpeedItemGreen"
         
-        if nameRandom < 5 {
+//        if nameRandom < 5 {
+//            imageName = "SpeedItemGreen"
+//        }else 
+//        if nameRandom >= 5 && players.count > 1{
+//            imageName = "SpeedItemRed"
+//        }
+        switch Int(arc4random_uniform(3)) {
+        case 1:
             imageName = "SpeedItemGreen"
-        }else if nameRandom >= 5{
-            imageName = "SpeedItemRed"
+        case 2:
+            imageName = "switchDirRed"
+        case 3:
+            if players.count > 1{
+                imageName = "SpeedItemRed"
+            }
+        default:
+            break
         }
 
         item = SKSpriteNode(imageNamed: imageName)
@@ -879,6 +936,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 increaseSpeedRed(Int(contact.bodyA.node!.name!)!)
             case "SpeedItemGreen":
                 increaseSpeedGreen(Int(contact.bodyA.node!.name!)!)
+            case "switchDirRed":
+                changeDirection(Int(contact.bodyA.node!.name!)!)
             default:
                 break
             }
@@ -956,12 +1015,48 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
     }
     
+    func changeDirection(index: Int){
+        if index != 0{
+            players[0].changeDir = true
+            dir1 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 0, repeats: false)
+        }
+        if index != 1 && players.count > 1{
+            players[1].changeDir = true
+            dir2 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 1, repeats: false)
+        }
+        if index != 2 && players.count > 2{
+            players[2].changeDir = true
+            dir3 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 2, repeats: false)
+        }
+        if index != 3 && players.count > 3{
+            players[3].changeDir = true
+            dir4 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 3, repeats: false)
+        }
+        
+    }
+    
     func decreaseSpeed(timer: NSTimer){
         let index = timer.userInfo as! Int
         players[index].snakeVelocity -= 0.5
         rightBtn(index)
         leftBtn(index)
     
+    }
+    
+    func changeDirectionBack(timer: NSTimer){
+        let index = timer.userInfo as! Int
+        switch index {
+            case 0:
+                players[0].changeDir = false
+            case 1:
+                players[1].changeDir = false
+            case 2:
+                players[2].changeDir = false
+            case 3:
+                players[3].changeDir = false
+            default:
+            break
+        }
     }
     
     func increaseSpeedRed(index: Int){
@@ -1018,6 +1113,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for (count,foodUnit) in foodList.enumerate(){
             if contactPos == foodUnit.position{
                 foodUnit.removeFromParent()
+                foodList.removeAtIndex(count)
                 let newTail = SKShapeNode(circleOfRadius: 8.0)
                 //let newTail = SKShapeNode(rectOfSize: CGSize(width: 10, height: 10))
                 newTail.fillColor = GameData.colors[index]
@@ -1036,6 +1132,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 self.addChild(newTail)
                 players[index].tail.append(newTail)
             }
+        }
+        if foodList.count == 0 {
+            createFood()
         }
         switch foodName {
         case "Erdbeere":

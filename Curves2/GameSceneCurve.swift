@@ -76,7 +76,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         for (index,color) in GameData.colors.enumerate(){
             
             
-            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(1.5))
+            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(1.5), changeDir: false)
             
             line.head.fillColor = color
             line.head.strokeColor = color
