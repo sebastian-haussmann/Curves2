@@ -355,6 +355,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 tail.removeFromParent()
             }
             player.tail.removeAll()
+            player.changeDir = false
+            player.snakeVelocity = CGFloat(1.5)
             randomStartingPosition(count)
             scoreSort[count].2 = 0
         }
@@ -590,11 +592,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
 //            imageName = "SpeedItemRed"
 //        }
         switch Int(arc4random_uniform(3)) {
-        case 1:
+        case 0:
             imageName = "SpeedItemGreen"
-        case 2:
+        case 1:
             imageName = "switchDirRed"
-        case 3:
+        case 2:
             if players.count > 1{
                 imageName = "SpeedItemRed"
             }
@@ -1026,19 +1028,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func changeDirection(index: Int){
         if index != 0{
             players[0].changeDir = true
-            dir1 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 0, repeats: false)
+            var intervall = 5.0
+            if dir1.timeInterval > 0 {
+                intervall += dir1.timeInterval
+            }
+            dir1 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 0, repeats: false)
         }
         if index != 1 && players.count > 1{
             players[1].changeDir = true
-            dir2 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 1, repeats: false)
+            var intervall = 5.0
+            if dir2.timeInterval > 0 {
+                intervall += dir2.timeInterval
+            }
+            dir2 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 1, repeats: false)
         }
         if index != 2 && players.count > 2{
             players[2].changeDir = true
-            dir3 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 2, repeats: false)
+            var intervall = 5.0
+            if dir3.timeInterval > 0 {
+                intervall += dir3.timeInterval
+            }
+            dir3 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 2, repeats: false)
         }
         if index != 3 && players.count > 3{
             players[3].changeDir = true
-            dir4 = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 3, repeats: false)
+            var intervall = 5.0
+            if dir4.timeInterval > 0 {
+                intervall += dir4.timeInterval
+            }
+            dir4 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameScene.changeDirectionBack), userInfo: 3, repeats: false)
         }
         
     }
@@ -1071,7 +1089,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for (count,player) in players.enumerate(){
             
             if index != count{
-                players[index].snakeVelocity += 0.5
+                player.snakeVelocity += 0.5
+                NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.decreaseSpeed), userInfo: count, repeats: false)
             }
             
         }

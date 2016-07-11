@@ -27,6 +27,12 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     var arrows = [SKSpriteNode]()
     
+    // direction Timers
+    var dir1 = NSTimer()
+    var dir2 = NSTimer()
+    var dir3 = NSTimer()
+    var dir4 = NSTimer()
+    
     
     var myTimerR1: NSTimer = NSTimer()
     var myTimerR2: NSTimer = NSTimer()
@@ -248,6 +254,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         for food in foodList{
             food.removeFromParent()
         }
+        foodList = [SKSpriteNode]()
         
     }
     
@@ -325,6 +332,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         for food in foodList{
             food.removeFromParent()
         }
+        foodList = [SKSpriteNode]()
         for item in itemList{
             item.removeFromParent()
         }
@@ -334,6 +342,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 tail.removeFromParent()
             }
             player.tail.removeAll()
+            player.changeDir = false
+            player.snakeVelocity = CGFloat(1.5)
             randomStartingPosition(count)
             scoreSort[count].2 = 0
         }
@@ -521,13 +531,17 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         //Linkskurve
         func changeDirectionL(timer: NSTimer){
             let playerIndex = timer.userInfo as! Int
-            changeDirectionL2(playerIndex)
+            if !players[playerIndex].dead {
+                changeDirectionL2(playerIndex)
+            }
         }
     
         //Rechtskurve
         func changeDirectionR(timer: NSTimer){
             let playerIndex = timer.userInfo as! Int
-            changeDirectionR2(playerIndex)
+            if !players[playerIndex].dead {
+                changeDirectionR2(playerIndex)
+            }
     
         }
     
@@ -536,15 +550,27 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     func makeItems(){
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
+                
+        var imageName = "SpeedItemGreen"
         
-        var nameRandom = arc4random_uniform(9)
-        
-        var imageName = String()
-        
-        if nameRandom < 5 {
-            imageName = "SpeedItemGreen"
-        }else if nameRandom >= 5{
-            imageName = "SpeedItemRed"
+        //        if nameRandom < 5 {
+        //            imageName = "SpeedItemGreen"
+        //        }else
+        //        if nameRandom >= 5 && players.count > 1{
+        //            imageName = "SpeedItemRed"
+        //        }
+        switch 3 {
+            case 0:
+                imageName = "SpeedItemGreen"
+            case 1:
+                imageName = "switchDirRed"
+            case 2:
+                if players.count > 1{
+                    imageName = "SpeedItemRed"
+                }
+            case 3: imageName = "FatItemRed"
+        default:
+            break
         }
         
         item = SKSpriteNode(imageNamed: imageName)
@@ -877,14 +903,18 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             
             
-//            switch contact.bodyB.node!.name!{
-//            case "SpeedItemRed":
-//                //increaseSpeedRed(Int(contact.bodyA.node!.name!)!)
-//            case "SpeedItemGreen":
-//                //increaseSpeedGreen(Int(contact.bodyA.node!.name!)!)
-//            default:
-//                break
-//            }
+            switch contact.bodyB.node!.name!{
+                case "SpeedItemRed":
+                    increaseSpeedRed(Int(contact.bodyA.node!.name!)!)
+                case "SpeedItemGreen":
+                    increaseSpeedGreen(Int(contact.bodyA.node!.name!)!)
+                case "switchDirRed":
+                  changeDirection(Int(contact.bodyA.node!.name!)!)
+                case "FatItemRed":
+                    increaseThicknessRed(Int(contact.bodyA.node!.name!)!)
+                default:
+                break
+            }
             
             for item in itemList{
                 if contact.bodyB.node!.position == item.position{
@@ -961,41 +991,120 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         self.view?.window?.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
     }
     
-//    func increaseSpeedGreen(index: Int){
-//        players[index].snakeVelocity += 0.5
-//        rightBtn(index)
-//        leftBtn(index)
-//        NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.decreaseSpeed), userInfo: index, repeats: false)
-//        
-//    }
-//    
-//    func decreaseSpeed(timer: NSTimer){
-//        let index = timer.userInfo as! Int
-//        players[index].snakeVelocity -= 0.5
-//        rightBtn(index)
-//        leftBtn(index)
-//        
-//    }
-//    
-//    func increaseSpeedRed(index: Int){
-//        for (count,player) in players.enumerate(){
-//            
-//            if index != count{
-//                players[index].snakeVelocity += 0.5
-//            }
-//            
-//        }
-//    }
+    func increaseSpeedGreen(index: Int){
+        players[index].snakeVelocity += 0.5
+        changeDirectionR2(index)
+        changeDirectionL2(index)
+        NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: index, repeats: false)
+        
+    }
+    
+    func decreaseSpeed(timer: NSTimer){
+        let index = timer.userInfo as! Int
+        players[index].snakeVelocity -= 0.5
+        changeDirectionR2(index)
+        changeDirectionL2(index)
+        
+    }
+    
+    func increaseSpeedRed(index: Int){
+        for (count,player) in players.enumerate(){
+            
+            if index != count{
+                player.snakeVelocity += 0.5
+                NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: count, repeats: false)
+            }
+            
+        }
+    }
+    
+    func increaseThicknessRed(index: Int){
+        for (count,player) in players.enumerate(){
+            
+            if index != count{
+                player.head.xScale += 0.5
+                player.head.yScale = player.head.xScale
+                for tail in player.tail{
+                    tail.xScale = player.head.xScale
+                    tail.yScale = player.head.xScale
+                }
+                NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseThickness), userInfo: count, repeats: false)
+            }
+            
+        }
+    }
+    
+    func decreaseThickness(timer: NSTimer){
+        let index = timer.userInfo as! Int
+        players[index].head.xScale -= 0.5
+        players[index].head.yScale = players[index].head.xScale
+        for tail in players[index].tail{
+            tail.xScale = players[index].head.xScale
+            tail.yScale = players[index].head.xScale
+        }
+    }
+    
+    func changeDirection(index: Int){
+        if index != 0{
+            players[0].changeDir = true
+            var intervall = 5.0
+            if dir1.timeInterval > 0 {
+                intervall += dir1.timeInterval
+            }
+            dir1 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 0, repeats: false)
+        }
+        if index != 1 && players.count > 1{
+            players[1].changeDir = true
+            var intervall = 5.0
+            if dir2.timeInterval > 0 {
+                intervall += dir2.timeInterval
+            }
+            dir2 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 1, repeats: false)
+        }
+        if index != 2 && players.count > 2{
+            players[2].changeDir = true
+            var intervall = 5.0
+            if dir3.timeInterval > 0 {
+                intervall += dir3.timeInterval
+            }
+            dir3 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 2, repeats: false)
+        }
+        if index != 3 && players.count > 3{
+            players[3].changeDir = true
+            var intervall = 5.0
+            if dir4.timeInterval > 0 {
+                intervall += dir4.timeInterval
+            }
+            dir4 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 3, repeats: false)
+        }
+        
+    }
+    
+    func changeDirectionBack(timer: NSTimer){
+        let index = timer.userInfo as! Int
+        switch index {
+        case 0:
+            players[0].changeDir = false
+        case 1:
+            players[1].changeDir = false
+        case 2:
+            players[2].changeDir = false
+        case 3:
+            players[3].changeDir = false
+        default:
+            break
+        }
+    }
     
     
     func changeDirectionL2(index: Int){
         let playerIndex = index
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
-        //        if switchDirBool {
-        //           wayPoints[0] = radianToPoint(alt-curveRadius)
-        //        }else{
-        players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
-        //        }
+        if !players[index].changeDir {
+            players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
+        }else{
+            players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
+        }
         changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
     }
         
@@ -1003,11 +1112,11 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     func changeDirectionR2(index: Int){
         let playerIndex = index
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
-        //        if switchDirBool {
-        //            wayPoints[0] = radianToPoint(alt+curveRadius)
-        //        }else{
-        players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
-        //        }
+        if !players[index].changeDir {
+            players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
+        }else{
+            players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
+        }
         changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
     }
     
@@ -1083,7 +1192,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         for (count,foodUnit) in foodList.enumerate(){
             if contactPos == foodUnit.position{
                 foodUnit.removeFromParent()
+                foodList.removeAtIndex(count)
                 let newTail = SKShapeNode(circleOfRadius: 8.0)
+                newTail.xScale = players[index].head.xScale
+                newTail.yScale = players[index].head.yScale
                 //let newTail = SKShapeNode(rectOfSize: CGSize(width: 10, height: 10))
                 newTail.fillColor = GameData.colors[index]
                 newTail.strokeColor = GameData.colors[index]
@@ -1101,6 +1213,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 self.addChild(newTail)
                 players[index].tail.append(newTail)
             }
+        }
+        if foodList.count == 0 {
+            createFood()
         }
         switch foodName {
         case "Erdbeere":
