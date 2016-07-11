@@ -368,7 +368,6 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         arrows[i].position = CGPoint(x: posX,y: posY)
         
         arrows[i].zRotation = CGFloat((Double(8*rand)-45) * Double(M_PI/180))
-       // print(Double(arrows[i].zRotation*180)/M_PI, " " , rand*8)
         
     }
     
@@ -917,8 +916,6 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             myTimerR3.invalidate()
             myTimerR4.invalidate()
             for (index, player) in players.enumerate(){
-                player.xSpeed = 0
-                player.ySpeed = 0
                 player.dead = true
             }
             

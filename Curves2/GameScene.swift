@@ -71,7 +71,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var itemList = [SKSpriteNode]()
     var foodTimer = NSTimer()
     
+    var waitTimer = NSTimer()
     
+    var arrows = [SKSpriteNode]()
     
     // direction Timers
     var dir1 = NSTimer()
@@ -97,13 +99,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         for (index,color) in GameData.colors.enumerate(){
             
             
-            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(2.0), changeDir: false)
+            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: true, lastPoint: CGPoint(), xSpeed: CGFloat(0), ySpeed: CGFloat(0), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(2.0), changeDir: false)
         
             line.head.fillColor = color
             line.head.strokeColor = color
             line.lineNode.fillColor = color
             line.lineNode.strokeColor = color
             line.head.name = String(index)
+            
+            let arrow = SKSpriteNode(imageNamed: "EmptyArrow")
+            arrow.setScale(0.05)
+            arrow.hidden = true
+            arrows.append(arrow)
+            self.addChild(arrow)
             
             var scorelbl = SKLabelNode(fontNamed: "TimesNewRoman")
             scorelbl.text = String(line.score)
@@ -114,6 +122,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             players.append(line)
             counter.append(0)
             randomStartingPosition(index)
+            waitTimer = NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(GameScene.waitBeforeStart), userInfo: 0, repeats: false)
             
             
             // Score View After each round
@@ -298,19 +307,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     }
     
     func moveSnake(index : Int){
-
-        var x = players[index].lastPoint.x
-        var y = players[index].lastPoint.y
-        
-        players[index].head.position = CGPoint(x: x + players[index].xSpeed, y: y + players[index].ySpeed)
-        
-       
-        
-        players[index].lastPoint = players[index].head.position
-        players[index].wayPoints.append(players[index].lastPoint)
-        
-        if players[index].tail.count != 0{
-            followHead(index)
+        if !players[index].dead {
+            var x = players[index].lastPoint.x
+            var y = players[index].lastPoint.y
+            
+            players[index].head.position = CGPoint(x: x + players[index].xSpeed, y: y + players[index].ySpeed)
+            
+           
+            
+            players[index].lastPoint = players[index].head.position
+            players[index].wayPoints.append(players[index].lastPoint)
+            
+            if players[index].tail.count != 0{
+                followHead(index)
+            }
         }
     }
     
@@ -346,11 +356,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             }
             player.tail.removeAll()
             randomStartingPosition(count)
-            players[count].dead = false
             scoreSort[count].2 = 0
         }
         scoreView.hidden = true
         gameModeView.hidden = true
+        waitTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(GameScene.waitBeforeStart), userInfo: 0, repeats: false)
         foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
     }
     
@@ -362,15 +372,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
         players[i].head.position = CGPointMake(posX, posY)
         players[i].lastPoint = CGPointMake(posX, posY)
-        players[i].wayPoints.append(startingPosition)
-    
-
+        
+        if players[i].wayPoints.count == 0{
+            players[i].wayPoints.append(startingPosition)
+        }else{
+            players[i].wayPoints[0] = startingPosition
+        }
+        
+        
         players[i].xSpeed = 1
         players[i].ySpeed = 0
-        
-        for index in 0...Int(arc4random_uniform(4)) {
+        let rand = Int(arc4random_uniform(3))
+        for _ in 0...rand {
             leftBtn(i)
         }
+        arrows[i].hidden = false
+        arrows[i].position = CGPoint(x: posX,y: posY)
+        
+        arrows[i].zRotation = CGFloat((Double(90*rand)) * Double(M_PI/180))
 
 
 
@@ -384,29 +403,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             scoreLblList[count].text = "0"
         }
         
-    
-        
-        for food in foodList{
-            food.removeFromParent()
-        }
-        for item in itemList{
-            item.removeFromParent()
-        }
-        itemList.removeAll()
-        for (count,player) in players.enumerate(){
-            for tail in players[count].tail{
-                tail.removeFromParent()
-            }
-            player.tail.removeAll()
-            randomStartingPosition(count)
-            players[count].dead = false
-            scoreSort[count].2 = 0
-        }
-        scoreView.hidden = true
-        gameModeView.hidden = true
         endScreenView.removeFromParent()
         self.view?.addSubview(scoreView)
-        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
+        newRound()
         
     }
     
@@ -887,19 +886,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             players[0].dead = true
             updateScore(0)
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat){
             
             players[1].dead = true
             updateScore(1)
             
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat){
             
             players[2].dead = true
             updateScore(2)
         
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat){
             
             players[3].dead = true
             updateScore(3)
@@ -964,8 +963,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         // check if All Dead
         if deadPlayers.count <= 1 && players.count > 1{
             for (index, player) in players.enumerate(){
-                player.xSpeed = 0
-                player.ySpeed = 0
+                player.dead = true
             }
             
             updateTableView()
@@ -994,6 +992,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             //updateTableView()
             makeEndScreen(0)
             
+        }
+    }
+    
+    func waitBeforeStart(){
+        for player in players {
+            player.dead = false
+            
+        }
+        for arrow in arrows {
+            arrow.hidden = true
         }
     }
     
