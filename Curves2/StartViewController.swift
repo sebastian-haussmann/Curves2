@@ -27,7 +27,7 @@ class StartViewController: UIViewController {
         addButton.layer.cornerRadius = cornerRadius
         removeButton.layer.cornerRadius = cornerRadius
         startButton.layer.cornerRadius = cornerRadius
-        settingsButton.layer.cornerRadius = cornerRadius
+//        settingsButton.layer.cornerRadius = cornerRadius
         
         super.viewDidLoad()
         playerCount = 2
