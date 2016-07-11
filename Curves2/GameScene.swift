@@ -591,7 +591,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
 //        if nameRandom >= 5 && players.count > 1{
 //            imageName = "SpeedItemRed"
 //        }
-        switch Int(arc4random_uniform(3)) {
+        let rand = Int(arc4random_uniform(3))
+        switch rand {
         case 0:
             imageName = "SpeedItemGreen"
         case 1:
@@ -600,6 +601,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             if players.count > 1{
                 imageName = "SpeedItemRed"
             }
+        case 3: imageName = "FatItemRed"
         default:
             break
         }
@@ -939,6 +941,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 increaseSpeedGreen(Int(contact.bodyA.node!.name!)!)
             case "switchDirRed":
                 changeDirection(Int(contact.bodyA.node!.name!)!)
+            case "FatItemRed":
+                increaseThicknessRed(Int(contact.bodyA.node!.name!)!)
             default:
                 break
             }
@@ -1093,6 +1097,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameScene.decreaseSpeed), userInfo: count, repeats: false)
             }
             
+        }
+    }
+    
+    func increaseThicknessRed(index: Int){
+        for (count,player) in players.enumerate(){
+            
+            if index != count{
+                player.head.xScale += 0.5
+                player.head.yScale = player.head.xScale
+                for tail in player.tail{
+                    tail.xScale = player.head.xScale
+                    tail.yScale = player.head.xScale
+                }
+                NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseThickness), userInfo: count, repeats: false)
+            }
+            
+        }
+    }
+    
+    func decreaseThickness(timer: NSTimer){
+        let index = timer.userInfo as! Int
+        players[index].head.xScale -= 0.5
+        players[index].head.yScale = players[index].head.xScale
+        for tail in players[index].tail{
+            tail.xScale = players[index].head.xScale
+            tail.yScale = players[index].head.xScale
         }
     }
     

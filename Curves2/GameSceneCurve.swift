@@ -559,7 +559,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         //        if nameRandom >= 5 && players.count > 1{
         //            imageName = "SpeedItemRed"
         //        }
-        switch 3 {
+        let rand = arc4random_uniform(3)
+        switch rand {
             case 0:
                 imageName = "SpeedItemGreen"
             case 1:
@@ -913,7 +914,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 case "FatItemRed":
                     increaseThicknessRed(Int(contact.bodyA.node!.name!)!)
                 default:
-                break
+                    break
             }
             
             for item in itemList{
