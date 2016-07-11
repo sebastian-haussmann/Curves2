@@ -551,7 +551,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
                 
-        var imageName = "SpeedItemGreen"
+        var imageName = ""
         
         //        if nameRandom < 5 {
         //            imageName = "SpeedItemGreen"
@@ -559,34 +559,40 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         //        if nameRandom >= 5 && players.count > 1{
         //            imageName = "SpeedItemRed"
         //        }
-        let rand = arc4random_uniform(3)
+        let rand = arc4random_uniform(4)
         switch rand {
             case 0:
                 imageName = "SpeedItemGreen"
             case 1:
-                imageName = "switchDirRed"
+                if players.count > 1{
+                    imageName = "switchDirRed"
+                }
             case 2:
                 if players.count > 1{
                     imageName = "SpeedItemRed"
                 }
-            case 3: imageName = "FatItemRed"
+            case 3:
+                if players.count > 1{
+                    imageName = "FatItemRed"
+                }
         default:
             break
         }
-        
-        item = SKSpriteNode(imageNamed: imageName)
-        item.name = imageName
-        item.setScale(0.4)
-        item.physicsBody = SKPhysicsBody(circleOfRadius: item.size.height / 2)
-        item.physicsBody!.categoryBitMask = PhysicsCat.itemCat
-        item.physicsBody!.contactTestBitMask =  PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
-        item.physicsBody?.affectedByGravity = false
-        item.physicsBody?.linearDamping = 0
-        item.position = CGPoint(x: posX, y: posY)
-        
-        if !(item.position == CGPoint(x: 0.0, y: 0.0)){
-            addChild(item)
-            itemList.append(item)
+        if imageName != ""{
+            item = SKSpriteNode(imageNamed: imageName)
+            item.name = imageName
+            item.setScale(0.4)
+            item.physicsBody = SKPhysicsBody(circleOfRadius: item.size.height / 2)
+            item.physicsBody!.categoryBitMask = PhysicsCat.itemCat
+            item.physicsBody!.contactTestBitMask =  PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+            item.physicsBody?.affectedByGravity = false
+            item.physicsBody?.linearDamping = 0
+            item.position = CGPoint(x: posX, y: posY)
+            
+            if !(item.position == CGPoint(x: 0.0, y: 0.0)){
+                addChild(item)
+                itemList.append(item)
+            }
         }
     }
     
