@@ -317,11 +317,11 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         
         
-        var x = Int(20 / players[index].snakeVelocity)
+        var x = Int(15 / players[index].snakeVelocity)
         for tail in players[index].tail{
             var tailSize = players[index].wayPoints.count
             tail.position = players[index].wayPoints[tailSize - x]
-            x = x + Int(20 / players[index].snakeVelocity)
+            x = x + Int(15 / players[index].snakeVelocity)
         }
         
     }
@@ -822,28 +822,28 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     func addPhysics(){
-        players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+        players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
         players[0].head.physicsBody!.categoryBitMask = PhysicsCat.p1HeadCat
         players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.itemCat
         players[0].head.physicsBody?.affectedByGravity = false
         players[0].head.physicsBody?.linearDamping = 0
         
         if players.count > 1 {
-            players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+            players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[1].head.physicsBody!.categoryBitMask = PhysicsCat.p2HeadCat
             players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.itemCat
             players[1].head.physicsBody?.affectedByGravity = false
             players[1].head.physicsBody?.linearDamping = 0
         }
         if players.count > 2 {
-            players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+            players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[2].head.physicsBody!.categoryBitMask = PhysicsCat.p3HeadCat
             players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.itemCat
             players[2].head.physicsBody?.affectedByGravity = false
             players[2].head.physicsBody?.linearDamping = 0
         }
         if players.count > 3 {
-            players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+            players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[3].head.physicsBody!.categoryBitMask = PhysicsCat.p4HeadCat
             players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.itemCat
             players[3].head.physicsBody?.affectedByGravity = false
@@ -1136,7 +1136,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         if GameData.gameModeID == 1{
             curRound += 1
             if curRound == GameData.gameModeCount{
-                gameModeLbl.text = "Letze Runde"
+                gameModeLbl.text = "Letzte Runde"
             }else{
                 gameModeLbl.text = "Runde " + String(curRound) + " von " + String(GameData.gameModeCount)
             }
@@ -1207,15 +1207,38 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 newTail.fillColor = GameData.colors[index]
                 newTail.strokeColor = GameData.colors[index]
                 //newTail.position = players[index].wayPoints[players[index].wayPoints.count - 10]
-                if players[index].tail.count > 1{
-                    newTail.physicsBody = SKPhysicsBody(circleOfRadius: 5.0)
+                //if players[index].tail.count <= 1{
+//                    newTail.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+//                    //newTail.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 10, height: 10))
+//                    newTail.physicsBody?.affectedByGravity = false
+//                    newTail.physicsBody?.linearDamping = 0
+//                    newTail.physicsBody?.allowsRotation = false
+//                    switch index {
+//                    case 0:
+//                        newTail.physicsBody?.categoryBitMask = PhysicsCat.p1HeadCat
+//                        newTail.physicsBody?.contactTestBitMask = PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+//                    case 1:
+//                        newTail.physicsBody?.categoryBitMask = PhysicsCat.p2HeadCat
+//                        newTail.physicsBody?.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+//                    case 2:
+//                        newTail.physicsBody?.categoryBitMask = PhysicsCat.p3HeadCat
+//                        newTail.physicsBody?.contactTestBitMask = PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat
+//                    case 3:
+//                        newTail.physicsBody?.categoryBitMask = PhysicsCat.p4HeadCat
+//                        newTail.physicsBody?.contactTestBitMask = PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat
+//                    default:
+//                        break
+//                    }
+//                    
+//                }else{
+                    newTail.physicsBody = SKPhysicsBody(circleOfRadius: 7.0)
                     //newTail.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 10, height: 10))
                     newTail.physicsBody?.affectedByGravity = false
                     newTail.physicsBody?.linearDamping = 0
                     newTail.physicsBody?.allowsRotation = false
                     newTail.physicsBody?.categoryBitMask = PhysicsCat.tailCat
-                    newTail.physicsBody?.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
-                }
+                    newTail.physicsBody?.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat
+               // }
                 
                 self.addChild(newTail)
                 players[index].tail.append(newTail)
