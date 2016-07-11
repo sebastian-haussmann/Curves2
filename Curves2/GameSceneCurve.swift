@@ -25,6 +25,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     var p4L = SKShapeNode()
     var counter = [Int]()
     
+    var arrows = [SKSpriteNode]()
+    
     
     var myTimerR1: NSTimer = NSTimer()
     var myTimerR2: NSTimer = NSTimer()
@@ -58,6 +60,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     var itemList = [SKSpriteNode]()
     var foodTimer = NSTimer()
     
+    var waitTimer = NSTimer()
+    
     var curRound = 0
     
     var endScreenView: SKShapeNode = SKShapeNode()
@@ -76,13 +80,20 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         for (index,color) in GameData.colors.enumerate(){
             
             
-            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: false, lastPoint: CGPoint(), xSpeed: CGFloat(1), ySpeed: CGFloat(1), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(1.5), changeDir: false)
+            let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: true, lastPoint: CGPoint(), xSpeed: CGFloat(0), ySpeed: CGFloat(0), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(1.5), changeDir: false)
             
             line.head.fillColor = color
             line.head.strokeColor = color
             line.lineNode.fillColor = color
             line.lineNode.strokeColor = color
             line.head.name = String(index)
+            
+            
+            let arrow = SKSpriteNode(imageNamed: "EmptyArrow")
+            arrow.setScale(0.05)
+            arrow.hidden = true
+            arrows.append(arrow)
+            self.addChild(arrow)
             
             var scorelbl = SKLabelNode(fontNamed: "TimesNewRoman")
             scorelbl.text = String(line.score)
@@ -93,6 +104,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             players.append(line)
             counter.append(0)
             randomStartingPosition(index)
+            waitTimer = NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(GameSceneCurve.waitBeforeStart), userInfo: 0, repeats: false)
             
             
             // Score View After each round
@@ -159,7 +171,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         gameArea.physicsBody?.dynamic = false
         self.addChild(gameArea)
         
-        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
+        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
     }
     
     func makeEndScreen(singleOrMultiplayer: Int){
@@ -276,19 +288,20 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     func moveSnake(index : Int){
-        
-        var x = players[index].lastPoint.x
-        var y = players[index].lastPoint.y
-        
-        players[index].head.position = CGPoint(x: x + players[index].xSpeed, y: y + players[index].ySpeed)
-        
-        
-        
-        players[index].lastPoint = players[index].head.position
-        players[index].wayPoints.append(players[index].lastPoint)
-        
-        if players[index].tail.count != 0{
-            followHead(index)
+        if !players[index].dead {
+            var x = players[index].lastPoint.x
+            var y = players[index].lastPoint.y
+            
+            players[index].head.position = CGPoint(x: x + players[index].xSpeed, y: y + players[index].ySpeed)
+            
+            
+            
+            players[index].lastPoint = players[index].head.position
+            players[index].wayPoints.append(players[index].lastPoint)
+            
+            if players[index].tail.count != 0{
+                followHead(index)
+            }
         }
     }
     
@@ -321,13 +334,13 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 tail.removeFromParent()
             }
             player.tail.removeAll()
-            players[count].dead = false
             randomStartingPosition(count)
             scoreSort[count].2 = 0
         }
         scoreView.hidden = true
         gameModeView.hidden = true
-        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
+        waitTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(GameSceneCurve.waitBeforeStart), userInfo: 0, repeats: false)
+        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
     }
     
     func randomStartingPosition(i: Int){
@@ -338,17 +351,24 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         players[i].head.position = CGPointMake(posX, posY)
         players[i].lastPoint = CGPointMake(posX, posY)
-        players[i].wayPoints.append(startingPosition)
-        
-//        let rand = Int(arc4random_uniform(4))
-        players[i].xSpeed = 1
-        players[i].ySpeed = 1
-        
-        for index in 0...Int(arc4random_uniform(45)) {
-            changeDirectionL2(i)
+        if players[i].wayPoints.count == 0{
+            players[i].wayPoints.append(startingPosition)
+        }else{
+            players[i].wayPoints[0] = startingPosition
         }
         
         
+        players[i].xSpeed = 1
+        players[i].ySpeed = 1
+        let rand = Int(arc4random_uniform(44))
+        for _ in 0...rand {
+            changeDirectionL2(i)
+        }
+        arrows[i].hidden = false
+        arrows[i].position = CGPoint(x: posX,y: posY)
+        
+        arrows[i].zRotation = CGFloat((Double(8*rand)-45) * Double(M_PI/180))
+       // print(Double(arrows[i].zRotation*180)/M_PI, " " , rand*8)
         
     }
     
@@ -359,30 +379,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             scoreSort[count].0 = 0
             scoreLblList[count].text = "0"
         }
-        
-        
-        
-        for food in foodList{
-            food.removeFromParent()
-        }
-        for item in itemList{
-            item.removeFromParent()
-        }
-        itemList.removeAll()
-        for (count,player) in players.enumerate(){
-            for tail in players[count].tail{
-                tail.removeFromParent()
-            }
-            player.tail.removeAll()
-            randomStartingPosition(count)
-            players[count].dead = false
-            scoreSort[count].2 = 0
-        }
-        scoreView.hidden = true
-        gameModeView.hidden = true
+
         endScreenView.removeFromParent()
         self.view?.addSubview(scoreView)
-        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
+        newRound()
         
     }
     
@@ -926,9 +926,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             foodTimer.invalidate()
             
             if curRound != GameData.gameModeCount && GameData.gameModeID == 1 || scoreSort[0].0 < GameData.gameModeCount && GameData.gameModeID == 0 {
-                NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.newRound), userInfo: 0, repeats: false)
+                NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.newRound), userInfo: 0, repeats: false)
             }else{
-                NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(GameScene.endScreen), userInfo: 0, repeats: false)
+                NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(GameSceneCurve.endScreen), userInfo: 0, repeats: false)
    
             }
             
@@ -942,6 +942,16 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         }
     }
     
+    
+    func waitBeforeStart(){
+        for player in players {
+            player.dead = false
+            
+        }
+        for arrow in arrows {
+            arrow.hidden = true
+        }
+    }
 
     
     func endScreen(){
@@ -983,29 +993,25 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     func changeDirectionL2(index: Int){
         let playerIndex = index
-        if !players[index].dead{
-            let alt = pointToRadian(players[playerIndex].wayPoints[0])
-            //        if switchDirBool {
-            //           wayPoints[0] = radianToPoint(alt-curveRadius)
-            //        }else{
-            players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
-            //        }
-            changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
-        }
+        let alt = pointToRadian(players[playerIndex].wayPoints[0])
+        //        if switchDirBool {
+        //           wayPoints[0] = radianToPoint(alt-curveRadius)
+        //        }else{
+        players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
+        //        }
+        changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
     }
         
             //Rechtskurve
     func changeDirectionR2(index: Int){
         let playerIndex = index
-        if !players[index].dead{
-            let alt = pointToRadian(players[playerIndex].wayPoints[0])
-            //        if switchDirBool {
-            //            wayPoints[0] = radianToPoint(alt+curveRadius)
-            //        }else{
-            players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
-            //        }
-            changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
-        }
+        let alt = pointToRadian(players[playerIndex].wayPoints[0])
+        //        if switchDirBool {
+        //            wayPoints[0] = radianToPoint(alt+curveRadius)
+        //        }else{
+        players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
+        //        }
+        changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
     }
     
     func updateTableView(){
