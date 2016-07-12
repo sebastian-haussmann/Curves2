@@ -864,6 +864,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             players[0].dead = true
             updateScore(0)
+            print("JO2")
         }
         if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat) ||
             (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat){
@@ -908,7 +909,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         }
         if (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.itemCat) {
             
-            
+            print("JO")
             
             switch contact.bodyB.node!.name!{
                 case "SpeedItemRed":
@@ -1207,12 +1208,15 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 newTail.fillColor = GameData.colors[index]
                 newTail.strokeColor = GameData.colors[index]
                 //newTail.position = players[index].wayPoints[players[index].wayPoints.count - 10]
-                //if players[index].tail.count <= 1{
-//                    newTail.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
-//                    //newTail.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 10, height: 10))
-//                    newTail.physicsBody?.affectedByGravity = false
-//                    newTail.physicsBody?.linearDamping = 0
-//                    newTail.physicsBody?.allowsRotation = false
+                if players[index].tail.count <= 1{
+                    newTail.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+                    //newTail.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 10, height: 10))
+                    newTail.physicsBody?.affectedByGravity = false
+                    newTail.physicsBody?.linearDamping = 0
+                    newTail.physicsBody?.allowsRotation = false
+                    newTail.physicsBody?.categoryBitMask = PhysicsCat.tailCat
+                    newTail.physicsBody?.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+                }
 //                    switch index {
 //                    case 0:
 //                        newTail.physicsBody?.categoryBitMask = PhysicsCat.p1HeadCat
@@ -1229,16 +1233,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
 //                    default:
 //                        break
 //                    }
-//                    
-//                }else{
-                    newTail.physicsBody = SKPhysicsBody(circleOfRadius: 7.0)
-                    //newTail.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 10, height: 10))
-                    newTail.physicsBody?.affectedByGravity = false
-                    newTail.physicsBody?.linearDamping = 0
-                    newTail.physicsBody?.allowsRotation = false
-                    newTail.physicsBody?.categoryBitMask = PhysicsCat.tailCat
-                    newTail.physicsBody?.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat
-               // }
+                    
                 
                 self.addChild(newTail)
                 players[index].tail.append(newTail)

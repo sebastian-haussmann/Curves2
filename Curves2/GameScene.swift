@@ -270,6 +270,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
     }
     
+    
+    
+    
+    
     func createFood(){
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
@@ -1272,6 +1276,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     }
     
     
+//    func getColorName(index: Int){
+//        
+//        switch index{
+//        case <#pattern#>:
+//            <#code#>
+//        default:
+//            <#code#>
+//        }
+//        
+//        
+//        
+//    }
+//    
     
     //***********************************************************************************
     //***********************************************************************************
