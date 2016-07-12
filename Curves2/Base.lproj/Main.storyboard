@@ -258,7 +258,7 @@
                                 </state>
                                 <connections>
                                     <action selector="startButton:" destination="th5-rQ-oUl" eventType="touchUpInside" id="37r-xn-u8y"/>
-                                    <segue destination="stQ-dZ-YCt" kind="show" id="Nqj-EY-CgL"/>
+                                    <segue destination="stQ-dZ-YCt" kind="show" identifier="settings" id="Nqj-EY-CgL"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WjF-Fu-rOi">

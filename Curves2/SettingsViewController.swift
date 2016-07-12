@@ -20,10 +20,23 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var curveID = 0
     var pointsOrRounds = 50
     var prevTextField = "50"
+
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        if GameData.settingsEdited{
+            gamemodeID = GameData.gameModeID
+            gamemodeSegment.selectedSegmentIndex = gamemodeID
+            curveID = GameData.curveMode
+            curveSegment.selectedSegmentIndex = curveID
+            pointsOrRounds = GameData.gameModeCount
+            gamemodeTxtField.text = String(pointsOrRounds)
+        }
+        
         gamemodeTxtField.delegate = self
         gamemodeTxtField.keyboardType = UIKeyboardType.NumberPad
         let cornerRadius = CGFloat(20)
@@ -86,6 +99,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             GameData.gameModeID = gamemodeID
             GameData.gameModeCount = pointsOrRounds
             GameData.curveMode = curveID
+            GameData.settingsEdited = true
             vc.editedSettings = true
         }
     }
