@@ -1247,20 +1247,34 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         if foodList.count == 0 {
             createFood()
         }
+        
+        let points = SKLabelNode(fontNamed: "Chalkduster")
+        points.fontSize = 15
+        points.fontColor = GameData.colors[index]
+        
+        points.position = CGPoint(x: contactPos.x, y: contactPos.y + 10)
+        
         switch foodName {
         case "Erdbeere":
             players[index].score += 1
+            points.text =  "+" + String(1)
             scoreSort[index].2 += 1
         case "Apfel":
             players[index].score += 2
+            points.text =  "+" + String(2)
             scoreSort[index].2 += 2
         case "Banane":
             players[index].score += 3
+            points.text =  "+" + String(3)
             scoreSort[index].2 += 3
         default:
             break
         }
         scoreLblList[index].text = String(players[index].score)
+        let myFunction = SKAction.runBlock({()in self.addChild(points)})
+        let wait = SKAction.waitForDuration(1.0)
+        let remove = SKAction.runBlock({() in points.removeFromParent()})
+        self.runAction(SKAction.sequence([myFunction, wait, remove]))
         
     }
     

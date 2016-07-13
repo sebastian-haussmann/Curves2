@@ -1266,24 +1266,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         if foodList.count == 0 {
             createFood()
         }
+        
+        let points = SKLabelNode(fontNamed: "Chalkduster")
+        points.fontSize = 15
+        points.fontColor = GameData.colors[index]
+        
+        points.position = CGPoint(x: contactPos.x, y: contactPos.y + 10)
+        
         switch foodName {
         case "Erdbeere":
             players[index].score = players[index].score + Int(round(1 * itemMultiply))
+            points.text =  "+" + String(Int(round(1 * itemMultiply)))
             scoreSort[index].2 += 1
         case "Apfel":
             players[index].score = players[index].score + Int(round(2 * itemMultiply))
+            points.text =  "+" + String(Int(round(2 * itemMultiply)))
             scoreSort[index].2 += 2
         case "Banane":
             players[index].score = players[index].score + Int(round(3 * itemMultiply))
+            points.text =  "+" +  String(Int(round(3 * itemMultiply)))
             scoreSort[index].2 += 3
         default:
             break
         }
         scoreLblList[index].text = String(players[index].score)
-        
+        let myFunction = SKAction.runBlock({()in self.addChild(points)})
+        let wait = SKAction.waitForDuration(1.0)
+        let remove = SKAction.runBlock({() in points.removeFromParent()})
+        self.runAction(SKAction.sequence([myFunction, wait, remove]))
+
+        //NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(GameScene.removeLbl), userInfo: 0, repeats: false)
     }
     
-
+//    func removeLbl(){
+//
+//    }
     
     //***********************************************************************************
     //***********************************************************************************
