@@ -163,6 +163,7 @@ class StartViewController: UIViewController {
                 GameData.gameModeID = 0
                 GameData.gameModeCount = 50
                 GameData.curveMode = 0
+                GameData.singlePlayerVelocity = 2.0
             }
         }
     }

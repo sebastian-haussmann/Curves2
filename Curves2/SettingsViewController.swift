@@ -32,7 +32,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        velocityTxtField.text = String(Int(velocitySlider.value))
+        
         if GameData.settingsEdited{
             gamemodeID = GameData.gameModeID
             gamemodeSegment.selectedSegmentIndex = gamemodeID
@@ -40,8 +40,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             curveSegment.selectedSegmentIndex = curveID
             pointsOrRounds = GameData.gameModeCount
             gamemodeTxtField.text = String(pointsOrRounds)
+            velocitySlider.value = Float(GameData.singlePlayerVelocity)
         }
-        
+        velocityTxtField.text = String(Int(velocitySlider.value))
         
         
         gamemodeTxtField.delegate = self
@@ -60,7 +61,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func sliderMoved(sender: AnyObject) {
         
         velocityTxtField.text = String(Int(velocitySlider.value))
-        GameData.singlePlayerVelocity = Int(velocitySlider.value)
+        GameData.singlePlayerVelocity = CGFloat(Int(velocitySlider.value))
         
     }
     
@@ -147,6 +148,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             GameData.gameModeCount = pointsOrRounds
             GameData.curveMode = curveID
             GameData.settingsEdited = true
+            GameData.singlePlayerVelocity = CGFloat(Int(velocitySlider.value))
             vc.editedSettings = true
         }
     }

@@ -33,7 +33,7 @@ struct GameData{
     static var curveMode: Int = Int()
     static var settingsEdited: Bool = false
     static var singlePlayer: Bool = false
-    static var singlePlayerVelocity: Int = Int()
+    static var singlePlayerVelocity: CGFloat = CGFloat()
     
 }
 
@@ -94,6 +94,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var endGameBtn: SKShapeNode = SKShapeNode()
     var highScoreBtn: SKShapeNode = SKShapeNode()
     var endScreenLbl: SKLabelNode = SKLabelNode()
+    var itemMultiply: CGFloat = 1.0
+    var singlePlayerVelo: CGFloat = 1.0
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -177,6 +179,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
         }
 
+        if GameData.singlePlayer{
+            
+            itemMultiply = 0.5 * GameData.singlePlayerVelocity
+            players[0].snakeVelocity = 1.0 + (0.5 * GameData.singlePlayerVelocity)
+            singlePlayerVelo = players[0].snakeVelocity
+            
+        }
             
         createButtons(players.count)
         addPhysics()
@@ -338,14 +347,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func followHead(index: Int){
         
     
-    
+        var x  = Int(7.5)
         //var x = Int(15 / players[index].snakeVelocity)
-        var x = Int(7.5)
+        if GameData.singlePlayer{
+            if GameData.singlePlayerVelocity == 1{
+                x = 11
+            }else{
+                x = 12 - Int(1.75 * singlePlayerVelo)
+            }
+            
+        }else{
+            x = Int(8.5)
+        }
+        
+        
         for tail in players[index].tail{
             var tailSize = players[index].wayPoints.count
             tail.position = players[index].wayPoints[tailSize - x]
             //x = x + Int(15 / players[index].snakeVelocity)
-            x = x + Int(7.5)
+            if GameData.singlePlayer{
+                if GameData.singlePlayerVelocity == 1{
+                    x += 11
+                }else{
+                    x = x + 11 - Int(1.75 * singlePlayerVelo)
+                }
+               
+            }else{
+                x = x + Int(7.5)
+            }
+            
         }
         
 
@@ -368,14 +398,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             }
             player.tail.removeAll()
             player.changeDir = false
-            player.snakeVelocity = CGFloat(1.5)
+            if GameData.singlePlayer{
+                player.snakeVelocity = singlePlayerVelo
+            }else{
+                player.snakeVelocity = CGFloat(2.0)
+            }
             randomStartingPosition(count)
             scoreSort[count].2 = 0
         }
+
         scoreView.hidden = true
         gameModeView.hidden = true
         waitTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(GameScene.waitBeforeStart), userInfo: 0, repeats: false)
         foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
+        
     }
     
     func randomStartingPosition(i: Int){
@@ -1232,13 +1268,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         }
         switch foodName {
         case "Erdbeere":
-            players[index].score += 1
+            players[index].score = players[index].score + Int(round(1 * itemMultiply))
             scoreSort[index].2 += 1
         case "Apfel":
-            players[index].score += 2
+            players[index].score = players[index].score + Int(round(2 * itemMultiply))
             scoreSort[index].2 += 2
         case "Banane":
-            players[index].score += 3
+            players[index].score = players[index].score + Int(round(3 * itemMultiply))
             scoreSort[index].2 += 3
         default:
             break
