@@ -21,6 +21,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var pointsOrRounds = 50
     var prevTextField = "50"
 
+    @IBOutlet weak var multiplayerView: UIView!
+    @IBOutlet weak var singlePlayerView: UIView!
+    @IBOutlet weak var switchView: UISegmentedControl!
     
 
     
@@ -48,6 +51,23 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tapRecognizer)
         
     }
+    
+    @IBAction func switchViewAction(sender: AnyObject) {
+        
+        switch switchView.selectedSegmentIndex{
+        case 0:
+            singlePlayerView.hidden = true
+            multiplayerView.hidden = false
+        case 1:
+            singlePlayerView.hidden = false
+            multiplayerView.hidden = true
+        default:
+            break
+        }
+        
+    }
+    
+    
     @IBAction func gameModeAction(sender: AnyObject) {
         
         switch gamemodeSegment.selectedSegmentIndex {
