@@ -515,11 +515,11 @@
                                     <constraint firstItem="J9L-JV-nfn" firstAttribute="centerY" secondItem="tMx-im-dt8" secondAttribute="centerY" constant="0.5" id="sqX-iq-rkJ"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Go-GF-T0O" userLabel="Einzelspieler">
-                                <rect key="frame" x="-1" y="108" width="736" height="231"/>
+                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Go-GF-T0O" userLabel="Einzelspieler">
+                                <rect key="frame" x="-1" y="116" width="736" height="223"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HAM-nc-c24" userLabel="EinzelKurvenmodus">
-                                        <rect key="frame" x="0.0" y="127" width="736" height="68"/>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HAM-nc-c24" userLabel="EinzelKurvenmodus">
+                                        <rect key="frame" x="0.0" y="119" width="736" height="68"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kurvenmodus:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="we9-eE-g6x">
                                                 <rect key="frame" x="20" y="20" width="263" height="28"/>
@@ -540,6 +540,7 @@
                                                 </segments>
                                                 <color key="tintColor" red="0.0" green="0.02147877183" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
+                                                    <action selector="curveModeAction2:" destination="stQ-dZ-YCt" eventType="valueChanged" id="4aK-yt-SWe"/>
                                                     <action selector="curveModeAction:" destination="stQ-dZ-YCt" eventType="valueChanged" id="San-Jf-H5h"/>
                                                 </connections>
                                             </segmentedControl>
@@ -554,9 +555,15 @@
                                             <constraint firstItem="we9-eE-g6x" firstAttribute="top" secondItem="HAM-nc-c24" secondAttribute="top" constant="20" id="xOH-1n-6mK"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37X-8b-hnm" userLabel="EinzelGeschwindigkeit">
-                                        <rect key="frame" x="0.0" y="28" width="736" height="68"/>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="37X-8b-hnm" userLabel="EinzelGeschwindigkeit">
+                                        <rect key="frame" x="0.0" y="20" width="736" height="68"/>
                                         <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T0m-Rt-DpX">
+                                                <rect key="frame" x="486" y="47" width="231" height="21"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="0.0" green="0.02147877183" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Geschwindigkeit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UgF-V1-Hrp">
                                                 <rect key="frame" x="20" y="19" width="263" height="28"/>
                                                 <constraints>
@@ -566,18 +573,24 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="1" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="juQ-pN-JaN">
-                                                <rect key="frame" x="485" y="17" width="235" height="31"/>
+                                                <rect key="frame" x="484" y="9" width="235" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="231" id="1yn-s5-wOh"/>
                                                 </constraints>
+                                                <connections>
+                                                    <action selector="sliderMoved:" destination="stQ-dZ-YCt" eventType="valueChanged" id="AhQ-qv-jGE"/>
+                                                </connections>
                                             </slider>
                                         </subviews>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="juQ-pN-JaN" secondAttribute="trailing" constant="18" id="4b5-tT-kmk"/>
+                                            <constraint firstAttribute="trailing" secondItem="juQ-pN-JaN" secondAttribute="trailing" constant="19" id="4b5-tT-kmk"/>
                                             <constraint firstAttribute="bottom" secondItem="UgF-V1-Hrp" secondAttribute="bottom" constant="21" id="Lvb-Ej-7e8"/>
-                                            <constraint firstItem="UgF-V1-Hrp" firstAttribute="bottom" secondItem="juQ-pN-JaN" secondAttribute="bottom" id="Sem-nx-B5N"/>
+                                            <constraint firstItem="UgF-V1-Hrp" firstAttribute="bottom" secondItem="juQ-pN-JaN" secondAttribute="bottom" constant="8" id="Sem-nx-B5N"/>
+                                            <constraint firstItem="T0m-Rt-DpX" firstAttribute="leading" secondItem="juQ-pN-JaN" secondAttribute="leading" id="ZDi-eA-9Eg"/>
                                             <constraint firstItem="UgF-V1-Hrp" firstAttribute="leading" secondItem="37X-8b-hnm" secondAttribute="leading" constant="20" id="gjZ-pG-wio"/>
+                                            <constraint firstItem="T0m-Rt-DpX" firstAttribute="trailing" secondItem="juQ-pN-JaN" secondAttribute="trailing" id="hmB-tR-E7I"/>
+                                            <constraint firstItem="T0m-Rt-DpX" firstAttribute="top" secondItem="juQ-pN-JaN" secondAttribute="bottom" constant="8" symbolic="YES" id="lj5-8n-fxw"/>
                                             <constraint firstItem="UgF-V1-Hrp" firstAttribute="top" secondItem="37X-8b-hnm" secondAttribute="top" constant="19" id="pCu-1B-GUq"/>
                                         </constraints>
                                     </view>
@@ -621,6 +634,7 @@
                     <connections>
                         <outlet property="cancelBtn" destination="2Oq-xb-VlH" id="wUG-7L-k9p"/>
                         <outlet property="curveSegment" destination="MyY-ne-z09" id="P7d-8v-psE"/>
+                        <outlet property="curveSegment2" destination="08E-h1-Glw" id="4xQ-nl-Avq"/>
                         <outlet property="gamemodeLbl" destination="Yj0-Ae-IGV" id="H7p-Ha-fHA"/>
                         <outlet property="gamemodeSegment" destination="Z7J-AS-6Sn" id="34w-hI-LSF"/>
                         <outlet property="gamemodeTxtField" destination="1nV-mW-ESN" id="n65-k3-OfJ"/>
@@ -628,6 +642,8 @@
                         <outlet property="saveBtn" destination="qwU-IS-2HA" id="5uX-0A-jhM"/>
                         <outlet property="singlePlayerView" destination="5Go-GF-T0O" id="Co8-KV-cXv"/>
                         <outlet property="switchView" destination="Dv0-qE-788" id="3fu-Yu-ZF2"/>
+                        <outlet property="velocitySlider" destination="juQ-pN-JaN" id="kgf-pV-f0U"/>
+                        <outlet property="velocityTxtField" destination="T0m-Rt-DpX" id="bCs-Zk-R0s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N3h-is-Arc" userLabel="First Responder" sceneMemberID="firstResponder"/>

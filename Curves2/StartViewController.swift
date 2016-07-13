@@ -145,8 +145,12 @@ class StartViewController: UIViewController {
         if segue.identifier == "startGame" {
             var colors = [UIColor]()
             colors.append(p1Button.backgroundColor!)
+            if playerCount == 1 {
+                GameData.singlePlayer = true
+            }
             if playerCount > 1 {
                 colors.append(p2Button.backgroundColor!)
+                GameData.singlePlayer = false
             }
             if playerCount > 2 {
                 colors.append(p3Button.backgroundColor!)

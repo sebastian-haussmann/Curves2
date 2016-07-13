@@ -16,21 +16,23 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var gamemodeLbl: UILabel!
     @IBOutlet weak var gamemodeTxtField: UITextField!
     
+    @IBOutlet weak var curveSegment2: UISegmentedControl!
+    @IBOutlet weak var velocitySlider: UISlider!
     var gamemodeID = 0
     var curveID = 0
     var pointsOrRounds = 50
     var prevTextField = "50"
 
+    @IBOutlet weak var velocityTxtField: UILabel!
     @IBOutlet weak var multiplayerView: UIView!
     @IBOutlet weak var singlePlayerView: UIView!
     @IBOutlet weak var switchView: UISegmentedControl!
     
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        velocityTxtField.text = String(Int(velocitySlider.value))
         if GameData.settingsEdited{
             gamemodeID = GameData.gameModeID
             gamemodeSegment.selectedSegmentIndex = gamemodeID
@@ -39,6 +41,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             pointsOrRounds = GameData.gameModeCount
             gamemodeTxtField.text = String(pointsOrRounds)
         }
+        
+        
         
         gamemodeTxtField.delegate = self
         gamemodeTxtField.keyboardType = UIKeyboardType.NumberPad
@@ -51,6 +55,16 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tapRecognizer)
         
     }
+    
+    
+    @IBAction func sliderMoved(sender: AnyObject) {
+        
+        velocityTxtField.text = String(Int(velocitySlider.value))
+        GameData.singlePlayerVelocity = Int(velocitySlider.value)
+        
+    }
+    
+    
     
     @IBAction func switchViewAction(sender: AnyObject) {
         
@@ -101,6 +115,19 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    @IBAction func curveModeAction2(sender: AnyObject) {
+        switch curveSegment2.selectedSegmentIndex {
+        case 0:
+            curveID = 0
+        case 1:
+            curveID = 1
+        default:
+            break
+        }
+        
+        
+        
+    }
     @IBAction func saveBtnPressed(sender: AnyObject) {
         
        // print(pointsOrRounds)

@@ -32,6 +32,8 @@ struct GameData{
     static var gameModeCount: Int = Int()
     static var curveMode: Int = Int()
     static var settingsEdited: Bool = false
+    static var singlePlayer: Bool = false
+    static var singlePlayerVelocity: Int = Int()
     
 }
 
