@@ -76,6 +76,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     var highScoreBtn: SKShapeNode = SKShapeNode()
     var endScreenLbl: SKLabelNode = SKLabelNode()
     
+    var itemMultiply: CGFloat = 1.0
+    var singlePlayerVelo: CGFloat = 1.0
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
@@ -159,6 +162,14 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
         }
         
+        
+        if GameData.singlePlayer{
+            
+            itemMultiply = 0.5 * GameData.singlePlayerVelocity
+            players[0].snakeVelocity = 0.5 + (0.5 * GameData.singlePlayerVelocity)
+            singlePlayerVelo = players[0].snakeVelocity
+            
+        }
         
         createButtons(players.count)
         addPhysics()
@@ -318,12 +329,35 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         
         //var x = Int(15 / players[index].snakeVelocity)
-        var x = 10
+        var x = 11
+        
+        if GameData.singlePlayer{
+            if GameData.singlePlayerVelocity == 1{
+                x = 13
+            }else{
+                x = 12 - Int(2 * singlePlayerVelo)
+            }
+            
+        }else{
+            x = Int(8.5)
+        }
+        
+        
         for tail in players[index].tail{
             var tailSize = players[index].wayPoints.count
             tail.position = players[index].wayPoints[tailSize - x]
            // x = x + Int(15 / players[index].snakeVelocity)
-            x = x + 10
+            if GameData.singlePlayer{
+                if GameData.singlePlayerVelocity == 1{
+                    x += 12
+                }else{
+                    x = x + 11 - Int(2 * singlePlayerVelo)
+                }
+                
+            }else{
+                x = x + 11
+            }
+
         }
         
     }
@@ -345,7 +379,12 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             }
             player.tail.removeAll()
             player.changeDir = false
-            player.snakeVelocity = CGFloat(1.5)
+            if GameData.singlePlayer{
+                player.snakeVelocity = singlePlayerVelo
+            }else{
+                player.snakeVelocity = CGFloat(1.5)
+            }
+            print(player.snakeVelocity)
             randomStartingPosition(count)
             scoreSort[count].2 = 0
         }
@@ -1111,9 +1150,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         let playerIndex = index
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
         if !players[index].changeDir {
-            players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
+            players[playerIndex].wayPoints[0] = radianToPoint(alt + (5 + Double(2*players[playerIndex].snakeVelocity)))
         }else{
-            players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
+            players[playerIndex].wayPoints[0] = radianToPoint(alt - (5 + Double(2*players[playerIndex].snakeVelocity)))
         }
         changeDirection(players[playerIndex].wayPoints[0], index: playerIndex)
     }
@@ -1123,9 +1162,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         let playerIndex = index
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
         if !players[index].changeDir {
-            players[playerIndex].wayPoints[0] = radianToPoint(alt - 8)
+            players[playerIndex].wayPoints[0] = radianToPoint(alt - (5 + Double(2*players[playerIndex].snakeVelocity)))
         }else{
-            players[playerIndex].wayPoints[0] = radianToPoint(alt + 8)
+            players[playerIndex].wayPoints[0] = radianToPoint(alt + (5 + Double(2*players[playerIndex].snakeVelocity)))
         }
         changeDirection(players[playerIndex].wayPoints[0],index: playerIndex)
     }
@@ -1256,16 +1295,16 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         switch foodName {
         case "Erdbeere":
-            players[index].score += 1
-            points.text =  "+" + String(1)
+            players[index].score = players[index].score + Int(round(1 * itemMultiply))
+            points.text =  "+" + String(Int(round(1 * itemMultiply)))
             scoreSort[index].2 += 1
         case "Apfel":
-            players[index].score += 2
-            points.text =  "+" + String(2)
+            players[index].score = players[index].score + Int(round(2 * itemMultiply))
+            points.text =  "+" + String(Int(round(2 * itemMultiply)))
             scoreSort[index].2 += 2
         case "Banane":
-            players[index].score += 3
-            points.text =  "+" + String(3)
+            players[index].score = players[index].score + Int(round(3 * itemMultiply))
+            points.text =  "+" + String(Int(round(3 * itemMultiply)))
             scoreSort[index].2 += 3
         default:
             break

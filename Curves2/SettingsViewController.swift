@@ -38,6 +38,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             gamemodeSegment.selectedSegmentIndex = gamemodeID
             curveID = GameData.curveMode
             curveSegment.selectedSegmentIndex = curveID
+            curveSegment2.selectedSegmentIndex = curveID
             pointsOrRounds = GameData.gameModeCount
             gamemodeTxtField.text = String(pointsOrRounds)
             velocitySlider.value = Float(GameData.singlePlayerVelocity)
@@ -108,8 +109,10 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         switch curveSegment.selectedSegmentIndex {
         case 0:
             curveID = 0
+            curveSegment2.selectedSegmentIndex = 0
         case 1:
             curveID = 1
+            curveSegment2.selectedSegmentIndex = 1
         default:
             break
         }
@@ -120,8 +123,10 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         switch curveSegment2.selectedSegmentIndex {
         case 0:
             curveID = 0
+            curveSegment.selectedSegmentIndex = 0
         case 1:
             curveID = 1
+            curveSegment.selectedSegmentIndex = 1
         default:
             break
         }
