@@ -57,7 +57,7 @@
                                         <rect key="frame" x="0.0" y="28" width="696" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="f1x-bJ-wht" id="uYi-Ho-dlW">
-                                            <rect key="frame" x="0.0" y="0.0" width="696" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="696" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rank" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY2-9L-nSv" userLabel="Rank">
@@ -109,7 +109,7 @@
                                     <outlet property="dataSource" destination="Ntv-D3-Y4L" id="ar0-TW-Bp7"/>
                                 </connections>
                             </tableView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Ut5-Nt-Af7">
+                            <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Ut5-Nt-Af7">
                                 <rect key="frame" x="167" y="34" width="403" height="29"/>
                                 <segments>
                                     <segment title="Einzelspieler"/>
@@ -119,6 +119,12 @@
                                     <action selector="modusAction:" destination="Ntv-D3-Y4L" eventType="valueChanged" id="Npl-aD-Gxg"/>
                                 </connections>
                             </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Einzelspieler" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cEk-Kf-juw">
+                                <rect key="frame" x="167" y="20" width="403" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -126,6 +132,7 @@
                             <constraint firstItem="j1C-dS-4lu" firstAttribute="leading" secondItem="Oc8-yf-pLf" secondAttribute="leading" id="F1R-at-wsq"/>
                             <constraint firstItem="Ut5-Nt-Af7" firstAttribute="centerY" secondItem="eQo-ns-P9M" secondAttribute="centerY" id="FAz-EA-IYh"/>
                             <constraint firstItem="eQo-ns-P9M" firstAttribute="leading" secondItem="Ut5-Nt-Af7" secondAttribute="trailing" constant="31" id="KSt-I6-z5c"/>
+                            <constraint firstItem="cEk-Kf-juw" firstAttribute="trailing" secondItem="Ut5-Nt-Af7" secondAttribute="trailing" id="O7U-JB-Yvk"/>
                             <constraint firstItem="j1C-dS-4lu" firstAttribute="top" secondItem="Zb7-dj-fF8" secondAttribute="bottom" id="RxJ-cV-Bgs"/>
                             <constraint firstItem="eQo-ns-P9M" firstAttribute="trailing" secondItem="Nqp-Do-zcE" secondAttribute="trailingMargin" id="XUF-gl-DJx"/>
                             <constraint firstItem="j1C-dS-4lu" firstAttribute="baseline" secondItem="eQo-ns-P9M" secondAttribute="firstBaseline" id="XhU-gj-JvG"/>
@@ -133,8 +140,11 @@
                             <constraint firstItem="Ut5-Nt-Af7" firstAttribute="centerX" secondItem="Oc8-yf-pLf" secondAttribute="centerX" id="ZQ6-dQ-8LH"/>
                             <constraint firstItem="Ut5-Nt-Af7" firstAttribute="top" secondItem="Zb7-dj-fF8" secondAttribute="bottom" constant="14" id="cnT-AG-Itp"/>
                             <constraint firstItem="j1C-dS-4lu" firstAttribute="leading" secondItem="Nqp-Do-zcE" secondAttribute="leadingMargin" id="crW-s1-h34"/>
+                            <constraint firstItem="cEk-Kf-juw" firstAttribute="bottom" secondItem="Ut5-Nt-Af7" secondAttribute="bottom" id="e2u-RN-o6v"/>
                             <constraint firstItem="Ut5-Nt-Af7" firstAttribute="leading" secondItem="j1C-dS-4lu" secondAttribute="trailing" constant="32" id="mVX-uP-kzA"/>
+                            <constraint firstItem="cEk-Kf-juw" firstAttribute="leading" secondItem="Ut5-Nt-Af7" secondAttribute="leading" id="nk2-cD-9My"/>
                             <constraint firstItem="xch-6l-7A7" firstAttribute="top" secondItem="Oc8-yf-pLf" secondAttribute="bottom" constant="8" symbolic="YES" id="pyy-OP-qd7"/>
+                            <constraint firstItem="cEk-Kf-juw" firstAttribute="top" secondItem="eQo-ns-P9M" secondAttribute="top" id="sAx-C4-RdM"/>
                             <constraint firstItem="Oc8-yf-pLf" firstAttribute="top" secondItem="j1C-dS-4lu" secondAttribute="bottom" constant="8" symbolic="YES" id="t8v-bC-SQk"/>
                             <constraint firstItem="j1C-dS-4lu" firstAttribute="top" secondItem="eQo-ns-P9M" secondAttribute="top" id="yZ1-xw-y4H"/>
                         </constraints>

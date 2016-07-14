@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class Highscore: UIViewController, UITableViewDataSource  {
     
-    let spRanking = [["hans",1000],["peter",500],["fritz",200]]
     let mpRanking = [["hjabs",300], ["askjn",200]]
     
+    var spRanking = [NSManagedObject]()
+    var singleplayer = true
     
     
     @IBOutlet weak var modus: UISegmentedControl!
@@ -30,6 +32,11 @@ class Highscore: UIViewController, UITableViewDataSource  {
         tableView.backgroundColor = UIColor.clearColor()
         tableView.allowsSelection = false
         
+        
+    }
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        spRanking = Data().loadSingleplayerHighscore(singleplayer)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -48,8 +55,9 @@ class Highscore: UIViewController, UITableViewDataSource  {
         
         cell.rank.text = String(indexPath.row+1)
         if modus.selectedSegmentIndex == 0{
-            cell.name.text = spRanking[indexPath.row][0] as? String
-            cell.score.text = String(spRanking[indexPath.row][1] as! Int)
+            let rank = spRanking[indexPath.row]
+            cell.name.text = rank.valueForKey("name") as? String
+            cell.score.text = String((rank.valueForKey("score") as? Int)!)
         }else{
             cell.name.text = mpRanking[indexPath.row][0] as? String
             cell.score.text = String(mpRanking[indexPath.row][1] as! Int)
@@ -70,5 +78,17 @@ class Highscore: UIViewController, UITableViewDataSource  {
     }
     
     @IBAction func resetButton(sender: AnyObject) {
+        let alert = UIAlertController(title: "Warnung", message: "Sind Sie sicher dass sie die Highscore zurücksetzen möchten? Dies kann nicht rückgängig gemacht werden.", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.Cancel, handler: nil))
+        let saveAction = UIAlertAction(title: "Zurücksetzen", style: UIAlertActionStyle.Destructive, handler: { (action:UIAlertAction) -> Void in
+            
+            Data().resetSingleplayerHighscore()
+            self.spRanking = Data().loadSingleplayerHighscore(self.singleplayer)
+            self.tableView.reloadData()
+        })
+        alert.addAction(saveAction)
+        self.presentViewController(alert, animated: true, completion: nil)
     }
+    
+    
 }

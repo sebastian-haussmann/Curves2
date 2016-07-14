@@ -226,6 +226,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             endGameBtn.position = CGPoint(x: 465, y: 70)
             highScoreBtn.addChild(highScoreLbl)
             endScreenView.addChild(highScoreBtn)
+            Data().savesingleplayerHighscore("Jürgen", score: players[0].score)
         }else{
             endScreenLbl.fontColor = GameData.colors[0]
             endScreenLbl.fontSize = 25
@@ -268,6 +269,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         foodList = [SKSpriteNode]()
         
     }
+    
     
     func createFood(){
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
