@@ -33,6 +33,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     var dir3 = NSTimer()
     var dir4 = NSTimer()
     
+    var speedTimer = NSTimer()
+    var thickTimer = NSTimer()
+    
     
     var myTimerR1: NSTimer = NSTimer()
     var myTimerR2: NSTimer = NSTimer()
@@ -375,10 +378,18 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             item.removeFromParent()
         }
         itemList.removeAll()
+        dir1.invalidate()
+        dir2.invalidate()
+        dir3.invalidate()
+        dir4.invalidate()
+        speedTimer.invalidate()
+        thickTimer.invalidate()
         for (count,player) in players.enumerate(){
             for tail in players[count].tail{
                 tail.removeFromParent()
             }
+            player.head.xScale = 1
+            player.head.yScale = player.head.xScale
             player.tail.removeAll()
             player.changeDir = false
             if GameData.singlePlayer{
@@ -1087,7 +1098,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         players[index].snakeVelocity += 0.5
         changeDirectionR2(index)
         changeDirectionL2(index)
-        NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: index, repeats: false)
+        speedTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: index, repeats: false)
         
     }
     
@@ -1104,7 +1115,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             if index != count{
                 player.snakeVelocity += 0.5
-                NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: count, repeats: false)
+                speedTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: count, repeats: false)
             }
             
         }
@@ -1120,7 +1131,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                     tail.xScale = player.head.xScale
                     tail.yScale = player.head.xScale
                 }
-                NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseThickness), userInfo: count, repeats: false)
+                thickTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseThickness), userInfo: count, repeats: false)
             }
             
         }
