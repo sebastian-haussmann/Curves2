@@ -60,4 +60,15 @@ class Data{
             debugPrint(error)
         }
     }
+    
+    func removeItemSingleplayerHighscore(score: NSManagedObject){
+        let appDel:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context:NSManagedObjectContext = appDel.managedObjectContext
+        context.deleteObject(score)
+        
+        do {
+            try context.save()
+        } catch _ {
+        }
+    }
 }
