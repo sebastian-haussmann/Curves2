@@ -33,7 +33,7 @@ class Data{
         let fetchRequest = NSFetchRequest(entityName: "SingleplayerHighscore")
         
         // sort less rounds as best
-        let sortDescriptor = NSSortDescriptor(key: "score", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "score", ascending: false)
         let sortDescriptors = [sortDescriptor]
         fetchRequest.sortDescriptors = sortDescriptors
         do {

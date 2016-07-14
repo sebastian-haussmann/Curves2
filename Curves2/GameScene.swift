@@ -1227,6 +1227,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 foodUnit.removeFromParent()
                 foodList.removeAtIndex(count)
                 let newTail = SKShapeNode(circleOfRadius: 8.0)
+                newTail.xScale = players[index].head.xScale
+                newTail.yScale = players[index].head.yScale
                 //let newTail = SKShapeNode(rectOfSize: CGSize(width: 10, height: 10))
                 newTail.fillColor = GameData.colors[index]
                 newTail.strokeColor = GameData.colors[index]
