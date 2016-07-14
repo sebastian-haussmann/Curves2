@@ -11,7 +11,7 @@ import CoreData
 
 class Data{
     
-    func savesingleplayerHighscore(player: String, score: Int) {
+    func saveSingleplayerHighscore(player: String, score: Int) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let entity =  NSEntityDescription.entityForName("SingleplayerHighscore", inManagedObjectContext:managedContext)

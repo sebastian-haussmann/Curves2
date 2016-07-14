@@ -10,7 +10,7 @@
 import SpriteKit
 
 
-class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITableViewDelegate {
+class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     let trianglePathP1L = CGPathCreateMutable()
     
@@ -78,6 +78,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     var endGameBtn: SKShapeNode = SKShapeNode()
     var highScoreBtn: SKShapeNode = SKShapeNode()
     var endScreenLbl: SKLabelNode = SKLabelNode()
+    var scoreName: UITextField = UITextField()
     
     var itemMultiply: CGFloat = 1.0
     var singlePlayerVelo: CGFloat = 1.0
@@ -226,10 +227,16 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             endScreenLbl.text = String(players[0].score)
             rematchBtn.position = CGPoint(x: 205, y: 70)
             highScoreBtn.position = CGPoint(x: 335, y: 70)
+            highScoreBtn.alpha = 0.5
             endGameBtn.position = CGPoint(x: 465, y: 70)
             highScoreBtn.addChild(highScoreLbl)
+            scoreName = UITextField(frame: CGRect(x: view!.frame.width / 2 - 50, y: view!.frame.height/2 + 30, width: 100, height: 20))
+            scoreName.attributedPlaceholder =  NSAttributedString(string: "Spielername", attributes: [NSForegroundColorAttributeName:GameData.colors[0]])
+            scoreName.delegate = self
+            scoreName.backgroundColor = UIColor.blackColor()
+            scoreName.textColor = GameData.colors[0]
+            self.view?.addSubview(scoreName)
             endScreenView.addChild(highScoreBtn)
-            Data().savesingleplayerHighscore("Jürgen", score: players[0].score)
         }else{
             endScreenLbl.fontColor = GameData.colors[0]
             endScreenLbl.fontSize = 25
@@ -442,7 +449,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             scoreSort[count].0 = 0
             scoreLblList[count].text = "0"
         }
-
+        scoreName.removeFromSuperview()
         endScreenView.removeFromParent()
         self.view?.addSubview(scoreView)
         newRound()
@@ -496,8 +503,11 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 }else if rematchBtn.containsPoint(location){
                     newGame()
                     rematchBtn.alpha = 0.5
-                }else if highScoreBtn.containsPoint(location){
-                    //newGame()
+                }else if highScoreBtn.containsPoint(location) && !highScoreBtn.hidden{
+                    if scoreName.text! != "" {
+                        highScoreBtn.hidden = true
+                        addHighscore(scoreName.text!)
+                    }
                     highScoreBtn.alpha = 0.5
                 }else if endGameBtn.containsPoint(location){
                     closeGame()
@@ -540,7 +550,11 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 }else if rematchBtn.containsPoint(location){
                     rematchBtn.alpha = 1
                 }else if highScoreBtn.containsPoint(location){
-                    highScoreBtn.alpha = 1
+                    if scoreName.text! != "" {
+                        highScoreBtn.alpha = 1
+                    }else{
+                        highScoreBtn.alpha = 0.5
+                    }
                 }else if endGameBtn.containsPoint(location){
                     endGameBtn.alpha = 1
                 }
@@ -1089,6 +1103,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         makeEndScreen(1)
     }
     
+    func addHighscore(name: String){
+        Data().saveSingleplayerHighscore(name, score: players[0].score)
+    }
+    
     func closeGame(){
         
         self.view?.window?.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
@@ -1369,6 +1387,18 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         let remove = SKAction.runBlock({() in points.removeFromParent()})
         self.runAction(SKAction.sequence([myFunction, wait, remove]))
         
+    }
+    
+    //Hide Keyboard after typing
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        scoreName.text = textField.text!
+        if scoreName.text! != "" {
+            highScoreBtn.alpha = 1
+        }else{
+            highScoreBtn.alpha = 0.5
+        }
+        self.view!.endEditing(true)
+        return false
     }
     
     
