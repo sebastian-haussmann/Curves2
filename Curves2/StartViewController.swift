@@ -62,6 +62,9 @@ class StartViewController: UIViewController {
             addButton.hidden = false
             removeButton.hidden = true
         case 2:
+            if p2Button.backgroundColor == p1Button.backgroundColor{
+                changeColor(1)
+            }
             p1Button.hidden = false
             p2Button.hidden = false
             p3Button.hidden = true
@@ -69,6 +72,9 @@ class StartViewController: UIViewController {
             addButton.hidden = false
             removeButton.hidden = false
         case 3:
+            if p3Button.backgroundColor == p2Button.backgroundColor || p3Button.backgroundColor == p1Button.backgroundColor{
+                changeColor(2)
+            }
             p1Button.hidden = false
             p2Button.hidden = false
             p3Button.hidden = false
@@ -76,6 +82,9 @@ class StartViewController: UIViewController {
             addButton.hidden = false
             removeButton.hidden = false
         case 4:
+            if p4Button.backgroundColor == p3Button.backgroundColor || p4Button.backgroundColor == p2Button.backgroundColor || p4Button.backgroundColor == p1Button.backgroundColor{
+                changeColor(3)
+            }
             p1Button.hidden = false
             p2Button.hidden = false
             p3Button.hidden = false
@@ -94,7 +103,6 @@ class StartViewController: UIViewController {
     
     
     @IBAction func startButton(sender: AnyObject) {
-//        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     @IBAction func p1Color(sender: AnyObject) {
@@ -111,18 +119,24 @@ class StartViewController: UIViewController {
     }
     
     func changeColor(number: Int){
-        var randomColors = [UIColor.blueColor(),UIColor.brownColor(), UIColor.cyanColor(), UIColor.greenColor(), UIColor.grayColor(), UIColor.orangeColor(), UIColor.redColor(), UIColor.purpleColor(), UIColor.yellowColor(), UIColor.whiteColor()]
+        var randomColors = [UIColor.magentaColor(), UIColor.blueColor(),UIColor.brownColor(), UIColor.cyanColor(), UIColor.greenColor(), UIColor.grayColor(), UIColor.orangeColor(), UIColor.redColor(), UIColor.purpleColor(), UIColor.yellowColor(), UIColor.whiteColor()]
         randomColors = randomColors.filter { (color: UIColor) -> Bool in
             color != p1Button.backgroundColor
         }
-        randomColors = randomColors.filter { (color: UIColor) -> Bool in
-            color != p2Button.backgroundColor
+        if playerCount > 1{
+            randomColors = randomColors.filter { (color: UIColor) -> Bool in
+                color != p2Button.backgroundColor
+            }
         }
-        randomColors = randomColors.filter { (color: UIColor) -> Bool in
-            color != p3Button.backgroundColor
+        if playerCount > 2{
+            randomColors = randomColors.filter { (color: UIColor) -> Bool in
+                color != p3Button.backgroundColor
+            }
         }
-        randomColors = randomColors.filter { (color: UIColor) -> Bool in
-            color != p4Button.backgroundColor
+        if playerCount > 3{
+            randomColors = randomColors.filter { (color: UIColor) -> Bool in
+                color != p4Button.backgroundColor
+            }
         }
         let colorInt = arc4random_uniform(UInt32(randomColors.count))
         switch number {

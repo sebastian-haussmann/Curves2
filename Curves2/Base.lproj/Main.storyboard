@@ -372,7 +372,6 @@
                                 <connections>
                                     <action selector="cancelBtnPressed:" destination="stQ-dZ-YCt" eventType="touchUpInside" id="tQz-X2-twc"/>
                                     <action selector="startButton:" destination="th5-rQ-oUl" eventType="touchUpInside" id="bmO-Xw-SNo"/>
-                                    <segue destination="th5-rQ-oUl" kind="show" identifier="cancelSettings" id="ZXU-Bd-cf5"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qwU-IS-2HA">
@@ -389,7 +388,7 @@
                                 <connections>
                                     <action selector="saveBtnPressed:" destination="stQ-dZ-YCt" eventType="touchUpInside" id="7gR-xm-tMF"/>
                                     <action selector="startButton:" destination="th5-rQ-oUl" eventType="touchUpInside" id="6Sk-5P-WLi"/>
-                                    <segue destination="th5-rQ-oUl" kind="show" identifier="saveSettings" id="l9w-oO-jrO"/>
+                                    <segue destination="th5-rQ-oUl" kind="show" identifier="saveSettings" animates="NO" id="l9w-oO-jrO"/>
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Dv0-qE-788">
@@ -681,7 +680,4 @@
             <point key="canvasLocation" x="423" y="-24"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="ZXU-Bd-cf5"/>
-    </inferredMetricsTieBreakers>
 </document>

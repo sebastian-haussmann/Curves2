@@ -141,6 +141,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func cancelBtnPressed(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     
@@ -155,6 +156,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             GameData.settingsEdited = true
             GameData.singlePlayerVelocity = CGFloat(Int(velocitySlider.value))
             vc.editedSettings = true
+            self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
 
