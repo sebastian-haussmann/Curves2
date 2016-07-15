@@ -240,9 +240,12 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             scoreName = UITextField(frame: CGRect(x: view!.frame.width / 2 - 50, y: view!.frame.height/2 + 30, width: 100, height: 20))
             scoreName.attributedPlaceholder =  NSAttributedString(string: "Spielername", attributes: [NSForegroundColorAttributeName:GameData.colors[0]])
             scoreName.delegate = self
-            scoreName.backgroundColor = UIColor.blackColor()
+            scoreName.backgroundColor = UIColor.darkGrayColor()
             scoreName.textColor = GameData.colors[0]
             self.view?.addSubview(scoreName)
+            let instruction = SKSpriteNode(imageNamed: "changeName")
+            instruction.position = CGPoint(x: view!.frame.width / 2 + 120 , y: view!.frame.height / 2 - 80)
+            endScreenView.addChild(instruction)
 //            Data().saveSingleplayerHighscore(GameData.nickname, score: players[0].score)
         }else{
             endScreenLbl.fontColor = GameData.colors[0]
@@ -514,6 +517,19 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                     if scoreName.text! != "" {
                         highScoreBtn.hidden = true
                         addHighscore(scoreName.text!)
+//                        scoreView.removeFromSuperview()
+//                        scoreName.removeFromSuperview()
+//                        scoreTableView.removeFromSuperview()
+//                        endScreenView.removeFromParent()
+//                        
+//                        self.removeAllActions()
+//                        self.removeAllChildren()
+//                        let scene = HighscoreScene(fileNamed: "HighscoreScene")
+//                        
+//                        scene!.scaleMode = .ResizeFill
+//                        
+//                        self.view?.presentScene(scene!, transition: SKTransition.doorsOpenHorizontalWithDuration(1.0))
+
                     }
                     highScoreBtn.alpha = 0.5
                 }else if endGameBtn.containsPoint(location){
