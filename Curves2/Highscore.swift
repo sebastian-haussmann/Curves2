@@ -68,6 +68,18 @@ class Highscore: UIViewController, UITableViewDataSource  {
         cell.score.textColor = UIColor.whiteColor()
         return cell
     }
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        switch editingStyle {
+        case .Delete:
+            // remove the deleted item from the model
+            Data().removeItemSingleplayerHighscore(spRanking[indexPath.row])
+            spRanking.removeAtIndex(indexPath.row)
+            // remove the deleted item from the `UITableView`
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        default:
+            return
+        }
+    }
     
     @IBAction func modusAction(sender: AnyObject) {
         tableView.reloadData()

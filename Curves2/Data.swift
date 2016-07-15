@@ -11,7 +11,7 @@ import CoreData
 
 class Data{
     
-    func savesingleplayerHighscore(player: String, score: Int) {
+    func saveSingleplayerHighscore(player: String, score: Int) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let entity =  NSEntityDescription.entityForName("SingleplayerHighscore", inManagedObjectContext:managedContext)
@@ -58,6 +58,17 @@ class Data{
             try coord.executeRequest(deleteRequest, withContext: context)
         } catch let error as NSError {
             debugPrint(error)
+        }
+    }
+    
+    func removeItemSingleplayerHighscore(score: NSManagedObject){
+        let appDel:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context:NSManagedObjectContext = appDel.managedObjectContext
+        context.deleteObject(score)
+        
+        do {
+            try context.save()
+        } catch _ {
         }
     }
 }
