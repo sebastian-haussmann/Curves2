@@ -21,6 +21,7 @@ class StartViewController: UIViewController {
     
     var editedSettings: Bool = false
     var playerCount = 2
+    var nickname = ""
     
     
     override func viewDidLoad() {
@@ -103,7 +104,6 @@ class StartViewController: UIViewController {
     
     
     @IBAction func startButton(sender: AnyObject) {
-        
     }
     @IBAction func p1Color(sender: AnyObject) {
         changeColor(0)
@@ -152,6 +152,20 @@ class StartViewController: UIViewController {
             print("Fail Color")
         }
     }
+    func enterName(){
+        let alertController = UIAlertController(title: "Name", message: "Bitte den Namen für die Highscore eingeben:", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addTextFieldWithConfigurationHandler(nil)
+        self.presentViewController(alertController,animated: true, completion: nil)
+        
+        
+        alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
+            self.nickname = alertController.textFields![0].text!
+            self.performSegueWithIdentifier("startGame", sender:self)
+            
+        }))
+       
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         // Get the new view controller using segue.destinationViewController.
@@ -161,6 +175,10 @@ class StartViewController: UIViewController {
             colors.append(p1Button.backgroundColor!)
             if playerCount == 1 {
                 GameData.singlePlayer = true
+                if nickname == ""{
+                    enterName()
+                }
+                GameData.nickname = nickname
             }
             if playerCount > 1 {
                 colors.append(p2Button.backgroundColor!)

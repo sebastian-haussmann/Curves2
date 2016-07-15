@@ -34,6 +34,7 @@ struct GameData{
     static var settingsEdited: Bool = false
     static var singlePlayer: Bool = false
     static var singlePlayerVelocity: CGFloat = CGFloat()
+    static var nickname: String = String()
     
 }
 
@@ -242,7 +243,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             endGameBtn.position = CGPoint(x: 465, y: 70)
             highScoreBtn.addChild(highScoreLbl)
             endScreenView.addChild(highScoreBtn)
-            Data().savesingleplayerHighscore("Jürgen", score: players[0].score)
+            Data().savesingleplayerHighscore(GameData.nickname, score: players[0].score)
         }else{
             endScreenLbl.fontColor = GameData.colors[0]
             endScreenLbl.fontSize = 25
