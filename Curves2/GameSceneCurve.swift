@@ -237,7 +237,13 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             scoreName.textColor = GameData.colors[0]
             self.view?.addSubview(scoreName)
             endScreenView.addChild(highScoreBtn)
-            Data().savesingleplayerHighscore(GameData.nickname, score: players[0].score)
+            scoreName = UITextField(frame: CGRect(x: view!.frame.width / 2 - 50, y: view!.frame.height/2 + 30, width: 100, height: 20))
+            scoreName.attributedPlaceholder =  NSAttributedString(string: "Spielername", attributes: [NSForegroundColorAttributeName:GameData.colors[0]])
+            scoreName.delegate = self
+            scoreName.backgroundColor = UIColor.blackColor()
+            scoreName.textColor = GameData.colors[0]
+            self.view?.addSubview(scoreName)
+//            Data().saveSingleplayerHighscore(GameData.nickname, score: players[0].score)
         }else{
             endScreenLbl.fontColor = GameData.colors[0]
             endScreenLbl.fontSize = 25
