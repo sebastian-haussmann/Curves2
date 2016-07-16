@@ -517,7 +517,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
         override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     
-           /* Called when a touch begins   jj*/
+           /* Called when a touch begins */
     
             for touch in touches {
                 let location = touch.locationInNode(self)
@@ -614,10 +614,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                     closeGame()
                     endGameBtn.alpha = 0.5
                 }else if pauseBtn.containsPoint(location) && pauseBtn.alpha == 1{
-                    self.runAction(SKAction.runBlock(self.pauseGame))
+                    if view!.scene!.paused{
+                        continueGame()
+                    }else{
+                        self.runAction(SKAction.runBlock(self.pauseGame))
+                    }
+                    
                 }
                 else if pauseBtn2.containsPoint(location) && pauseBtn2.alpha == 1{
-                    self.runAction(SKAction.runBlock(self.pauseGame))
+                    if view!.scene!.paused{
+                        continueGame()
+                    }else{
+                        self.runAction(SKAction.runBlock(self.pauseGame))
+                    }
 
                 }
           }
@@ -999,28 +1008,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     }
     
     func addPhysics(){
-        players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+        players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
         players[0].head.physicsBody!.categoryBitMask = PhysicsCat.p1HeadCat
         players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p3TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat
         players[0].head.physicsBody?.affectedByGravity = false
         players[0].head.physicsBody?.linearDamping = 0
     
         if players.count > 1 {
-            players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+            players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[1].head.physicsBody!.categoryBitMask = PhysicsCat.p2HeadCat
             players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p1TailCat | PhysicsCat.p3TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat
             players[1].head.physicsBody?.affectedByGravity = false
             players[1].head.physicsBody?.linearDamping = 0
         }
         if players.count > 2 {
-            players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+            players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[2].head.physicsBody!.categoryBitMask = PhysicsCat.p3HeadCat
             players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p1TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat
             players[2].head.physicsBody?.affectedByGravity = false
             players[2].head.physicsBody?.linearDamping = 0
         }
         if players.count > 3 {
-            players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 4.0)
+            players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[3].head.physicsBody!.categoryBitMask = PhysicsCat.p4HeadCat
             players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p3TailCat | PhysicsCat.p1TailCat | PhysicsCat.itemCat
             players[3].head.physicsBody?.affectedByGravity = false

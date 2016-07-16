@@ -257,16 +257,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             scoreName = UITextField(frame: CGRect(x: view!.frame.width / 2 - 50, y: view!.frame.height/2 + 30, width: 100, height: 20))
             scoreName.attributedPlaceholder =  NSAttributedString(string: "Spielername", attributes: [NSForegroundColorAttributeName:GameData.colors[0]])
             scoreName.delegate = self
-            scoreName.backgroundColor = UIColor.blackColor()
-            scoreName.textColor = GameData.colors[0]
-            self.view?.addSubview(scoreName)
-            endScreenView.addChild(highScoreBtn)
-            scoreName = UITextField(frame: CGRect(x: view!.frame.width / 2 - 50, y: view!.frame.height/2 + 30, width: 100, height: 20))
-            scoreName.attributedPlaceholder =  NSAttributedString(string: "Spielername", attributes: [NSForegroundColorAttributeName:GameData.colors[0]])
-            scoreName.delegate = self
             scoreName.backgroundColor = UIColor.darkGrayColor()
             scoreName.textColor = GameData.colors[0]
             self.view?.addSubview(scoreName)
+            endScreenView.addChild(highScoreBtn)
             let instruction = SKSpriteNode(imageNamed: "changeName")
             instruction.position = CGPoint(x: view!.frame.width / 2 + 120 , y: view!.frame.height / 2 - 80)
             endScreenView.addChild(instruction)
