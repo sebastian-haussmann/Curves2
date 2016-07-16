@@ -324,7 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         endScreenView.addChild(endScreenLbl)
         
        
-        
+        endScreenView.zPosition = 1
         self.addChild(endScreenView)
         
         
@@ -666,8 +666,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
 
     }
 
-    func pauseGame()
-    {
+    func pauseGame(){
         
         scene!.view!.paused = true
         makeEndScreen(1)
