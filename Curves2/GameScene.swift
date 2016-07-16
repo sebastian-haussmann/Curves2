@@ -102,13 +102,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
     var itemMultiply: CGFloat = 1.0
     var singlePlayerVelo: CGFloat = 1.0
+    let pauseBtn = SKSpriteNode(imageNamed: "PauseBtn")
+    let pauseBtn2 = SKSpriteNode(imageNamed: "PauseBtn")
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
        
         scaleMode = .ResizeFill
         physicsWorld.contactDelegate = self
+        
+        
+        pauseBtn.position = CGPoint(x: view.frame.width - (btnWidth / 2), y: view.frame.height / 2)
+        pauseBtn.setScale(0.7)
+        self.addChild(pauseBtn)
     
+        pauseBtn2.position = CGPoint(x: btnWidth / 2, y: view.frame.height / 2)
+        pauseBtn2.setScale(0.7)
+        self.addChild(pauseBtn2)
         
         for (index,color) in GameData.colors.enumerate(){
             
@@ -183,6 +193,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             self.addChild(gameModeView)
             self.view?.addSubview(scoreView)
             
+            
+            
         }
 
         if GameData.singlePlayer{
@@ -215,7 +227,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
     func makeEndScreen(singleOrMultiplayer: Int){
     
-        foodTimer.invalidate()
+        if !view!.scene!.paused{
+            foodTimer.invalidate()
+            for item in itemList{
+                item.removeFromParent()
+            }
+            for food in foodList{
+                food.removeFromParent()
+            }
+            foodList = [SKSpriteNode]()
+
+        }
         
         endScreenView = SKShapeNode(rect: CGRect(x: btnWidth + 5 + 10, y: 20, width: view!.frame.width - (2*btnWidth+10) - 20, height: view!.frame.height - 100))
         endScreenView.fillColor = UIColor.darkGrayColor()
@@ -263,17 +285,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             endScreenLbl.fontColor = GameData.colors[0]
             endScreenLbl.fontSize = 25
             endScreenLbl.position = CGPoint(x: view!.frame.width / 2, y: view!.frame.height - 120)
-            endScreenLbl.text = "Spieler bla" +  " gewinnt mit " + String(scoreSort[0].0) + " Punkten!"
-            rematchBtn.position = CGPoint(x: 205, y: 70)
-            endGameBtn.position = CGPoint(x: 465, y: 70)
+            if view!.scene!.paused{
+                endScreenLbl.text = "Pause"
+                endScreenLbl.fontColor = UIColor.whiteColor()
+                endScreenLbl.fontSize = 85
+                endScreenLbl.position = CGPoint(x: view!.frame.width / 2, y: (view!.frame.height / 2) - 20)
+
+                
+            }else{
+                endScreenLbl.text = "Spieler bla" +  " gewinnt mit " + String(scoreSort[0].0) + " Punkten!"
+            }
+            rematchBtn.position = CGPoint(x: 255, y: 70)
+            endGameBtn.position = CGPoint(x: 415, y: 70)
         }
         
         
         
         
         
+        if view!.scene!.paused{
+           rematchLbl.text = "Weiter"
+        }else{
+            rematchLbl.text = "Erneut Spielen"
+        }
         
-        rematchLbl.text = "Erneut Spielen"
         rematchLbl.fontSize = 15
         endGameLbl.text = "Hauptmenü"
         endGameLbl.fontSize = 15
@@ -292,13 +327,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         
         self.addChild(endScreenView)
         
-        for item in itemList{
-            item.removeFromParent()
-        }
-        for food in foodList{
-            food.removeFromParent()
-        }
-        foodList = [SKSpriteNode]()
+        
     
     }
     
@@ -436,7 +465,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         gameModeView.hidden = true
         waitTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(GameScene.waitBeforeStart), userInfo: 0, repeats: false)
         foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.createFood), userInfo: 0, repeats: true)
-        
+        pauseBtn2.alpha = 1
+        pauseBtn.alpha = 1
     }
     
     func randomStartingPosition(i: Int){
@@ -556,7 +586,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                     }
                     p4L.alpha = 0.5
                 }else if rematchBtn.containsPoint(location){
-                    newGame()
+                    if view!.scene!.paused{
+                       continueGame()
+                    }else{
+                        newGame()
+                    }
                     rematchBtn.alpha = 0.5
                 }else if highScoreBtn.containsPoint(location) && !highScoreBtn.hidden{
                     if scoreName.text! != "" {
@@ -579,6 +613,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 }else if endGameBtn.containsPoint(location){
                     closeGame()
                     endGameBtn.alpha = 0.5
+                }else if pauseBtn.containsPoint(location) && pauseBtn.alpha == 1{
+                    self.runAction(SKAction.runBlock(self.pauseGame))
+                }
+                else if pauseBtn2.containsPoint(location) && pauseBtn2.alpha == 1{
+                    self.runAction(SKAction.runBlock(self.pauseGame))
+
                 }
           }
     }
@@ -621,10 +661,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             }else if endGameBtn.containsPoint(location){
                 endGameBtn.alpha = 1
             }
+        
         }
 
     }
+
+    func pauseGame()
+    {
+        
+        scene!.view!.paused = true
+        makeEndScreen(1)
+        
+    }
     
+    func continueGame(){
+        scene!.view!.paused = false
+        endScreenView.removeFromParent()
+    }
+
     func rightBtn(index: Int){
         if(players[index].xSpeed > 0){
             players[index].xSpeed = 0
@@ -1290,6 +1344,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         }
         
         scoreView.hidden = false
+        pauseBtn.alpha = 0.3
+        pauseBtn2.alpha = 0.3
         gameModeView.hidden = false
         self.scoreTableView.reloadData()
     }
