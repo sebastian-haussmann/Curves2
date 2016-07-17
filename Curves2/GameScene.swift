@@ -778,6 +778,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             item.physicsBody!.contactTestBitMask =  PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
             item.physicsBody?.affectedByGravity = false
             item.physicsBody?.linearDamping = 0
+            item.physicsBody?.dynamic = false
             item.position = CGPoint(x: posX, y: posY)
             
             if !(item.position == CGPoint(x: 0.0, y: 0.0)){
@@ -1398,6 +1399,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 newTail.physicsBody?.affectedByGravity = false
                 newTail.physicsBody?.linearDamping = 0
                 newTail.physicsBody?.allowsRotation = false
+                newTail.physicsBody?.dynamic = false
                 if players[index].tail.count <= 1{
                     
                     switch index {
