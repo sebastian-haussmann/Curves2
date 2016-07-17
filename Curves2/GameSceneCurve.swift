@@ -732,6 +732,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             item.physicsBody?.affectedByGravity = false
             item.physicsBody?.linearDamping = 0
             item.position = CGPoint(x: posX, y: posY)
+            item.physicsBody?.dynamic = false
             
             if !(item.position == CGPoint(x: 0.0, y: 0.0)){
                 addChild(item)
@@ -1404,6 +1405,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 newTail.physicsBody?.affectedByGravity = false
                 newTail.physicsBody?.linearDamping = 0
                 newTail.physicsBody?.allowsRotation = false
+                newTail.physicsBody?.dynamic = false
                 if players[index].tail.count <= 1{
                     
                     switch index {
