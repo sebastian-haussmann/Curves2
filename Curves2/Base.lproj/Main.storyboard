@@ -583,7 +583,7 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="1" maxValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="juQ-pN-JaN">
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="2" minValue="1" maxValue="7" translatesAutoresizingMaskIntoConstraints="NO" id="juQ-pN-JaN">
                                                 <rect key="frame" x="484" y="9" width="235" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="231" id="1yn-s5-wOh"/>

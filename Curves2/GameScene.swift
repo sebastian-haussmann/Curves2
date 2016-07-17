@@ -145,6 +145,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             self.addChild(line.head)
             players.append(line)
             counter.append(0)
+            
+            
+            if GameData.singlePlayer && index == 0{
+                
+                itemMultiply = 0.5 * GameData.singlePlayerVelocity
+                players[0].snakeVelocity = 1.0 + (0.5 * GameData.singlePlayerVelocity)
+                singlePlayerVelo = players[0].snakeVelocity
+                
+            }
+            
+            
             randomStartingPosition(index)
             waitTimer = NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(GameScene.waitBeforeStart), userInfo: 0, repeats: false)
             
@@ -197,13 +208,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
         }
 
-        if GameData.singlePlayer{
-            
-            itemMultiply = 0.5 * GameData.singlePlayerVelocity
-            players[0].snakeVelocity = 1.0 + (0.5 * GameData.singlePlayerVelocity)
-            singlePlayerVelo = players[0].snakeVelocity
-            
-        }
+        
             
         createButtons(players.count)
         addPhysics()
