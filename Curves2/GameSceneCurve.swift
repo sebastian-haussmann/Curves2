@@ -87,6 +87,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     let pauseBtn2 = SKSpriteNode(imageNamed: "PauseBtn")
     
     var gameCountTemp = 0
+    var scalefactor = 1.0
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -170,7 +171,6 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             
             
-            
             if GameData.gameModeID == 0{
                 gameModeLbl.text = "Ziel: " + String(GameData.gameModeCount)
             }else{
@@ -189,6 +189,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         }
         
         
+        if self.view!.frame.maxY <= 375{
+            scalefactor = 0.7
+        }
         createButtons(players.count)
         addPhysics()
         
@@ -292,6 +295,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             rematchBtn.position = CGPoint(x: 255, y: 70)
             endGameBtn.position = CGPoint(x: 415, y: 70)
         }
+        endScreenLbl.setScale(CGFloat(scalefactor))
         
         
         
