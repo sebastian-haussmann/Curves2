@@ -287,8 +287,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             endScreenView.addChild(instruction)
             //Data().saveSingleplayerHighscore(GameData.nickname, score: players[0].score)
         }else{
-            endScreenLbl.fontColor = GameData.colors[0]
+            endScreenLbl.fontColor = scoreSort[0].1
             endScreenLbl.fontSize = 25
+            var playerName = ""
+            for (count,player) in players.enumerate(){
+                if player.head.fillColor == scoreSort[0].1{
+                    playerName = "Spieler " + String(count + 1)
+                }
+                
+            }
+            
             endScreenLbl.position = CGPoint(x: view!.frame.width / 2, y: view!.frame.height - 120)
             if view!.scene!.paused{
                 endScreenLbl.text = "Pause"
@@ -298,7 +306,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
 
                 
             }else{
-                endScreenLbl.text = "Spieler bla" +  " gewinnt mit " + String(scoreSort[0].0) + " Punkten!"
+                endScreenLbl.text = playerName + " gewinnt mit " + String(scoreSort[0].0) + " Punkten!"
             }
             rematchBtn.position = CGPoint(x: 255, y: 70)
             endGameBtn.position = CGPoint(x: 415, y: 70)
