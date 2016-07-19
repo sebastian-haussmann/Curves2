@@ -86,6 +86,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     let pauseBtn = SKSpriteNode(imageNamed: "PauseBtn")
     let pauseBtn2 = SKSpriteNode(imageNamed: "PauseBtn")
     
+    var gameCountTemp = 0
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
@@ -183,7 +185,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             self.addChild(gameModeView)
             self.view?.addSubview(scoreView)
-            
+            gameCountTemp = GameData.gameModeCount
         }
         
         
@@ -272,7 +274,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             var playerName = ""
             for (count,player) in players.enumerate(){
                 if player.head.fillColor == scoreSort[0].1{
-                    playerName = "Spieler " + String(count)
+                    playerName = "Spieler " + String(count + 1)
                 }
                 
             }
@@ -419,6 +421,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     func newRound(){
         
+        
         for food in foodList{
             food.removeFromParent()
         }
@@ -487,6 +490,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     func newGame(){
         
+        curRound = 0
+        GameData.gameModeCount = gameCountTemp
         for (count,player) in players.enumerate(){
             player.score = 0
             scoreSort[count].0 = 0
@@ -1152,6 +1157,18 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             updateTableView()
             foodTimer.invalidate()
+            
+            if scoreSort[0].0 == scoreSort[1].0 && GameData.gameModeID == 0{
+                GameData.gameModeCount += 5
+                gameModeLbl.text = "Neues Ziel: " + String(GameData.gameModeCount)
+            }
+            
+            if curRound == GameData.gameModeCount && GameData.gameModeID == 1 && scoreSort[0].0 == scoreSort[1].0{
+                
+                GameData.gameModeCount += 1
+                gameModeLbl.text = "Unentschieden!"
+                
+            }
             
             if curRound != GameData.gameModeCount && GameData.gameModeID == 1 || scoreSort[0].0 < GameData.gameModeCount && GameData.gameModeID == 0 {
                 NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.newRound), userInfo: 0, repeats: false)
