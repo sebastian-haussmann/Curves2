@@ -180,7 +180,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             gameModeLbl.color = UIColor.whiteColor()
             gameModeLbl.fontSize = 30
-            gameModeLbl.position = CGPoint(x: view.frame.width / 2, y: 330)
+            gameModeLbl.position = CGPoint(x: view.frame.width / 2, y: view.frame.maxY - 45)
             gameModeView.addChild(gameModeLbl)
             
             self.addChild(gameModeView)
