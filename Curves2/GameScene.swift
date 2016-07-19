@@ -23,6 +23,7 @@ struct PhysicsCat{
     static let p2TailCat : UInt32 = 0x1 << 14
     static let p3TailCat : UInt32 = 0x1 << 15
     static let p4TailCat : UInt32 = 0x1 << 16
+    static let bombCat : UInt32 = 0x1 << 17
     
 }
 
@@ -53,7 +54,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     var p4L = SKShapeNode()
     var counter = [Int]()
     
-    
+    var bomb = SKSpriteNode()
+    var bombList = [SKSpriteNode]()
  
     var scoreLblList = [SKLabelNode]()
     
@@ -452,6 +454,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
     func newRound(){
         
+        for bomb in bombList{
+            bomb.removeFromParent()
+        }
+        bombList.removeAll()
         
         for food in foodList{
             food.removeFromParent()
@@ -772,7 +778,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
 //        if nameRandom >= 5 && players.count > 1{
 //            imageName = "SpeedItemRed"
 //        }
-        let rand = Int(arc4random_uniform(4))
+        let rand = Int(arc4random_uniform(5))
         switch rand {
         case 0:
             imageName = "SpeedItemGreen"
@@ -788,6 +794,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             if players.count > 1{
                 imageName = "FatItemRed"
             }
+        case 4:
+            imageName = "bombItem"
         default:
             break
         }
@@ -1038,28 +1046,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     func addPhysics(){
         players[0].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
         players[0].head.physicsBody!.categoryBitMask = PhysicsCat.p1HeadCat
-        players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p3TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat
+        players[0].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p3TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat | PhysicsCat.bombCat
         players[0].head.physicsBody?.affectedByGravity = false
         players[0].head.physicsBody?.linearDamping = 0
     
         if players.count > 1 {
             players[1].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[1].head.physicsBody!.categoryBitMask = PhysicsCat.p2HeadCat
-            players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p1TailCat | PhysicsCat.p3TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat
+            players[1].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p1HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p1TailCat | PhysicsCat.p3TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat | PhysicsCat.bombCat
             players[1].head.physicsBody?.affectedByGravity = false
             players[1].head.physicsBody?.linearDamping = 0
         }
         if players.count > 2 {
             players[2].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[2].head.physicsBody!.categoryBitMask = PhysicsCat.p3HeadCat
-            players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p1TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat
+            players[2].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p4HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p1TailCat | PhysicsCat.p4TailCat | PhysicsCat.itemCat | PhysicsCat.bombCat
             players[2].head.physicsBody?.affectedByGravity = false
             players[2].head.physicsBody?.linearDamping = 0
         }
         if players.count > 3 {
             players[3].head.physicsBody = SKPhysicsBody(circleOfRadius: 6.0)
             players[3].head.physicsBody!.categoryBitMask = PhysicsCat.p4HeadCat
-            players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p3TailCat | PhysicsCat.p1TailCat | PhysicsCat.itemCat
+            players[3].head.physicsBody!.contactTestBitMask = PhysicsCat.gameAreaCat | PhysicsCat.foodCat | PhysicsCat.tailCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p1HeadCat | PhysicsCat.p2TailCat | PhysicsCat.p3TailCat | PhysicsCat.p1TailCat | PhysicsCat.itemCat | PhysicsCat.bombCat
             players[3].head.physicsBody?.affectedByGravity = false
             players[3].head.physicsBody?.linearDamping = 0
         }
@@ -1073,26 +1081,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         // ****************************************************************
         // ****************************************************************
         
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2TailCat)  || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3TailCat)  || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4TailCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2TailCat)  || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3TailCat)  || (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4TailCat) || contact.bodyB.categoryBitMask == PhysicsCat.bombCat && contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat{
             
             players[0].dead = true
             updateScore()
             
         }
         if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat) ||
-            (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4TailCat){
+            (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4TailCat) || contact.bodyB.categoryBitMask == PhysicsCat.bombCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat{
             
             players[1].dead = true
             updateScore()
             
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4TailCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4TailCat) || contact.bodyB.categoryBitMask == PhysicsCat.bombCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat{
             
             players[2].dead = true
             updateScore()
             
         }
-        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3TailCat){
+        if (contact.bodyA.categoryBitMask == PhysicsCat.gameAreaCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.tailCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.tailCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p1TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2TailCat) || (contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3TailCat) || contact.bodyB.categoryBitMask == PhysicsCat.bombCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat{
             
             players[3].dead = true
             updateScore()
@@ -1176,6 +1184,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                 changeDirection(Int(contact.bodyA.node!.name!)!)
             case "FatItemRed":
                 increaseThicknessRed(Int(contact.bodyA.node!.name!)!)
+            case "bombItem":
+                createBombs()
             default:
                 break
             }
@@ -1247,6 +1257,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
         }
     }
+    
+    func createBombs(){
+        
+        for var i = 0; i<5; i=i+1{
+            let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
+            let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
+        
+            self.bomb = SKSpriteNode(imageNamed: "bomb")
+            self.bomb.setScale(0.5)
+            
+            self.bomb.physicsBody = SKPhysicsBody(circleOfRadius: self.bomb.size.width / 1.9)
+            self.bomb.physicsBody!.categoryBitMask = PhysicsCat.bombCat
+            self.bomb.physicsBody!.contactTestBitMask =  PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
+            self.bomb.physicsBody?.affectedByGravity = false
+            self.bomb.physicsBody?.linearDamping = 0
+            self.bomb.position = CGPoint(x: posX, y: posY)
+            self.bombList.append(self.bomb)
+            self.addChild(self.bomb)
+        }
+        
+    }
+
     
     func waitBeforeStart(){
         for player in players {
