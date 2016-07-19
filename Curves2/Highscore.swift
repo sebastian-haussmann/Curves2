@@ -37,12 +37,22 @@ class Highscore: UIViewController, UITableViewDataSource  {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         spRanking = Data().loadSingleplayerHighscore(singleplayer)
+        for (index,rank) in spRanking.enumerate(){
+            if index > 19 {
+                Data().removeItemSingleplayerHighscore(rank)
+            }
+        }
+        spRanking = Data().loadSingleplayerHighscore(singleplayer)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var returnValue = 0
         if modus.selectedSegmentIndex == 0{
-            returnValue = spRanking.count
+            if spRanking.count <= 20{
+                returnValue = spRanking.count
+            }else{
+                returnValue = 20
+            }
         }else{
             returnValue = mpRanking.count
         }
