@@ -1113,35 +1113,71 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         // Köpfe kollidieren Start
         
         if (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat){
+            var oneDead = false
+            if !players[0].dead && !players[1].dead{
+                oneDead = true
+            }
             players[0].dead = true
             players[1].dead = true
             updateScore()
-            updateScore()
+            if oneDead {
+                updateScore()
+            }
         }else if (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat){
+            var oneDead = false
+            if !players[0].dead && !players[2].dead{
+                oneDead = true
+            }
             players[0].dead = true
             players[2].dead = true
             updateScore()
-            updateScore()
+            if oneDead {
+                updateScore()
+            }
         }else if (contact.bodyA.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p1HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat){
+            var oneDead = false
+            if !players[0].dead && !players[3].dead{
+                oneDead = true
+            }
             players[0].dead = true
             players[3].dead = true
             updateScore()
-            updateScore()
+            if oneDead {
+                updateScore()
+            }
         }else if (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat){
+            var oneDead = false
+            if !players[1].dead && !players[2].dead{
+                oneDead = true
+            }
             players[1].dead = true
             players[2].dead = true
             updateScore()
-            updateScore()
+            if oneDead {
+                updateScore()
+            }
         }else if (contact.bodyA.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p2HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat){
+            var oneDead = false
+            if !players[1].dead && !players[3].dead{
+                oneDead = true
+            }
             players[1].dead = true
             players[3].dead = true
             updateScore()
-            updateScore()
+            if oneDead {
+                updateScore()
+            }
         }else if (contact.bodyA.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyB.categoryBitMask == PhysicsCat.p4HeadCat) || (contact.bodyB.categoryBitMask == PhysicsCat.p3HeadCat && contact.bodyA.categoryBitMask == PhysicsCat.p4HeadCat){
+            var oneDead = false
+            if !players[2].dead && !players[3].dead{
+                oneDead = true
+            }
             players[2].dead = true
             players[3].dead = true
             updateScore()
-            updateScore()
+            if oneDead {
+                updateScore()
+            }
         }
         
         
