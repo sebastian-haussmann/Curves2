@@ -1265,7 +1265,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
         
             self.bomb = SKSpriteNode(imageNamed: "bomb")
-            self.bomb.setScale(0.5)
+            self.bomb.setScale(0.4)
             
             self.bomb.physicsBody = SKPhysicsBody(circleOfRadius: self.bomb.size.width / 1.9)
             self.bomb.physicsBody!.categoryBitMask = PhysicsCat.bombCat
