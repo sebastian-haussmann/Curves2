@@ -233,9 +233,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     }
     
     func makeEndScreen(singleOrMultiplayer: Int){
-    
+        
+        foodTimer.invalidate()
         if !view!.scene!.paused{
-            foodTimer.invalidate()
             for item in itemList{
                 item.removeFromParent()
             }
@@ -703,6 +703,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     
     func continueGame(){
         scene!.view!.paused = false
+        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
         endScreenView.removeFromParent()
     }
 

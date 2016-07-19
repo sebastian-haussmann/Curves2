@@ -213,8 +213,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         
         
+        foodTimer.invalidate()
         if !view!.scene!.paused{
-            foodTimer.invalidate()
             for item in itemList{
                 item.removeFromParent()
             }
@@ -678,6 +678,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     func continueGame(){
         scene!.view!.paused = false
+        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
         endScreenView.removeFromParent()
     }
 
