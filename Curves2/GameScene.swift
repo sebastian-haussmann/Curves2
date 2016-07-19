@@ -106,6 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
     let pauseBtn2 = SKSpriteNode(imageNamed: "PauseBtn")
     
     var gameCountTemp = 0
+    var scalefactor = 1.0
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -209,8 +210,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
         }
 
+        if self.view!.frame.maxY < 375{
+            scalefactor = 0.8
+        }
         
-            
         createButtons(players.count)
         addPhysics()
 
@@ -271,9 +274,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             endScreenLbl.fontColor = GameData.colors[0]
             endScreenLbl.fontSize = 80
             endScreenLbl.text = String(players[0].score)
-            rematchBtn.position = CGPoint(x: 205, y: 70)
-            highScoreBtn.position = CGPoint(x: 335, y: 70)
-            endGameBtn.position = CGPoint(x: 465, y: 70)
+            rematchBtn.position = CGPoint(x: view!.center.x-130*CGFloat(scalefactor), y: 70)
+            highScoreBtn.position = CGPoint(x: view!.center.x, y: 70)
+            endGameBtn.position = CGPoint(x: view!.center.x+130*CGFloat(scalefactor), y: 70)
+            rematchBtn.setScale(CGFloat(scalefactor))
+            highScoreBtn.setScale(CGFloat(scalefactor))
+            endGameBtn.setScale(CGFloat(scalefactor))
             highScoreBtn.alpha = 0.5
             highScoreBtn.addChild(highScoreLbl)
             endScreenView.addChild(highScoreBtn)
@@ -309,9 +315,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             }else{
                 endScreenLbl.text = playerName + " gewinnt mit " + String(scoreSort[0].0) + " Punkten!"
             }
-            rematchBtn.position = CGPoint(x: 255, y: 70)
-            endGameBtn.position = CGPoint(x: 415, y: 70)
+            rematchBtn.position = CGPoint(x: view!.center.x-70, y: 70)
+            endGameBtn.position = CGPoint(x: view!.center.x+70, y: 70)
         }
+        endScreenLbl.setScale(CGFloat(scalefactor))
         
         
         
