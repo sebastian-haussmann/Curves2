@@ -95,13 +95,17 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         scaleMode = .ResizeFill
         physicsWorld.contactDelegate = self
         
+        if self.view!.frame.maxY < 375{
+            scalefactor = 0.8
+        }
+        
         
         pauseBtn.position = CGPoint(x: view.frame.width - (btnWidth / 2), y: view.frame.height / 2)
-        pauseBtn.setScale(0.7)
+        pauseBtn.setScale(0.7*CGFloat(scalefactor))
         self.addChild(pauseBtn)
         
         pauseBtn2.position = CGPoint(x: btnWidth / 2, y: view.frame.height / 2)
-        pauseBtn2.setScale(0.7)
+        pauseBtn2.setScale(0.7*CGFloat(scalefactor))
         self.addChild(pauseBtn2)
         
         for (index,color) in GameData.colors.enumerate(){
@@ -188,10 +192,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             gameCountTemp = GameData.gameModeCount
         }
         
-        
-        if self.view!.frame.maxY < 375{
-            scalefactor = 0.8
-        }
+
         createButtons(players.count)
         addPhysics()
         
