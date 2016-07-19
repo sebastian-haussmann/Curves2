@@ -83,9 +83,10 @@ class Highscore: UIViewController, UITableViewDataSource  {
         case .Delete:
             // remove the deleted item from the model
             Data().removeItemSingleplayerHighscore(spRanking[indexPath.row])
-            spRanking.removeAtIndex(indexPath.row)
+            spRanking = Data().loadSingleplayerHighscore(singleplayer)
+            tableView.reloadData()
             // remove the deleted item from the `UITableView`
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            //self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         default:
             return
         }
