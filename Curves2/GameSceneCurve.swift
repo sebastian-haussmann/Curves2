@@ -1159,8 +1159,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             updateTableView()
             foodTimer.invalidate()
             
-            if scoreSort[0].0 == scoreSort[1].0 && GameData.gameModeID == 0{
-                GameData.gameModeCount += 5
+            if scoreSort[0].0 == scoreSort[1].0 && GameData.gameModeID == 0 && scoreSort[0].0 >= GameData.gameModeCount{
+                GameData.gameModeCount = (scoreSort[0].0 + 5)
                 gameModeLbl.text = "Neues Ziel: " + String(GameData.gameModeCount)
             }
             

@@ -113,7 +113,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
         scaleMode = .ResizeFill
         physicsWorld.contactDelegate = self
         
-        
         pauseBtn.position = CGPoint(x: view.frame.width - (btnWidth / 2), y: view.frame.height / 2)
         pauseBtn.setScale(0.7)
         self.addChild(pauseBtn)
@@ -200,7 +199,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             
             gameModeLbl.color = UIColor.whiteColor()
             gameModeLbl.fontSize = 30
-            gameModeLbl.position = CGPoint(x: view.frame.width / 2, y: 330)
+            gameModeLbl.position = CGPoint(x: view.frame.width / 2, y: view.frame.maxY - 45)
             gameModeView.addChild(gameModeLbl)
             
             self.addChild(gameModeView)
@@ -1202,8 +1201,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             foodTimer.invalidate()
             
             
-            if scoreSort[0].0 == scoreSort[1].0 && GameData.gameModeID == 0{
-                GameData.gameModeCount += 5
+            if scoreSort[0].0 == scoreSort[1].0 && GameData.gameModeID == 0 && scoreSort[0].0 >= GameData.gameModeCount{
+                GameData.gameModeCount = (scoreSort[0].0 + 5)
                 gameModeLbl.text = "Neues Ziel: " + String(GameData.gameModeCount)
             }
             
