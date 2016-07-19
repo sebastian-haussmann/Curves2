@@ -293,7 +293,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
             endScreenLbl.fontSize = 25
             var playerName = ""
             for (count,player) in players.enumerate(){
-                if player.head.fillColor == scoreSort[0].1{
+                if GameData.colors[count] == scoreSort[0].1{
                     playerName = "Spieler " + String(count + 1)
                 }
                 
