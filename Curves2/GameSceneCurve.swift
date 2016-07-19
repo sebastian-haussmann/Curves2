@@ -270,7 +270,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             let instruction = SKSpriteNode(imageNamed: "changeName")
             instruction.position = CGPoint(x: view!.frame.width / 2 + 120 , y: view!.frame.height / 2 - 80)
             endScreenView.addChild(instruction)
-//            Data().saveSingleplayerHighscore(GameData.nickname, score: players[0].score)h
+//            Data().saveSingleplayerHighscore(GameData.nickname, score: players[0].score)hg
         }else{
             endScreenLbl.fontColor = scoreSort[0].1
             endScreenLbl.fontSize = 25
