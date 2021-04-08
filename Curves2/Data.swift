@@ -11,11 +11,11 @@ import CoreData
 
 class Data{
     
-    func saveSingleplayerHighscore(player: String, score: Int) {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    func saveSingleplayerHighscore(_ player: String, score: Int) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
-        let entity =  NSEntityDescription.entityForName("SingleplayerHighscore", inManagedObjectContext:managedContext)
-        let newRanking = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+        let entity =  NSEntityDescription.entity(forEntityName: "SingleplayerHighscore", in:managedContext)
+        let newRanking = NSManagedObject(entity: entity!, insertInto: managedContext)
         
         newRanking.setValue(player, forKey: "name")
         newRanking.setValue(score, forKey: "score")
@@ -27,10 +27,10 @@ class Data{
         }
     }
     
-    func loadSingleplayerHighscore(singleplayer: Bool) -> [NSManagedObject]{
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    func loadSingleplayerHighscore(_ singleplayer: Bool) -> [NSManagedObject]{
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "SingleplayerHighscore")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SingleplayerHighscore")
         
         // sort less rounds as best
         let sortDescriptor = NSSortDescriptor(key: "score", ascending: false)
@@ -38,7 +38,7 @@ class Data{
         fetchRequest.sortDescriptors = sortDescriptors
         do {
             let results =
-                try managedContext.executeFetchRequest(fetchRequest)
+                try managedContext.fetch(fetchRequest)
             return results as! [NSManagedObject]
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
@@ -47,24 +47,24 @@ class Data{
     }
     
     func resetSingleplayerHighscore(){
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.managedObjectContext
         let coord = appDelegate.persistentStoreCoordinator
         
-        let fetchRequest = NSFetchRequest(entityName: "SingleplayerHighscore")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SingleplayerHighscore")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
         do {
-            try coord.executeRequest(deleteRequest, withContext: context)
+            try coord.execute(deleteRequest, with: context)
         } catch let error as NSError {
             debugPrint(error)
         }
     }
     
-    func removeItemSingleplayerHighscore(score: NSManagedObject){
-        let appDel:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    func removeItemSingleplayerHighscore(_ score: NSManagedObject){
+        let appDel:AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context:NSManagedObjectContext = appDel.managedObjectContext
-        context.deleteObject(score)
+        context.delete(score)
         
         do {
             try context.save()

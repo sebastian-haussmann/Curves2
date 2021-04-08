@@ -19,15 +19,15 @@ class HighscoreScene: SKScene, UITableViewDataSource, UITableViewDelegate{
     var spRanking = [NSManagedObject]()
     var singleplayer = true
     
-    let backButton = SKShapeNode(rectOfSize: CGSize(width: 140, height: 60), cornerRadius: 20)
-    let resetButton = SKShapeNode(rectOfSize: CGSize(width: 140, height: 60), cornerRadius: 20)
+    let backButton = SKShapeNode(rectOf: CGSize(width: 140, height: 60), cornerRadius: 20)
+    let resetButton = SKShapeNode(rectOf: CGSize(width: 140, height: 60), cornerRadius: 20)
     
     let backLbl = SKLabelNode(fontNamed: "TimesNewRoman")
     let resetLbl = SKLabelNode(fontNamed: "TimesNewRoman")
     let highscoreLbl = SKLabelNode(fontNamed: "TimesNewRoman")
     
-    override func didMoveToView(view: SKView) {
-        scaleMode = .ResizeFill
+    override func didMove(to view: SKView) {
+        scaleMode = .resizeFill
         
         
         
@@ -37,18 +37,18 @@ class HighscoreScene: SKScene, UITableViewDataSource, UITableViewDelegate{
         rankTableView = UITableView(frame: CGRect(origin: CGPoint(x: 20,y: 80), size: CGSize(width: view.frame.width - 50, height: view.frame.height - 80)))
         //countTableView = UITableView(frame: CGRect(origin: CGPoint(x: 10,y: 80), size: CGSize(width: 60, height: view.frame.height - 80)))
         
-        rankView.backgroundColor = UIColor.blackColor()
+        rankView.backgroundColor = UIColor.black
         rankView.addSubview(rankTableView)
         rankView.addSubview(countTableView)
         rankTableView.dataSource = self
         rankTableView.delegate = self
 //        countTableView.dataSource = self
 //        countTableView.delegate = self
-        rankTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        let tblView =  UIView(frame: CGRectZero)
+        rankTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        let tblView =  UIView(frame: CGRect.zero)
         rankTableView.tableFooterView = tblView
-        rankTableView.tableFooterView!.hidden = true
-        rankTableView.backgroundColor = UIColor.blackColor()
+        rankTableView.tableFooterView!.isHidden = true
+        rankTableView.backgroundColor = UIColor.black
         
 //        countTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell2")
 //        let tblView2 =  UIView(frame: CGRectZero)
@@ -63,16 +63,16 @@ class HighscoreScene: SKScene, UITableViewDataSource, UITableViewDelegate{
         highscoreLbl.position = CGPoint(x: view.frame.width / 2, y: view.frame.height - 50)
         self.addChild(highscoreLbl)
         
-        backButton.fillColor = UIColor.blueColor()
-        backButton.strokeColor = UIColor.blueColor()
+        backButton.fillColor = UIColor.blue
+        backButton.strokeColor = UIColor.blue
         backButton.position = CGPoint(x: view.frame.width - 80, y: view.frame.height - 40)
         self.addChild(backButton)
         backLbl.text = "Menü"
         backLbl.fontSize = 25
         backButton.addChild(backLbl)
         
-        resetButton.fillColor = UIColor.blueColor()
-        resetButton.strokeColor = UIColor.blueColor()
+        resetButton.fillColor = UIColor.blue
+        resetButton.strokeColor = UIColor.blue
         resetButton.position = CGPoint(x: 80, y: view.frame.height - 40)
         self.addChild(resetButton)
         resetLbl.text = "Reset"
@@ -83,22 +83,22 @@ class HighscoreScene: SKScene, UITableViewDataSource, UITableViewDelegate{
     
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return spRanking.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
 //        if tableView == rankTableView{
         
-            let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+            let cell: UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "cell")
         
             let rank = spRanking[indexPath.row]
-            cell.textLabel?.textColor = UIColor.whiteColor()
-            cell.backgroundColor = UIColor.clearColor()
-            cell.textLabel?.text = String(indexPath.row+1) + "                                                              " + String(rank.valueForKey("name") as! String)
-            cell.detailTextLabel?.text = String((rank.valueForKey("score") as? Int)!)
-            cell.detailTextLabel?.textColor = UIColor.whiteColor()
+            cell.textLabel?.textColor = UIColor.white
+            cell.backgroundColor = UIColor.clear
+            cell.textLabel?.text = String(indexPath.row+1) + "                                                              " + String(rank.value(forKey: "name") as! String)
+            cell.detailTextLabel?.text = String((rank.value(forKey: "score") as? Int)!)
+            cell.detailTextLabel?.textColor = UIColor.white
         
             return cell
 //        }else{
@@ -111,14 +111,14 @@ class HighscoreScene: SKScene, UITableViewDataSource, UITableViewDelegate{
 //        }
     }
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         /* Called when a touch begins   jj*/
         
         for touch in touches {
-            let location = touch.locationInNode(self)
-            if backButton.containsPoint(location){
-                self.view?.window?.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+            let location = touch.location(in: self)
+            if backButton.contains(location){
+                self.view?.window?.rootViewController?.dismiss(animated: false, completion: nil)
             }
             
         }

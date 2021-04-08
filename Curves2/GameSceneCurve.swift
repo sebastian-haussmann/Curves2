@@ -12,7 +12,7 @@ import SpriteKit
 
 class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
-    let trianglePathP1L = CGPathCreateMutable()
+    let trianglePathP1L = CGMutablePath()
     
     //unten Links
     var p1R = SKShapeNode()
@@ -28,23 +28,23 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     var arrows = [SKSpriteNode]()
     
     // direction Timers
-    var dir1 = NSTimer()
-    var dir2 = NSTimer()
-    var dir3 = NSTimer()
-    var dir4 = NSTimer()
+    var dir1 = Timer()
+    var dir2 = Timer()
+    var dir3 = Timer()
+    var dir4 = Timer()
     
-    var speedTimer = NSTimer()
-    var thickTimer = NSTimer()
+    var speedTimer = Timer()
+    var thickTimer = Timer()
     
     
-    var myTimerR1: NSTimer = NSTimer()
-    var myTimerR2: NSTimer = NSTimer()
-    var myTimerR3: NSTimer = NSTimer()
-    var myTimerR4: NSTimer = NSTimer()
-    var myTimerL1: NSTimer = NSTimer()
-    var myTimerL2: NSTimer = NSTimer()
-    var myTimerL3: NSTimer = NSTimer()
-    var myTimerL4: NSTimer = NSTimer()
+    var myTimerR1: Timer = Timer()
+    var myTimerR2: Timer = Timer()
+    var myTimerR3: Timer = Timer()
+    var myTimerR4: Timer = Timer()
+    var myTimerL1: Timer = Timer()
+    var myTimerL2: Timer = Timer()
+    var myTimerL3: Timer = Timer()
+    var myTimerL4: Timer = Timer()
     
     var scoreLblList = [SKLabelNode]()
     
@@ -69,9 +69,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     var item = SKSpriteNode()
     var itemList = [SKSpriteNode]()
-    var foodTimer = NSTimer()
+    var foodTimer = Timer()
     
-    var waitTimer = NSTimer()
+    var waitTimer = Timer()
     
     var curRound = 0
     
@@ -91,10 +91,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     var gameCountTemp = 0
     var scalefactor = 1.0
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         /* Setup your scene here */
         
-        scaleMode = .ResizeFill
+        scaleMode = .resizeFill
         physicsWorld.contactDelegate = self
         
         if self.view!.frame.maxY < 375{
@@ -110,7 +110,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         pauseBtn2.setScale(0.7*CGFloat(scalefactor))
         self.addChild(pauseBtn2)
         
-        for (index,color) in GameData.colors.enumerate(){
+        for (index,color) in GameData.colors.enumerated(){
             
             
             let line = LineObject(head: SKShapeNode(circleOfRadius: 8.0), position: CGPoint(), lineNode: SKShapeNode(), wayPoints: [], dead: true, lastPoint: CGPoint(), xSpeed: CGFloat(0), ySpeed: CGFloat(0), speed: CGFloat(1),tail: [], score: 0, snakeVelocity: CGFloat(1.5), changeDir: false)
@@ -124,11 +124,11 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             let arrow = SKSpriteNode(imageNamed: "EmptyArrow")
             arrow.setScale(0.05)
-            arrow.hidden = true
+            arrow.isHidden = true
             arrows.append(arrow)
             self.addChild(arrow)
             
-            var scorelbl = SKLabelNode(fontNamed: "TimesNewRoman")
+            let scorelbl = SKLabelNode(fontNamed: "TimesNewRoman")
             scorelbl.text = String(line.score)
             scorelbl.fontSize = 20
             scorelbl.fontColor = color
@@ -146,29 +146,29 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             }
             
             randomStartingPosition(index)
-            waitTimer = NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(GameSceneCurve.waitBeforeStart), userInfo: 0, repeats: false)
+            waitTimer = Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(GameSceneCurve.waitBeforeStart), userInfo: 0, repeats: false)
             
             
             // Score View After each round
             scoreView = UIView(frame: CGRect(x: btnWidth + 5, y: 60, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
             scoreTableView = UITableView(frame: CGRect(origin: CGPoint(x: 0,y: 0), size: CGSize(width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10)))
             scoreView.addSubview(scoreTableView)
-            scoreView.hidden = true
+            scoreView.isHidden = true
             scoreTableView.dataSource = self
             scoreTableView.delegate = self
-            scoreTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-            let tblView =  UIView(frame: CGRectZero)
+            scoreTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+            let tblView =  UIView(frame: CGRect.zero)
             scoreTableView.tableFooterView = tblView
-            scoreTableView.tableFooterView!.hidden = true
-            scoreTableView.backgroundColor = UIColor.clearColor()
+            scoreTableView.tableFooterView!.isHidden = true
+            scoreTableView.backgroundColor = UIColor.clear
             scoreTableView.allowsSelection = false
-            scoreTableView.scrollEnabled = false
+            scoreTableView.isScrollEnabled = false
             scoreSort.append((0,color,0))
             
             gameModeView = SKShapeNode(rect: CGRect(x: btnWidth + 5, y: 315, width: view.frame.width - (2*btnWidth+10), height: 55))
-            gameModeView.hidden = true
-            gameModeView.fillColor = UIColor.blackColor()
-            gameModeView.strokeColor = UIColor.whiteColor()
+            gameModeView.isHidden = true
+            gameModeView.fillColor = UIColor.black
+            gameModeView.strokeColor = UIColor.white
             gameModeView.lineWidth = 2.0
             
             gameModeLbl = SKLabelNode(fontNamed: "Chalkduster")
@@ -184,7 +184,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 
             }
             
-            gameModeLbl.color = UIColor.whiteColor()
+            gameModeLbl.color = UIColor.white
             gameModeLbl.fontSize = 30
             gameModeLbl.position = CGPoint(x: view.frame.width / 2, y: view.frame.maxY - 45)
             gameModeView.addChild(gameModeLbl)
@@ -202,25 +202,25 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         gameArea = SKShapeNode(rect: CGRect(x: btnWidth + 5 , y: 5, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
         gameArea.lineWidth = 5
-        gameArea.strokeColor = SKColor.whiteColor()
+        gameArea.strokeColor = SKColor.white
         
         // Fügt den Wänden einen Body für die Kollisionserkennung hinzu
-        gameArea.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: btnWidth + 5, y: 5, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
+        gameArea.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: btnWidth + 5, y: 5, width: view.frame.width - (2*btnWidth+10), height: view.frame.height - 10))
         gameArea.physicsBody!.categoryBitMask = PhysicsCat.gameAreaCat
         gameArea.physicsBody?.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
         gameArea.physicsBody?.affectedByGravity = false
-        gameArea.physicsBody?.dynamic = false
+        gameArea.physicsBody?.isDynamic = false
         self.addChild(gameArea)
         
-        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
+        foodTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
     }
     
-    func makeEndScreen(singleOrMultiplayer: Int){
+    func makeEndScreen(_ singleOrMultiplayer: Int){
         
         
         
         foodTimer.invalidate()
-        if !view!.scene!.paused{
+        if !view!.scene!.isPaused{
             for item in itemList{
                 item.removeFromParent()
             }
@@ -233,20 +233,20 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         
         endScreenView = SKShapeNode(rect: CGRect(x: btnWidth + 5 + 10, y: 20, width: view!.frame.width - (2*btnWidth+10) - 20, height: view!.frame.height - 100))
-        endScreenView.fillColor = UIColor.darkGrayColor()
-        endScreenView.strokeColor = UIColor.whiteColor()
+        endScreenView.fillColor = UIColor.darkGray
+        endScreenView.strokeColor = UIColor.white
         
         
-        rematchBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
-        endGameBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
-        highScoreBtn = SKShapeNode(rectOfSize: CGSize(width: 110, height: 60), cornerRadius: 20)
+        rematchBtn = SKShapeNode(rectOf: CGSize(width: 110, height: 60), cornerRadius: 20)
+        endGameBtn = SKShapeNode(rectOf: CGSize(width: 110, height: 60), cornerRadius: 20)
+        highScoreBtn = SKShapeNode(rectOf: CGSize(width: 110, height: 60), cornerRadius: 20)
         
         
         
         
-        rematchBtn.fillColor = UIColor.blueColor()
-        highScoreBtn.fillColor = UIColor.blueColor()
-        endGameBtn.fillColor = UIColor.blueColor()
+        rematchBtn.fillColor = UIColor.blue
+        highScoreBtn.fillColor = UIColor.blue
+        endGameBtn.fillColor = UIColor.blue
         
         let rematchLbl = SKLabelNode(fontNamed: "TimesNewRoman")
         let endGameLbl = SKLabelNode(fontNamed: "TimesNewRoman")
@@ -267,9 +267,9 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             highScoreBtn.alpha = 0.5
             highScoreBtn.addChild(highScoreLbl)
             scoreName = UITextField(frame: CGRect(x: view!.frame.width / 2 - 50, y: view!.frame.height/2 + 30, width: 100, height: 20))
-            scoreName.attributedPlaceholder =  NSAttributedString(string: "Spielername", attributes: [NSForegroundColorAttributeName:GameData.colors[0]])
+            scoreName.attributedPlaceholder =  NSAttributedString(string: "Spielername", attributes: [NSAttributedString.Key.foregroundColor:GameData.colors[0]])
             scoreName.delegate = self
-            scoreName.backgroundColor = UIColor.darkGrayColor()
+            scoreName.backgroundColor = UIColor.darkGray
             scoreName.textColor = GameData.colors[0]
             self.view?.addSubview(scoreName)
             endScreenView.addChild(highScoreBtn)
@@ -281,16 +281,16 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             endScreenLbl.fontColor = scoreSort[0].1
             endScreenLbl.fontSize = 25
             var playerName = ""
-            for (count,player) in players.enumerate(){
+            for (count,player) in players.enumerated(){
                 if GameData.colors[count] == scoreSort[0].1{
                     playerName = "Spieler " + String(count + 1)
                 }
                 
             }
             endScreenLbl.position = CGPoint(x: view!.frame.width / 2, y: view!.frame.height - 120)
-            if view!.scene!.paused{
+            if view!.scene!.isPaused{
                 endScreenLbl.text = "Pause"
-                endScreenLbl.fontColor = UIColor.whiteColor()
+                endScreenLbl.fontColor = UIColor.white
                 endScreenLbl.fontSize = 85
                 endScreenLbl.position = CGPoint(x: view!.frame.width / 2, y: (view!.frame.height / 2) - 20)
                 
@@ -308,7 +308,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         
         
-        if view!.scene!.paused{
+        if view!.scene!.isPaused{
             rematchLbl.text = "Weiter"
         }else{
             rematchLbl.text = "Erneut Spielen"
@@ -335,11 +335,11 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     
-    func createFood(){
+    @objc func createFood(){
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
         
-        var randFood = arc4random_uniform(17)
+        let randFood = arc4random_uniform(17)
         var imageName = ""
         
         
@@ -351,17 +351,17 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             imageName = "Erdbeere"
         }
         
-        var food = SKSpriteNode(imageNamed: imageName)
+        let food = SKSpriteNode(imageNamed: imageName)
         food.name = imageName
         food.position = CGPoint(x: posX, y: posY)
         food.setScale(0.1)
         
-        food.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: food.size.width - 5, height: food.size.height - 5))
+        food.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: food.size.width - 5, height: food.size.height - 5))
         //food.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: posX, y: posY, width: 10, height: 10))
         food.physicsBody!.categoryBitMask = PhysicsCat.foodCat
         food.physicsBody!.contactTestBitMask = PhysicsCat.p1HeadCat | PhysicsCat.p2HeadCat | PhysicsCat.p3HeadCat | PhysicsCat.p4HeadCat
         food.physicsBody?.affectedByGravity = false
-        food.physicsBody?.dynamic = false
+        food.physicsBody?.isDynamic = false
         food.physicsBody?.linearDamping = 0
         foodList.append(food)
         
@@ -371,10 +371,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
     }
     
-    func moveSnake(index : Int){
+    func moveSnake(_ index : Int){
         if !players[index].dead {
-            var x = players[index].lastPoint.x
-            var y = players[index].lastPoint.y
+            let x = players[index].lastPoint.x
+            let y = players[index].lastPoint.y
             
             players[index].head.position = CGPoint(x: x + players[index].xSpeed, y: y + players[index].ySpeed)
             
@@ -390,7 +390,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     
-    func followHead(index: Int){
+    func followHead(_ index: Int){
         
         
         
@@ -410,7 +410,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         
         for tail in players[index].tail{
-            var tailSize = players[index].wayPoints.count
+            let tailSize = players[index].wayPoints.count
             tail.position = players[index].wayPoints[tailSize - x]
            // x = x + Int(15 / players[index].snakeVelocity)
             if GameData.singlePlayer{
@@ -429,7 +429,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     
-    func newRound(){
+    @objc func newRound(){
         
         for bomb in bombList{
             bomb.removeFromParent()
@@ -449,7 +449,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         dir4.invalidate()
         speedTimer.invalidate()
         thickTimer.invalidate()
-        for (count,player) in players.enumerate(){
+        for (count,player) in players.enumerated(){
             for tail in players[count].tail{
                 tail.removeFromParent()
             }
@@ -465,22 +465,22 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             randomStartingPosition(count)
             scoreSort[count].2 = 0
         }
-        scoreView.hidden = true
-        gameModeView.hidden = true
-        waitTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(GameSceneCurve.waitBeforeStart), userInfo: 0, repeats: false)
-        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
+        scoreView.isHidden = true
+        gameModeView.isHidden = true
+        waitTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(GameSceneCurve.waitBeforeStart), userInfo: 0, repeats: false)
+        foodTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
         pauseBtn2.alpha = 1
         pauseBtn.alpha = 1
     }
     
-    func randomStartingPosition(i: Int){
+    func randomStartingPosition(_ i: Int){
         let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2 * btnWidth + 10) - 100))) + btnWidth + 5 + 50
         let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 25)
         let startingPosition = CGPoint(x: posX, y: posY)
         //        print(startingPosition)
         
-        players[i].head.position = CGPointMake(posX, posY)
-        players[i].lastPoint = CGPointMake(posX, posY)
+        players[i].head.position = CGPoint(x: posX, y: posY)
+        players[i].lastPoint = CGPoint(x: posX, y: posY)
         if players[i].wayPoints.count == 0{
             players[i].wayPoints.append(startingPosition)
         }else{
@@ -494,7 +494,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         for _ in 0...rand {
             changeDirectionL2(i)
         }
-        arrows[i].hidden = false
+        arrows[i].isHidden = false
         arrows[i].position = CGPoint(x: posX,y: posY)
         
         arrows[i].zRotation = CGFloat((Double(8*rand)-45) * Double(M_PI/180))
@@ -505,7 +505,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         curRound = 0
         GameData.gameModeCount = gameCountTemp
-        for (count,player) in players.enumerate(){
+        for (count,player) in players.enumerated(){
             player.score = 0
             scoreSort[count].0 = 0
             scoreLblList[count].text = "0"
@@ -518,59 +518,59 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     
-        override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     
            /* Called when a touch begins   jj*/
     
             for touch in touches {
-                let location = touch.locationInNode(self)
+                let location = touch.location(in: self)
     
-                if p1R.containsPoint(location){
+                if p1R.contains(location){
                     changeDirectionR2(0)
-                    myTimerR1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 0, repeats: true)
+                    myTimerR1 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 0, repeats: true)
                     p1R.alpha = 0.5
-                }else if p1L.containsPoint(location){
+                }else if p1L.contains(location){
                     changeDirectionL2(0)
                     p1L.alpha = 0.5
-                    myTimerL1 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 0, repeats: true)
-                }else if p2R.containsPoint(location){
+                    myTimerL1 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 0, repeats: true)
+                }else if p2R.contains(location){
                     changeDirectionR2(1)
                     p2R.alpha = 0.5
-                    myTimerR2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 1, repeats: true)
+                    myTimerR2 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 1, repeats: true)
     
-                }else if p2L.containsPoint(location){
+                }else if p2L.contains(location){
                     changeDirectionL2(1)
                     p2L.alpha = 0.5
-                    myTimerL2 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 1, repeats: true)
-                }else if p3R.containsPoint(location){
+                    myTimerL2 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 1, repeats: true)
+                }else if p3R.contains(location){
                     changeDirectionR2(2)
                     p3R.alpha = 0.5
-                    myTimerR3 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 2, repeats: true)
+                    myTimerR3 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 2, repeats: true)
     
                 }
-                else if p3L.containsPoint(location){
+                else if p3L.contains(location){
                     changeDirectionL2(2)
                     p3L.alpha = 0.5
-                    myTimerL3 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 2, repeats: true)
-                }else if p4R.containsPoint(location){
+                    myTimerL3 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 2, repeats: true)
+                }else if p4R.contains(location){
                     changeDirectionR2(3)
                     p4R.alpha = 0.5
-                    myTimerR4 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 3, repeats: true)
+                    myTimerR4 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionR), userInfo: 3, repeats: true)
     
-                }else if p4L.containsPoint(location){
+                }else if p4L.contains(location){
                     changeDirectionL2(3)
                     p4L.alpha = 0.5
-                    myTimerL4 = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 3, repeats: true)
-                }else if rematchBtn.containsPoint(location){
-                    if view!.scene!.paused{
+                    myTimerL4 = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(GameSceneCurve.changeDirectionL), userInfo: 3, repeats: true)
+                }else if rematchBtn.contains(location){
+                    if view!.scene!.isPaused{
                         continueGame()
                     }else{
                         newGame()
                     }
                     rematchBtn.alpha = 0.5
-                }else if highScoreBtn.containsPoint(location) && !highScoreBtn.hidden{
+                }else if highScoreBtn.contains(location) && !highScoreBtn.isHidden{
                     if scoreName.text! != "" {
-                        highScoreBtn.hidden = true
+                        highScoreBtn.isHidden = true
                         addHighscore(scoreName.text!)
 //                        scoreView.removeFromSuperview()
 //                        scoreName.removeFromSuperview()
@@ -587,15 +587,15 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
 
                     }
                     highScoreBtn.alpha = 0.5
-                }else if endGameBtn.containsPoint(location){
+                }else if endGameBtn.contains(location){
                     closeGame()
                     endGameBtn.alpha = 0.5
                 }
-                else if pauseBtn.containsPoint(location) && pauseBtn.alpha == 1{
-                    self.runAction(SKAction.runBlock(self.pauseGame))
+                else if pauseBtn.contains(location) && pauseBtn.alpha == 1{
+                    self.run(SKAction.run(self.pauseGame))
                 }
-                else if pauseBtn2.containsPoint(location) && pauseBtn2.alpha == 1{
-                    self.runAction(SKAction.runBlock(self.pauseGame))
+                else if pauseBtn2.contains(location) && pauseBtn2.alpha == 1{
+                    self.run(SKAction.run(self.pauseGame))
                     
                 }
     
@@ -604,74 +604,74 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     
     
-        override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     
             for touch in touches{
-                let location = touch.locationInNode(self)
+                let location = touch.location(in: self)
     
     
-                if p1R.containsPoint(location) || p1L.containsPoint(location){
+                if p1R.contains(location) || p1L.contains(location){
                     myTimerR1.invalidate()
                     myTimerL1.invalidate()
                     p1R.alpha = 1.0
                     p1L.alpha = 1.0
     
-                }else if p2R.containsPoint(location) || p2L.containsPoint(location){
+                }else if p2R.contains(location) || p2L.contains(location){
                     myTimerR2.invalidate()
                     myTimerL2.invalidate()
                     p2R.alpha = 1.0
                     p2L.alpha = 1.0
     
-                }else if p3R.containsPoint(location) || p3L.containsPoint(location){
+                }else if p3R.contains(location) || p3L.contains(location){
                     myTimerR3.invalidate()
                     myTimerL3.invalidate()
                     p3R.alpha = 1.0
                     p3L.alpha = 1.0
     
-                }else if p4R.containsPoint(location) || p4L.containsPoint(location){
+                }else if p4R.contains(location) || p4L.contains(location){
                     myTimerR4.invalidate()
                     myTimerL4.invalidate()
                     p4R.alpha = 1.0
                     p4L.alpha = 1.0
     
-                }else if rematchBtn.containsPoint(location){
+                }else if rematchBtn.contains(location){
                     rematchBtn.alpha = 1
-                }else if highScoreBtn.containsPoint(location){
+                }else if highScoreBtn.contains(location){
                     if scoreName.text! != "" {
                         highScoreBtn.alpha = 1
                     }else{
                         highScoreBtn.alpha = 0.5
                     }
-                }else if endGameBtn.containsPoint(location){
+                }else if endGameBtn.contains(location){
                     endGameBtn.alpha = 1
                 }
             }
         }
-        override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     
             for touch in touches{
-                let location = touch.locationInNode(self)
-                let prevLoc = touch.previousLocationInNode(self)
+                let location = touch.location(in: self)
+                let prevLoc = touch.previousLocation(in: self)
     
-                if p1R.containsPoint(prevLoc) && !p1R.containsPoint(location) || p1L.containsPoint(prevLoc) && !p1L.containsPoint(location){
+                if p1R.contains(prevLoc) && !p1R.contains(location) || p1L.contains(prevLoc) && !p1L.contains(location){
                     myTimerR1.invalidate()
                     myTimerL1.invalidate()
                     p1R.alpha = 1.0
                     p1L.alpha = 1.0
     
-                }else if p2R.containsPoint(prevLoc) && !p2R.containsPoint(location) || p2L.containsPoint(prevLoc) && !p2L.containsPoint(location){
+                }else if p2R.contains(prevLoc) && !p2R.contains(location) || p2L.contains(prevLoc) && !p2L.contains(location){
                     myTimerR2.invalidate()
                     myTimerL2.invalidate()
                     p2R.alpha = 1.0
                     p2L.alpha = 1.0
     
-                }else if p3R.containsPoint(prevLoc) && !p3R.containsPoint(location) || p3L.containsPoint(prevLoc) && !p3L.containsPoint(location){
+                }else if p3R.contains(prevLoc) && !p3R.contains(location) || p3L.contains(prevLoc) && !p3L.contains(location){
                     myTimerR3.invalidate()
                     myTimerL3.invalidate()
                     p3R.alpha = 1.0
                     p3L.alpha = 1.0
     
-                }else if p4R.containsPoint(prevLoc) && !p4R.containsPoint(location) || p4L.containsPoint(prevLoc) && !p4L.containsPoint(location){
+                }else if p4R.contains(prevLoc) && !p4R.contains(location) || p4L.contains(prevLoc) && !p4L.contains(location){
                     myTimerR4.invalidate()
                     myTimerL4.invalidate()
                     p4R.alpha = 1.0
@@ -684,14 +684,14 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     func pauseGame(){
         
-        scene!.view!.paused = true
+        scene!.view!.isPaused = true
         makeEndScreen(1)
         
     }
     
     func continueGame(){
-        scene!.view!.paused = false
-        foodTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
+        scene!.view!.isPaused = false
+        foodTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(GameSceneCurve.createFood), userInfo: 0, repeats: true)
         endScreenView.removeFromParent()
     }
 
@@ -699,7 +699,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     
         //Linkskurve
-        func changeDirectionL(timer: NSTimer){
+        @objc func changeDirectionL(_ timer: Timer){
             let playerIndex = timer.userInfo as! Int
             if !players[playerIndex].dead {
                 changeDirectionL2(playerIndex)
@@ -707,7 +707,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         }
     
         //Rechtskurve
-        func changeDirectionR(timer: NSTimer){
+        @objc func changeDirectionR(_ timer: Timer){
             let playerIndex = timer.userInfo as! Int
             if !players[playerIndex].dead {
                 changeDirectionR2(playerIndex)
@@ -760,7 +760,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             item.physicsBody?.affectedByGravity = false
             item.physicsBody?.linearDamping = 0
             item.position = CGPoint(x: posX, y: posY)
-            item.physicsBody?.dynamic = false
+            item.physicsBody?.isDynamic = false
             
             if !(item.position == CGPoint(x: 0.0, y: 0.0)){
                 addChild(item)
@@ -771,13 +771,13 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     
     
-    func createButtons(playerCount: Int){
+    func createButtons(_ playerCount: Int){
         
         
-        CGPathMoveToPoint(trianglePathP1L, nil, 5, 100)
-        CGPathAddLineToPoint(trianglePathP1L, nil, 105, 100)
-        CGPathAddLineToPoint(trianglePathP1L, nil, 5, 0)
-        CGPathCloseSubpath(trianglePathP1L)
+        trianglePathP1L.move(to: CGPoint(x: 5, y: 100))
+        trianglePathP1L.addLine(to: CGPoint(x: 105, y: 100))
+        trianglePathP1L.addLine(to: CGPoint(x: 0, y: 0))
+        trianglePathP1L.closeSubpath()
         
         
         // Für 1 und 2 Spieler
@@ -785,7 +785,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             let leftArr = SKSpriteNode(imageNamed: "LeftArr")
             let rightArr = SKSpriteNode(imageNamed: "RightArr")
-            p1L = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p1L = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
             p1L.position = CGPoint(x: 50, y: 50 )
             p1L.strokeColor = GameData.colors[0]
             p1L.fillColor = GameData.colors[0]
@@ -794,7 +794,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             p1L.addChild(leftArr)
             
             self.addChild(p1L)
-            p1R = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p1R = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
             p1R.position = CGPoint(x: view!.frame.width-50, y: 50)
             p1R.strokeColor = GameData.colors[0]
             p1R.fillColor = GameData.colors[0]
@@ -818,7 +818,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
             let leftArr = SKSpriteNode(imageNamed: "RightArr")
             let rightArr = SKSpriteNode(imageNamed: "LeftArr")
-            p2L = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p2L = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
             p2L.position = CGPoint(x: view!.frame.width-50, y: view!.frame.height-50 )
             p2L.strokeColor = GameData.colors[1]
             p2L.fillColor = GameData.colors[1]
@@ -826,7 +826,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             leftArr.position = CGPoint(x: 0, y: 0)
             p2L.addChild(leftArr)
             self.addChild(p2L)
-            p2R = SKShapeNode(rectOfSize: CGSize(width: 100, height: 100))
+            p2R = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
             p2R.position = CGPoint(x: 50, y: view!.frame.height-50)
             p2R.strokeColor = GameData.colors[1]
             p2R.fillColor = GameData.colors[1]
@@ -979,10 +979,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     
     
     
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         /* Called before each frame is rendered */
         
-        for (i,player) in players.enumerate(){
+        for (i,player) in players.enumerated(){
             if !players[i].dead{
                 moveSnake(i)
                 if arc4random_uniform(600) == 5{
@@ -1025,7 +1025,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
         
         
         // PLayer + Wall Start
@@ -1191,7 +1191,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
         
         
-        var deadPlayers = players.filter{(obj: LineObject) -> Bool in
+        let deadPlayers = players.filter{(obj: LineObject) -> Bool in
             obj.dead == false}
         
         
@@ -1205,7 +1205,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             myTimerR2.invalidate()
             myTimerR3.invalidate()
             myTimerR4.invalidate()
-            for (index, player) in players.enumerate(){
+            for (index, player) in players.enumerated(){
                 player.dead = true
             }
             
@@ -1225,16 +1225,16 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             }
             
             if curRound != GameData.gameModeCount && GameData.gameModeID == 1 || scoreSort[0].0 < GameData.gameModeCount && GameData.gameModeID == 0 {
-                NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameSceneCurve.newRound), userInfo: 0, repeats: false)
+                Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(GameSceneCurve.newRound), userInfo: 0, repeats: false)
             }else{
-                NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(GameSceneCurve.endScreen), userInfo: 0, repeats: false)
+                Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(GameSceneCurve.endScreen), userInfo: 0, repeats: false)
    
             }
             
             
         }
         
-        if !players.contains({obj -> Bool in obj.dead == false}) && players.count == 1{
+        if !players.contains(where: {obj -> Bool in obj.dead == false}) && players.count == 1{
             //updateTableView()
             makeEndScreen(0)
 
@@ -1242,20 +1242,19 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     
-    func waitBeforeStart(){
+    @objc func waitBeforeStart(){
         for player in players {
             player.dead = false
             
         }
         for arrow in arrows {
-            arrow.hidden = true
+            arrow.isHidden = true
         }
     }
 
     
     func createBombs(){
-        
-        for var i = 0; i<5; i=i+1{
+        for i in 0..<5 {
             let posX = CGFloat(arc4random_uniform(UInt32(view!.frame.width - (2*btnWidth + 10)))) + btnWidth + 5
             let posY = CGFloat(arc4random_uniform(UInt32(view!.frame.height - 50) ) + 10)
             
@@ -1275,29 +1274,29 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
 
     
-    func endScreen(){
+    @objc func endScreen(){
         scoreView.removeFromSuperview()
         makeEndScreen(1)
     }
     
-    func addHighscore(name: String){
+    func addHighscore(_ name: String){
         Data().saveSingleplayerHighscore(name, score: players[0].score)
     }
     
     func closeGame(){
         
-        self.view?.window?.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+        self.view?.window?.rootViewController?.dismiss(animated: false, completion: nil)
     }
     
-    func increaseSpeedGreen(index: Int){
+    func increaseSpeedGreen(_ index: Int){
         players[index].snakeVelocity += 0.5
         changeDirectionR2(index)
         changeDirectionL2(index)
-        speedTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: index, repeats: false)
+        speedTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: index, repeats: false)
         
     }
     
-    func decreaseSpeed(timer: NSTimer){
+    @objc func decreaseSpeed(_ timer: Timer){
         let index = timer.userInfo as! Int
         players[index].snakeVelocity -= 0.5
         changeDirectionR2(index)
@@ -1305,19 +1304,19 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
     }
     
-    func increaseSpeedRed(index: Int){
-        for (count,player) in players.enumerate(){
+    func increaseSpeedRed(_ index: Int){
+        for (count,player) in players.enumerated(){
             
             if index != count{
                 player.snakeVelocity += 0.5
-                speedTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: count, repeats: false)
+                speedTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(GameSceneCurve.decreaseSpeed), userInfo: count, repeats: false)
             }
             
         }
     }
     
-    func increaseThicknessRed(index: Int){
-        for (count,player) in players.enumerate(){
+    func increaseThicknessRed(_ index: Int){
+        for (count,player) in players.enumerated(){
             
             if index != count{
                 player.head.xScale += 0.5
@@ -1326,13 +1325,13 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                     tail.xScale = player.head.xScale
                     tail.yScale = player.head.xScale
                 }
-                thickTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(GameSceneCurve.decreaseThickness), userInfo: count, repeats: false)
+                thickTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(GameSceneCurve.decreaseThickness), userInfo: count, repeats: false)
             }
             
         }
     }
     
-    func decreaseThickness(timer: NSTimer){
+    @objc func decreaseThickness(_ timer: Timer){
         let index = timer.userInfo as! Int
         players[index].head.xScale -= 0.5
         players[index].head.yScale = players[index].head.xScale
@@ -1342,14 +1341,14 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         }
     }
     
-    func changeDirection(index: Int){
+    func changeDirection(_ index: Int){
         if index != 0{
             players[0].changeDir = true
             var intervall = 5.0
             if dir1.timeInterval > 0 {
                 intervall += dir1.timeInterval
             }
-            dir1 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 0, repeats: false)
+            dir1 = Timer.scheduledTimer(timeInterval: intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 0, repeats: false)
         }
         if index != 1 && players.count > 1{
             players[1].changeDir = true
@@ -1357,7 +1356,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             if dir2.timeInterval > 0 {
                 intervall += dir2.timeInterval
             }
-            dir2 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 1, repeats: false)
+            dir2 = Timer.scheduledTimer(timeInterval: intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 1, repeats: false)
         }
         if index != 2 && players.count > 2{
             players[2].changeDir = true
@@ -1365,7 +1364,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             if dir3.timeInterval > 0 {
                 intervall += dir3.timeInterval
             }
-            dir3 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 2, repeats: false)
+            dir3 = Timer.scheduledTimer(timeInterval: intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 2, repeats: false)
         }
         if index != 3 && players.count > 3{
             players[3].changeDir = true
@@ -1373,12 +1372,12 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             if dir4.timeInterval > 0 {
                 intervall += dir4.timeInterval
             }
-            dir4 = NSTimer.scheduledTimerWithTimeInterval(intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 3, repeats: false)
+            dir4 = Timer.scheduledTimer(timeInterval: intervall, target: self, selector: #selector(GameSceneCurve.changeDirectionBack), userInfo: 3, repeats: false)
         }
         
     }
     
-    func changeDirectionBack(timer: NSTimer){
+    @objc func changeDirectionBack(_ timer: Timer){
         let index = timer.userInfo as! Int
         switch index {
         case 0:
@@ -1395,7 +1394,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     
-    func changeDirectionL2(index: Int){
+    func changeDirectionL2(_ index: Int){
         let playerIndex = index
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
         if !players[index].changeDir {
@@ -1407,7 +1406,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
         
             //Rechtskurve
-    func changeDirectionR2(index: Int){
+    func changeDirectionR2(_ index: Int){
         let playerIndex = index
         let alt = pointToRadian(players[playerIndex].wayPoints[0])
         if !players[index].changeDir {
@@ -1419,10 +1418,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     }
     
     func updateTableView(){
-        for (count,player) in players.enumerate(){
+        for (count,player) in players.enumerated(){
             scoreSort[count] = (player.score, GameData.colors[count], scoreSort[count].2)
         }
-        scoreSort.sortInPlace() { $0.0 > $1.0 }
+        scoreSort.sort() { $0.0 > $1.0 }
         gameModeLbl.fontColor = scoreSort[0].1
         if GameData.gameModeID == 1{
             curRound += 1
@@ -1435,15 +1434,15 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             
         }
         
-        scoreView.hidden = false
+        scoreView.isHidden = false
         pauseBtn.alpha = 0.3
         pauseBtn2.alpha = 0.3
-        gameModeView.hidden = false
+        gameModeView.isHidden = false
         self.scoreTableView.reloadData()
     }
     
 
-        func pointToRadian(targetPoint: CGPoint) -> Double{
+        func pointToRadian(_ targetPoint: CGPoint) -> Double{
             let deltaX = targetPoint.x;
             let deltaY = targetPoint.y;
             let rad = atan2(deltaY, deltaX); // In radians
@@ -1451,14 +1450,14 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         }
     
         //Für Kurve -> Radius zu Punkt
-        func radianToPoint(rad: Double) -> CGPoint{
+        func radianToPoint(_ rad: Double) -> CGPoint{
             return CGPoint(x: cos(rad*(M_PI/180))*141, y: sin(rad*(M_PI/180))*141)
         }
     
     
     
         //Für Kurve + Geschwindigkeit
-        func changeDirection(targetPoint: CGPoint, index: Int){
+        func changeDirection(_ targetPoint: CGPoint, index: Int){
             let currentPosition = position
             let offset = CGPoint(x: targetPoint.x - currentPosition.x, y: targetPoint.y - currentPosition.y)
             let length = Double(sqrtf(Float(offset.x * offset.x) + Float(offset.y * offset.y)))
@@ -1471,10 +1470,10 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
 
     
     func updateScore(){
-        var deadPlayers = players.filter{(obj: LineObject) -> Bool in
+        let deadPlayers = players.filter{(obj: LineObject) -> Bool in
             obj.dead == false}
         if deadPlayers.count != 0{
-            for (count,player) in players.enumerate(){
+            for (count,player) in players.enumerated(){
                 if player.dead == false{
                     player.score += 5
                     scoreSort[count].2 += 5
@@ -1487,12 +1486,12 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         
     }
     
-    func addTailAndRemoveFood(contactPos: CGPoint, index: Int, foodName: String){
+    func addTailAndRemoveFood(_ contactPos: CGPoint, index: Int, foodName: String){
         
-        for (count,foodUnit) in foodList.enumerate(){
+        for (count,foodUnit) in foodList.enumerated(){
             if contactPos == foodUnit.position{
                 foodUnit.removeFromParent()
-                foodList.removeAtIndex(count)
+                foodList.remove(at: count)
                 let newTail = SKShapeNode(circleOfRadius: 8.0)
                 newTail.xScale = players[index].head.xScale
                 newTail.yScale = players[index].head.yScale
@@ -1505,7 +1504,7 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
                 newTail.physicsBody?.affectedByGravity = false
                 newTail.physicsBody?.linearDamping = 0
                 newTail.physicsBody?.allowsRotation = false
-                newTail.physicsBody?.dynamic = false
+                newTail.physicsBody?.isDynamic = false
                 if players[index].tail.count <= 1{
                     
                     switch index {
@@ -1562,15 +1561,15 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
             break
         }
         scoreLblList[index].text = String(players[index].score)
-        let myFunction = SKAction.runBlock({()in self.addChild(points)})
-        let wait = SKAction.waitForDuration(1.0)
-        let remove = SKAction.runBlock({() in points.removeFromParent()})
-        self.runAction(SKAction.sequence([myFunction, wait, remove]))
+        let myFunction = SKAction.run({()in self.addChild(points)})
+        let wait = SKAction.wait(forDuration: 1.0)
+        let remove = SKAction.run({() in points.removeFromParent()})
+        self.run(SKAction.sequence([myFunction, wait, remove]))
         
     }
     
     //Hide Keyboard after typing
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         scoreName.text = textField.text!
         if scoreName.text! != "" {
             highScoreBtn.alpha = 1
@@ -1588,12 +1587,12 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
     //                                  Score Table View Start
     //***********************************************************************************
     //***********************************************************************************
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return players.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "cell")
         //        print(scores[indexPath.row])
         //        let player = players.filter {($0.playerID == scores[indexPath.row].0)}
         //        if player.count == 0{
@@ -1605,8 +1604,8 @@ class GameSceneCurve: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, 
         //            cell.textLabel?.textColor = hexStringToUIColor(player[0].color)
         //        }
         cell.textLabel?.text = String(scoreSort[indexPath.row].0)
-        cell.textLabel?.font = UIFont.boldSystemFontOfSize(25)
-        cell.backgroundColor = UIColor.blackColor()
+        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        cell.backgroundColor = UIColor.black
         //        cell.textLabel?.text = scores[indexPath.row].1
         cell.detailTextLabel?.text = "+ " + String(scoreSort[indexPath.row].2)
         return cell

@@ -27,8 +27,8 @@ class GameViewController: UIViewController {
                 skView.ignoresSiblingOrder = true
                 
                 /* Set the scale mode to scale to fit the window */
-                scene.scaleMode = .AspectFill
-                scene.backgroundColor = SKColor.blackColor()
+                scene.scaleMode = .aspectFill
+                scene.backgroundColor = SKColor.black
                 skView.presentScene(scene)
             }
         }else{
@@ -42,8 +42,8 @@ class GameViewController: UIViewController {
                 skView.ignoresSiblingOrder = true
                 
                 /* Set the scale mode to scale to fit the window */
-                scene.scaleMode = .AspectFill
-                scene.backgroundColor = SKColor.blackColor()
+                scene.scaleMode = .aspectFill
+                scene.backgroundColor = SKColor.black
                 skView.presentScene(scene)
             }
         }
@@ -51,15 +51,15 @@ class GameViewController: UIViewController {
         
     }
 
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate : Bool {
         return true
     }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return .AllButUpsideDown
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .allButUpsideDown
         } else {
-            return .All
+            return .all
         }
     }
 
@@ -68,7 +68,7 @@ class GameViewController: UIViewController {
         // Release any cached data, images, etc that aren't in use.
     }
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 }

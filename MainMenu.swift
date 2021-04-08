@@ -10,32 +10,32 @@ import SpriteKit
 
 class MainMenu: SKScene {
     
-    let p1Color = SKShapeNode(rectOfSize: CGSize(width: 80, height: 80), cornerRadius: 20)
-    let p2Color = SKShapeNode(rectOfSize: CGSize(width: 80, height: 80), cornerRadius: 20)
-    let p3Color = SKShapeNode(rectOfSize: CGSize(width: 80, height: 80), cornerRadius: 20)
-    let p4Color = SKShapeNode(rectOfSize: CGSize(width: 80, height: 80), cornerRadius: 20)
+    let p1Color = SKShapeNode(rectOf: CGSize(width: 80, height: 80), cornerRadius: 20)
+    let p2Color = SKShapeNode(rectOf: CGSize(width: 80, height: 80), cornerRadius: 20)
+    let p3Color = SKShapeNode(rectOf: CGSize(width: 80, height: 80), cornerRadius: 20)
+    let p4Color = SKShapeNode(rectOf: CGSize(width: 80, height: 80), cornerRadius: 20)
     
-    let startBtn = SKShapeNode(rectOfSize: CGSize(width: 120, height: 60), cornerRadius: 20)
-    let addBtn = SKShapeNode(rectOfSize: CGSize(width: 60, height: 60), cornerRadius: 20)
-    let removeBtn = SKShapeNode(rectOfSize: CGSize(width: 60, height: 60), cornerRadius: 20)
+    let startBtn = SKShapeNode(rectOf: CGSize(width: 120, height: 60), cornerRadius: 20)
+    let addBtn = SKShapeNode(rectOf: CGSize(width: 60, height: 60), cornerRadius: 20)
+    let removeBtn = SKShapeNode(rectOf: CGSize(width: 60, height: 60), cornerRadius: 20)
     
     
     var editedSettings: Bool = false
     
     var playerCount = 2
     
-    override func didMoveToView(view: SKView) {
-        scaleMode = .ResizeFill
+    override func didMove(to view: SKView) {
+        scaleMode = .resizeFill
         
         playerCount = 2
         
         
         startBtn.position = CGPoint (x: view.frame.width / 2, y: view.frame.height / 2)
-        startBtn.fillColor = UIColor.blueColor()
+        startBtn.fillColor = UIColor.blue
         addBtn.position = CGPoint(x: (view.frame.width / 2) + 140, y: view.frame.height / 2)
-        addBtn.fillColor = UIColor.blueColor()
+        addBtn.fillColor = UIColor.blue
         removeBtn.position = CGPoint(x: (view.frame.width / 2) - 140, y: view.frame.height / 2)
-        removeBtn.fillColor = UIColor.blueColor()
+        removeBtn.fillColor = UIColor.blue
         
         self.addChild(startBtn)
         self.addChild(addBtn)
@@ -57,8 +57,8 @@ class MainMenu: SKScene {
         
     }
     
-    func changeColor(number: Int){
-        var randomColors = [UIColor.blueColor(),UIColor.brownColor(), UIColor.cyanColor(), UIColor.greenColor(), UIColor.grayColor(), UIColor.orangeColor(), UIColor.redColor(), UIColor.purpleColor(), UIColor.yellowColor(), UIColor.whiteColor()]
+    func changeColor(_ number: Int){
+        var randomColors = [UIColor.blue,UIColor.brown, UIColor.cyan, UIColor.green, UIColor.gray, UIColor.orange, UIColor.red, UIColor.purple, UIColor.yellow, UIColor.white]
         randomColors = randomColors.filter { (color: UIColor) -> Bool in
             color != p1Color.fillColor
         }
@@ -87,28 +87,28 @@ class MainMenu: SKScene {
     }
 
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let location = touch.locationInNode(self)
-            if addBtn.containsPoint(location){
+            let location = touch.location(in: self)
+            if addBtn.contains(location){
                 
             }
-            if removeBtn.containsPoint(location){
+            if removeBtn.contains(location){
                 
             }
-            if startBtn.containsPoint(location){
+            if startBtn.contains(location){
                 
             }
-            if p1Color.containsPoint(location){
+            if p1Color.contains(location){
                 
             }
-            if p2Color.containsPoint(location){
+            if p2Color.contains(location){
                 
             }
-            if p3Color.containsPoint(location){
+            if p3Color.contains(location){
                 
             }
-            if p4Color.containsPoint(location){
+            if p4Color.contains(location){
                 
             }
         }
@@ -116,7 +116,7 @@ class MainMenu: SKScene {
         
     }
     
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         /* Called before each frame is rendered */
     }
 }

@@ -33,7 +33,7 @@ class StartViewController: UIViewController {
         
         super.viewDidLoad()
         playerCount = 2
-        for var i=0; i < 4; i=i+1 {
+        for i in 0..<4 {
             changeColor(i)
             p1Button.layer.cornerRadius = cornerRadius
             p2Button.layer.cornerRadius = cornerRadius
@@ -44,11 +44,11 @@ class StartViewController: UIViewController {
         
     }
     
-    @IBAction func addPlayer(sender: AnyObject) {
+    @IBAction func addPlayer(_ sender: AnyObject) {
         playerCount = playerCount + 1
         checkButtons()
     }
-    @IBAction func removePlayer(sender: AnyObject) {
+    @IBAction func removePlayer(_ sender: AnyObject) {
         playerCount = playerCount - 1
         checkButtons()
     }
@@ -56,70 +56,70 @@ class StartViewController: UIViewController {
     func checkButtons(){
         switch playerCount {
         case 1:
-            p1Button.hidden = false
-            p2Button.hidden = true
-            p3Button.hidden = true
-            p4Button.hidden = true
-            addButton.hidden = false
-            removeButton.hidden = true
+            p1Button.isHidden = false
+            p2Button.isHidden = true
+            p3Button.isHidden = true
+            p4Button.isHidden = true
+            addButton.isHidden = false
+            removeButton.isHidden = true
         case 2:
             if p2Button.backgroundColor == p1Button.backgroundColor{
                 changeColor(1)
             }
-            p1Button.hidden = false
-            p2Button.hidden = false
-            p3Button.hidden = true
-            p4Button.hidden = true
-            addButton.hidden = false
-            removeButton.hidden = false
+            p1Button.isHidden = false
+            p2Button.isHidden = false
+            p3Button.isHidden = true
+            p4Button.isHidden = true
+            addButton.isHidden = false
+            removeButton.isHidden = false
         case 3:
             if p3Button.backgroundColor == p2Button.backgroundColor || p3Button.backgroundColor == p1Button.backgroundColor{
                 changeColor(2)
             }
-            p1Button.hidden = false
-            p2Button.hidden = false
-            p3Button.hidden = false
-            p4Button.hidden = true
-            addButton.hidden = false
-            removeButton.hidden = false
+            p1Button.isHidden = false
+            p2Button.isHidden = false
+            p3Button.isHidden = false
+            p4Button.isHidden = true
+            addButton.isHidden = false
+            removeButton.isHidden = false
         case 4:
             if p4Button.backgroundColor == p3Button.backgroundColor || p4Button.backgroundColor == p2Button.backgroundColor || p4Button.backgroundColor == p1Button.backgroundColor{
                 changeColor(3)
             }
-            p1Button.hidden = false
-            p2Button.hidden = false
-            p3Button.hidden = false
-            p4Button.hidden = false
-            addButton.hidden = true
-            removeButton.hidden = false
+            p1Button.isHidden = false
+            p2Button.isHidden = false
+            p3Button.isHidden = false
+            p4Button.isHidden = false
+            addButton.isHidden = true
+            removeButton.isHidden = false
         default:
-            p1Button.hidden = false
-            p2Button.hidden = false
-            p3Button.hidden = true
-            p4Button.hidden = true
-            addButton.hidden = false
-            removeButton.hidden = false
+            p1Button.isHidden = false
+            p2Button.isHidden = false
+            p3Button.isHidden = true
+            p4Button.isHidden = true
+            addButton.isHidden = false
+            removeButton.isHidden = false
         }
     }
     
     
-    @IBAction func startButton(sender: AnyObject) {
+    @IBAction func startButton(_ sender: AnyObject) {
     }
-    @IBAction func p1Color(sender: AnyObject) {
+    @IBAction func p1Color(_ sender: AnyObject) {
         changeColor(0)
     }
-    @IBAction func p2Color(sender: AnyObject) {
+    @IBAction func p2Color(_ sender: AnyObject) {
         changeColor(1)
     }
-    @IBAction func p3Action(sender: AnyObject) {
+    @IBAction func p3Action(_ sender: AnyObject) {
         changeColor(2)
     }
-    @IBAction func p4Action(sender: AnyObject) {
+    @IBAction func p4Action(_ sender: AnyObject) {
         changeColor(3)
     }
     
-    func changeColor(number: Int){
-        var randomColors = [UIColor.magentaColor(), UIColor.blueColor(),UIColor.brownColor(), UIColor.cyanColor(), UIColor.greenColor(), UIColor.grayColor(), UIColor.orangeColor(), UIColor.redColor(), UIColor.purpleColor(), UIColor.yellowColor(), UIColor.whiteColor()]
+    func changeColor(_ number: Int){
+        var randomColors = [UIColor.magenta, UIColor.blue,UIColor.brown, UIColor.cyan, UIColor.green, UIColor.gray, UIColor.orange, UIColor.red, UIColor.purple, UIColor.yellow, UIColor.white]
         randomColors = randomColors.filter { (color: UIColor) -> Bool in
             color != p1Button.backgroundColor
         }
@@ -167,7 +167,7 @@ class StartViewController: UIViewController {
 //       
 //    }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "startGame" {

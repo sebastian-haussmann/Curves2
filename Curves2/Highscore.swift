@@ -24,20 +24,20 @@ class Highscore: UIViewController, UITableViewDataSource  {
         super.viewDidLoad()
         
         // remove empty table part
-        let tblView =  UIView(frame: CGRectZero)
+        let tblView =  UIView(frame: CGRect.zero)
         tableView.tableFooterView = tblView
-        tableView.tableFooterView!.hidden = true
-        tableView.backgroundColor = UIColor.clearColor()
+        tableView.tableFooterView!.isHidden = true
+        tableView.backgroundColor = UIColor.clear
         
-        tableView.backgroundColor = UIColor.clearColor()
+        tableView.backgroundColor = UIColor.clear
         tableView.allowsSelection = false
         
         
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         spRanking = Data().loadSingleplayerHighscore(singleplayer)
-        for (index,rank) in spRanking.enumerate(){
+        for (index,rank) in spRanking.enumerated(){
             if index > 19 {
                 Data().removeItemSingleplayerHighscore(rank)
             }
@@ -45,7 +45,7 @@ class Highscore: UIViewController, UITableViewDataSource  {
         spRanking = Data().loadSingleplayerHighscore(singleplayer)
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var returnValue = 0
         if modus.selectedSegmentIndex == 0{
             if spRanking.count <= 20{
@@ -60,27 +60,27 @@ class Highscore: UIViewController, UITableViewDataSource  {
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! HighscoreCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! HighscoreCell
         
         cell.rank.text = String(indexPath.row+1)
         if modus.selectedSegmentIndex == 0{
             let rank = spRanking[indexPath.row]
-            cell.name.text = rank.valueForKey("name") as? String
-            cell.score.text = String((rank.valueForKey("score") as? Int)!)
+            cell.name.text = rank.value(forKey: "name") as? String
+            cell.score.text = String((rank.value(forKey: "score") as? Int)!)
         }else{
             cell.name.text = mpRanking[indexPath.row][0] as? String
             cell.score.text = String(mpRanking[indexPath.row][1] as! Int)
         }
-        cell.backgroundColor = UIColor.clearColor()
-        cell.rank.textColor = UIColor.whiteColor()
-        cell.name.textColor = UIColor.whiteColor()
-        cell.score.textColor = UIColor.whiteColor()
+        cell.backgroundColor = UIColor.clear
+        cell.rank.textColor = UIColor.white
+        cell.name.textColor = UIColor.white
+        cell.score.textColor = UIColor.white
         return cell
     }
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {
-        case .Delete:
+        case .delete:
             // remove the deleted item from the model
             Data().removeItemSingleplayerHighscore(spRanking[indexPath.row])
             spRanking = Data().loadSingleplayerHighscore(singleplayer)
@@ -92,25 +92,25 @@ class Highscore: UIViewController, UITableViewDataSource  {
         }
     }
     
-    @IBAction func modusAction(sender: AnyObject) {
+    @IBAction func modusAction(_ sender: AnyObject) {
         tableView.reloadData()
     }
     
-    @IBAction func backButton(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backButton(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func resetButton(sender: AnyObject) {
-        let alert = UIAlertController(title: "Warnung", message: "Sind Sie sicher dass sie die Highscore zurücksetzen möchten? Dies kann nicht rückgängig gemacht werden.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.Cancel, handler: nil))
-        let saveAction = UIAlertAction(title: "Zurücksetzen", style: UIAlertActionStyle.Destructive, handler: { (action:UIAlertAction) -> Void in
+    @IBAction func resetButton(_ sender: AnyObject) {
+        let alert = UIAlertController(title: "Warnung", message: "Sind Sie sicher dass sie die Highscore zurücksetzen möchten? Dies kann nicht rückgängig gemacht werden.", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertAction.Style.cancel, handler: nil))
+        let saveAction = UIAlertAction(title: "Zurücksetzen", style: UIAlertAction.Style.destructive, handler: { (action:UIAlertAction) -> Void in
             
             Data().resetSingleplayerHighscore()
             self.spRanking = Data().loadSingleplayerHighscore(self.singleplayer)
             self.tableView.reloadData()
         })
         alert.addAction(saveAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     

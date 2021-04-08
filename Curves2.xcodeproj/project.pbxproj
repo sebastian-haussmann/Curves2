@@ -238,14 +238,17 @@
 				TargetAttributes = {
 					58FF4AF91D2171E9005C8DD3 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 42N696HKU5;
+						DevelopmentTeam = 45YTBMTN93;
+						LastSwiftMigration = 1000;
 					};
 					58FF4B111D2171E9005C8DD3 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 58FF4AF91D2171E9005C8DD3;
 					};
 					58FF4B1C1D2171E9005C8DD3 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 58FF4AF91D2171E9005C8DD3;
 					};
 				};
@@ -462,11 +465,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 45YTBMTN93;
 				INFOPLIST_FILE = Curves2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -476,11 +481,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 45YTBMTN93;
 				INFOPLIST_FILE = Curves2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -493,6 +500,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Curves2.app/Curves2";
 			};
 			name = Debug;
@@ -505,6 +513,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Curves2.app/Curves2";
 			};
 			name = Release;
@@ -517,6 +526,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2UITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = Curves2;
 			};
 			name = Debug;
@@ -528,6 +538,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Mo.Curves2UITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = Curves2;
 			};
 			name = Release;

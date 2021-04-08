@@ -47,19 +47,19 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         
         gamemodeTxtField.delegate = self
-        gamemodeTxtField.keyboardType = UIKeyboardType.NumberPad
+        gamemodeTxtField.keyboardType = UIKeyboardType.numberPad
         let cornerRadius = CGFloat(20)
         saveBtn.layer.cornerRadius = cornerRadius
         cancelBtn.layer.cornerRadius = cornerRadius
         
         let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: "didTapView")
+        tapRecognizer.addTarget(self, action: #selector(SettingsViewController.didTapView))
         self.view.addGestureRecognizer(tapRecognizer)
         
     }
     
     
-    @IBAction func sliderMoved(sender: AnyObject) {
+    @IBAction func sliderMoved(_ sender: AnyObject) {
         
         velocityTxtField.text = String(Int(velocitySlider.value))
         GameData.singlePlayerVelocity = CGFloat(Int(velocitySlider.value))
@@ -68,15 +68,15 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    @IBAction func switchViewAction(sender: AnyObject) {
+    @IBAction func switchViewAction(_ sender: AnyObject) {
         
         switch switchView.selectedSegmentIndex{
         case 0:
-            singlePlayerView.hidden = true
-            multiplayerView.hidden = false
+            singlePlayerView.isHidden = true
+            multiplayerView.isHidden = false
         case 1:
-            singlePlayerView.hidden = false
-            multiplayerView.hidden = true
+            singlePlayerView.isHidden = false
+            multiplayerView.isHidden = true
         default:
             break
         }
@@ -84,7 +84,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    @IBAction func gameModeAction(sender: AnyObject) {
+    @IBAction func gameModeAction(_ sender: AnyObject) {
         
         switch gamemodeSegment.selectedSegmentIndex {
         case 0:
@@ -104,7 +104,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         
     }
-    @IBAction func curveModeAction(sender: AnyObject) {
+    @IBAction func curveModeAction(_ sender: AnyObject) {
         
         switch curveSegment.selectedSegmentIndex {
         case 0:
@@ -119,7 +119,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction func curveModeAction2(sender: AnyObject) {
+    @IBAction func curveModeAction2(_ sender: AnyObject) {
         switch curveSegment2.selectedSegmentIndex {
         case 0:
             curveID = 0
@@ -134,34 +134,34 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         
     }
-    @IBAction func saveBtnPressed(sender: AnyObject) {
+    @IBAction func saveBtnPressed(_ sender: AnyObject) {
         
        // print(pointsOrRounds)
         
     }
     
-    @IBAction func cancelBtnPressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelBtnPressed(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "saveSettings" {
-            let vc = segue.destinationViewController as! StartViewController
+            let vc = segue.destination as! StartViewController
             GameData.gameModeID = gamemodeID
             GameData.gameModeCount = pointsOrRounds
             GameData.curveMode = curveID
             GameData.settingsEdited = true
             GameData.singlePlayerVelocity = CGFloat(Int(velocitySlider.value))
             vc.editedSettings = true
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
 
     
-    func didTapView(){
+    @objc func didTapView(){
         
         if gamemodeTxtField.text == "" {
             gamemodeTxtField.text = prevTextField
