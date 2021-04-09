@@ -1426,13 +1426,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UITableViewDataSource, UITab
                     tail.xScale = player.head.xScale
                     tail.yScale = player.head.xScale
                 }
-                thickTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(GameSceneCurve.decreaseThickness), userInfo: count, repeats: false)
+                thickTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(GameScene.decreaseThickness), userInfo: count, repeats: false)
             }
             
         }
     }
     
-    func decreaseThickness(_ timer: Timer){
+    @objc func decreaseThickness(_ timer: Timer){
         let index = timer.userInfo as! Int
         players[index].head.xScale -= 0.5
         players[index].head.yScale = players[index].head.xScale
